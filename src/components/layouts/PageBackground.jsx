@@ -1,26 +1,17 @@
 // src/components/layouts/PageBackground.jsx
-import { useEffect } from "react";
-
-const GRADIENTS = {
-  sky: "linear-gradient(180deg, #bcdcff 0%, #dcebff 48%, #fdf2e4 100%)",
-  default: "#f2f4f6",
-};
-
 function PageBackground({ variant = "default", children }) {
-  useEffect(() => {
-    const prevBodyBackground = document.body.style.background;
-    const prevHtmlBackground = document.documentElement.style.background;
+  const bgClass =
+    variant === "sky"
+      ? "bg-gradient-to-b from-[#bcdcff] via-[#dcebff] to-[#fdf2e4]"
+      : "bg-[#f2f4f6]";
 
-    document.body.style.background = GRADIENTS[variant];
-    document.documentElement.style.background = GRADIENTS[variant];
-
-    return () => {
-      document.body.style.background = prevBodyBackground;
-      document.documentElement.style.background = prevHtmlBackground;
-    };
-  }, [variant]);
-
-  return <div className="min-h-dvh w-full">{children}</div>;
+  return (
+    <div className="relative min-h-dvh w-full">
+      {/* 콘텐츠 길이와 무관하게 항상 화면 전체를 덮는 고정 배경 */}
+      <div className={`fixed inset-0 -z-10 ${bgClass}`} />
+      {children}
+    </div>
+  );
 }
 
 export default PageBackground;
