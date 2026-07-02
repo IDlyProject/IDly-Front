@@ -14,7 +14,7 @@ const REQUIRED_ITEMS = [
   },
   {
     id: "notification",
-    label: "알림 설정 (필수)",
+    label: "알림 설정 (강하게 권장)",
     desc: "실시간 보안 알림을 받아야 조치할 수 있어요.",
     hasDetail: false,
   },
