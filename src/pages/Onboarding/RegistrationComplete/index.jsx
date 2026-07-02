@@ -11,8 +11,7 @@ function RegistrationComplete() {
   const connectedCount = 1;
 
   const handleStartAnalysis = () => {
-    // TODO: connected 상태 Gmail만 분석 요청 생성 (status: queued)
-    navigate(ROUTES.HOME);
+    navigate(ROUTES.ANALYSIS);
   };
 
   return (

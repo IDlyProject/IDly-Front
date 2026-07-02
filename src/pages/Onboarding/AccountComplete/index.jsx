@@ -14,8 +14,7 @@ function AccountComplete() {
   };
 
   const handleStartAnalysis = () => {
-    // TODO: 연결 계정 추가 건너뛰고 초기 분석 화면으로 이동
-    navigate(ROUTES.HOME);
+    navigate(ROUTES.ANALYSIS);
   };
 
   return (

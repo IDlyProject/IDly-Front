@@ -9,11 +9,13 @@ export const ROUTES = {
   ONBOARDING_ADD_ACCOUNT: "/onboarding/add-account",
   ONBOARDING_COMPLETE: "/onboarding/complete",
 
+  ANALYSIS: "/analysis",
+
   HOME: "/home",
   ORGANIZE: "/organize",
   MY: "/my",
 
-  ACCOUNT_DETAIL: "/account",
-  SECURITY_ACTION: "/account/security",
-  SECURITY_MAIL: "/account/security/mail",
+  // 특정 서비스 계정(Disney+ 등)의 문제 상세/대응 - id가 필수
+  ACCOUNT_DETAIL: (id) => `/account/${id}`,
+  ACCOUNT_ACTION: (id) => `/account/${id}/action`,
 };

@@ -11,13 +11,12 @@ import AccountConfirm from "@/pages/Onboarding/AccountConfirm";
 import AccountComplete from "@/pages/Onboarding/AccountComplete";
 import AddAccount from "@/pages/Onboarding/AddAccount";
 import RegistrationComplete from "@/pages/Onboarding/RegistrationComplete";
-
+import Analysis from "@/pages/Analysis";
 import Home from "@/pages/Home";
 import Organize from "@/pages/Organize";
 import My from "@/pages/My";
-import AccountManagement from "@/pages/AccountDetail";
-import SecurityAction from "@/pages/AccountDetail/SecurityAction";
-import SecurityMail from "@/pages/AccountDetail/SecurityAction/SecurityMail";
+import AccountDetail from "@/pages/AccountDetail";
+import AccountAction from "@/pages/AccountAction";
 
 export const router = createBrowserRouter([
   { path: ROUTES.SPLASH, element: <Splash /> },
@@ -30,26 +29,27 @@ export const router = createBrowserRouter([
   { path: ROUTES.ONBOARDING_COMPLETE, element: <RegistrationComplete /> },
 
   {
-    path: ROUTES.ACCOUNT_DETAIL,
+    path: ROUTES.ANALYSIS,
     element: (
       <ProtectedRoute>
-        <AccountManagement />
+        <Analysis />
+      </ProtectedRoute>
+    ),
+  },
+
+  {
+    path: "/account/:accountId",
+    element: (
+      <ProtectedRoute>
+        <AccountDetail />
       </ProtectedRoute>
     ),
   },
   {
-    path: ROUTES.SECURITY_ACTION,
+    path: "/account/:accountId/action",
     element: (
       <ProtectedRoute>
-        <SecurityAction />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: ROUTES.SECURITY_MAIL,
-    element: (
-      <ProtectedRoute>
-        <SecurityMail />
+        <AccountAction />
       </ProtectedRoute>
     ),
   },
