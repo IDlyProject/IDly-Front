@@ -1,4 +1,4 @@
-// src/components/layout/PageBackground.jsx
+// src/components/layouts/PageBackground.jsx
 import { useEffect } from "react";
 
 const GRADIENTS = {
@@ -8,11 +8,15 @@ const GRADIENTS = {
 
 function PageBackground({ variant = "default", children }) {
   useEffect(() => {
-    const prevBackground = document.body.style.background;
+    const prevBodyBackground = document.body.style.background;
+    const prevHtmlBackground = document.documentElement.style.background;
+
     document.body.style.background = GRADIENTS[variant];
+    document.documentElement.style.background = GRADIENTS[variant];
 
     return () => {
-      document.body.style.background = prevBackground;
+      document.body.style.background = prevBodyBackground;
+      document.documentElement.style.background = prevHtmlBackground;
     };
   }, [variant]);
 
