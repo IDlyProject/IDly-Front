@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* 모바일 웹뷰 대응 기본 리셋 */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overscroll-behavior-y: none; /* 당겨서 새로고침 등 바운스 방지 */
+}
+
+body {
+  min-height: 100dvh;
+  -webkit-tap-highlight-color: transparent; /* 터치 시 파란 하이라이트 제거 */
+  -webkit-text-size-adjust: 100%; /* 화면 회전 시 폰트 자동 확대 방지 */
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  touch-action: manipulation; /* 더블탭 확대(zoom) 방지 */
+}
