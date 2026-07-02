@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/ui/Button";
 import { ROUTES } from "@/constants/routes";
+import PageBackground from "@/components/layouts/PageBackground";
 
 const REQUIRED_ITEMS = [
   { id: "terms", label: "서비스 이용 약관 동의 (필수)", hasDetail: true },
@@ -67,76 +68,78 @@ function Consent() {
   };
 
   return (
-    <div className="flex min-h-dvh flex-col bg-[#f2f4f6] px-6 pt-10 pb-8">
-      <h1 className="text-[26px] font-bold leading-snug text-[#191f28]">
-        안녕하세요,
-        <br />
-        계정을 지키는
-        <br />
-        IDly입니다!
-      </h1>
+    <PageBackground variant="default">
+      <div className="flex min-h-dvh flex-col px-6 pt-10 pb-8">
+        <h1 className="text-[26px] font-bold leading-snug text-[#191f28]">
+          안녕하세요,
+          <br />
+          계정을 지키는
+          <br />
+          IDly입니다!
+        </h1>
 
-      <div className="mt-8 flex-1 space-y-3">
-        {/* 전체 동의하기 */}
-        <button
-          onClick={toggleAll}
-          className="flex w-full items-center gap-3 rounded-2xl bg-white p-4 text-left shadow-sm active:bg-gray-50"
-        >
-          <Checkbox checked={allChecked} />
-          <b className="text-[15px] text-[#191f28]">전체 동의하기</b>
-        </button>
-
-        {/* 개별 항목 */}
-        {REQUIRED_ITEMS.map((item) => (
-          <div
-            key={item.id}
-            className="flex w-full items-center gap-3 rounded-2xl bg-white p-4 shadow-sm"
+        <div className="mt-8 flex-1 space-y-3">
+          {/* 전체 동의하기 */}
+          <button
+            onClick={toggleAll}
+            className="flex w-full items-center gap-3 rounded-2xl bg-white p-4 text-left shadow-sm active:bg-gray-50"
           >
-            {/* 체크박스만 클릭 → 체크 토글 */}
-            <button
-              onClick={() => toggleOne(item.id)}
-              className="flex flex-shrink-0 items-center"
-              aria-label={`${item.label} 동의`}
-            >
-              <Checkbox checked={!!checked[item.id]} />
-            </button>
+            <Checkbox checked={allChecked} />
+            <b className="text-[15px] text-[#191f28]">전체 동의하기</b>
+          </button>
 
-            {/* 텍스트도 클릭 → 체크 토글 (터치 영역 넓힘) */}
-            <button
-              onClick={() => toggleOne(item.id)}
-              className="flex-1 text-left"
+          {/* 개별 항목 */}
+          {REQUIRED_ITEMS.map((item) => (
+            <div
+              key={item.id}
+              className="flex w-full items-center gap-3 rounded-2xl bg-white p-4 shadow-sm"
             >
-              <b className="block text-[14px] text-[#191f28]">{item.label}</b>
-              {item.desc && (
-                <small className="mt-1 block text-[11px] text-gray-400">
-                  {item.desc}
-                </small>
-              )}
-            </button>
-
-            {/* 상세보기는 별도 버튼 → 약관 상세로 이동 */}
-            {item.hasDetail && (
+              {/* 체크박스만 클릭 → 체크 토글 */}
               <button
-                onClick={() => handleViewDetail(item.id)}
-                className="flex-shrink-0 px-1 text-gray-300"
-                aria-label="상세 보기"
+                onClick={() => toggleOne(item.id)}
+                className="flex flex-shrink-0 items-center"
+                aria-label={`${item.label} 동의`}
               >
-                ›
+                <Checkbox checked={!!checked[item.id]} />
               </button>
-            )}
-          </div>
-        ))}
-      </div>
 
-      <Button
-        variant="primary"
-        disabled={!allChecked}
-        className={!allChecked ? "opacity-40" : ""}
-        onClick={() => navigate(ROUTES.ONBOARDING_ACCOUNT_CONFIRM)}
-      >
-        다음
-      </Button>
-    </div>
+              {/* 텍스트도 클릭 → 체크 토글 (터치 영역 넓힘) */}
+              <button
+                onClick={() => toggleOne(item.id)}
+                className="flex-1 text-left"
+              >
+                <b className="block text-[14px] text-[#191f28]">{item.label}</b>
+                {item.desc && (
+                  <small className="mt-1 block text-[11px] text-gray-400">
+                    {item.desc}
+                  </small>
+                )}
+              </button>
+
+              {/* 상세보기는 별도 버튼 → 약관 상세로 이동 */}
+              {item.hasDetail && (
+                <button
+                  onClick={() => handleViewDetail(item.id)}
+                  className="flex-shrink-0 px-1 text-gray-300"
+                  aria-label="상세 보기"
+                >
+                  ›
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <Button
+          variant="primary"
+          disabled={!allChecked}
+          className={!allChecked ? "opacity-40" : ""}
+          onClick={() => navigate(ROUTES.ONBOARDING_ACCOUNT_CONFIRM)}
+        >
+          다음
+        </Button>
+      </div>
+    </PageBackground>
   );
 }
 
