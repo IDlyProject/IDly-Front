@@ -32,10 +32,10 @@ function AccountComplete() {
       </p>
 
       <div className="mt-14 space-y-3">
-        <Button variant="primary" onClick={handleAddAccount}>
+        <Button variant="secondary" onClick={handleAddAccount}>
           연결 계정 추가하기
         </Button>
-        <Button variant="secondary" onClick={handleStartAnalysis}>
+        <Button variant="primary" onClick={handleStartAnalysis}>
           분석 시작하기
         </Button>
       </div>
