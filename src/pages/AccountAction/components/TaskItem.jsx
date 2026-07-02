@@ -1,7 +1,7 @@
 // src/pages/AccountAction/components/TaskItem.jsx
 import { useRef, useState } from "react";
 
-const REVEAL_WIDTH = 144;
+const REVEAL_WIDTH = 152;
 
 function TaskItem({ task, status, onComplete, onSkip, onUndo, onOpenLink }) {
   const [translateX, setTranslateX] = useState(0);
@@ -118,6 +118,7 @@ function TaskItem({ task, status, onComplete, onSkip, onUndo, onOpenLink }) {
         className="absolute inset-y-0 right-0 flex gap-2"
         style={{ width: REVEAL_WIDTH }}
       >
+        <div className="w-0.5 flex-shrink-0" aria-hidden="true" />
         <button
           onClick={handleComplete}
           className="grid w-[68px] flex-shrink-0 place-items-center rounded-2xl border border-gray-200 bg-white text-[11px] font-bold text-[#12b886] shadow-sm"

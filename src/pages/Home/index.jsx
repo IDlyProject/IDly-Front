@@ -77,7 +77,7 @@ function Home() {
                 // TODO: 문제 상세 화면으로 이동
               }}
             />
-            <RecommendCard />
+            <RecommendCard url="https://idly-apt.tistory.com/2" />
           </>
         )}
 
