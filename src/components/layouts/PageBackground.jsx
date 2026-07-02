@@ -7,8 +7,7 @@ function PageBackground({ variant = "default", children }) {
 
   return (
     <div className="relative min-h-dvh w-full">
-      {/* 콘텐츠 길이와 무관하게 항상 화면 전체를 덮는 고정 배경 */}
-      <div className={`fixed inset-0 -z-10 ${bgClass}`} />
+      <div className={`absolute inset-0 -z-10 ${bgClass}`} />
       {children}
     </div>
   );
