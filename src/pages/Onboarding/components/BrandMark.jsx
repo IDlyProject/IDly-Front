@@ -5,7 +5,7 @@ function BrandMark() {
       style={{
         width: "132px",
         height: "154px",
-        padding: "36px 18px 28px",
+        padding: "36px 18px 36px", // 28px → 36px로 변경 (하단 여백 확보)
         borderRadius: "24px 24px 14px 14px",
         background:
           "linear-gradient(180deg, rgba(255,255,255,0.98), #f3f7ff 72%, #e9eff8)",
@@ -28,7 +28,7 @@ function BrandMark() {
         }}
       />
 
-      {/* 하단 남색 고리 (카드 뒤쪽에서 살짝 보임) */}
+      {/* 하단 남색 고리 */}
       <div
         className="absolute left-1/2 bottom-0 -translate-x-1/2"
         style={{
