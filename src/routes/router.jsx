@@ -1,10 +1,17 @@
 // src/routes/router.jsx
-import { ROUTES } from "@/constants/routes";
 import { createBrowserRouter } from "react-router-dom";
+import { ROUTES } from "@/constants/routes";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "@/components/layouts/MainLayout";
+
 import Splash from "@/pages/Splash";
-import Onboarding from "@/pages/Onboarding";
+import Login from "@/pages/Onboarding/Login";
+import Consent from "@/pages/Onboarding/Consent";
+import AccountConfirm from "@/pages/Onboarding/AccountConfirm";
+import AccountComplete from "@/pages/Onboarding/AccountComplete";
+import AddAccount from "@/pages/Onboarding/AddAccount";
+import RegistrationComplete from "@/pages/Onboarding/RegistrationComplete";
+
 import Home from "@/pages/Home";
 import Organize from "@/pages/Organize";
 import My from "@/pages/My";
@@ -14,7 +21,13 @@ import SecurityMail from "@/pages/AccountDetail/SecurityAction/SecurityMail";
 
 export const router = createBrowserRouter([
   { path: ROUTES.SPLASH, element: <Splash /> },
-  { path: ROUTES.ONBOARDING, element: <Onboarding /> },
+
+  { path: ROUTES.ONBOARDING_LOGIN, element: <Login /> },
+  { path: ROUTES.ONBOARDING_CONSENT, element: <Consent /> },
+  { path: ROUTES.ONBOARDING_ACCOUNT_CONFIRM, element: <AccountConfirm /> },
+  { path: ROUTES.ONBOARDING_ACCOUNT_COMPLETE, element: <AccountComplete /> },
+  { path: ROUTES.ONBOARDING_ADD_ACCOUNT, element: <AddAccount /> },
+  { path: ROUTES.ONBOARDING_COMPLETE, element: <RegistrationComplete /> },
 
   {
     path: ROUTES.ACCOUNT_DETAIL,

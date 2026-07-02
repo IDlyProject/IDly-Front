@@ -1,15 +1,18 @@
 // src/constants/routes.js
 export const ROUTES = {
-  // 시작 / 온보딩
   SPLASH: "/",
-  ONBOARDING: "/onboarding",
 
-  // 네비바 화면
+  ONBOARDING_LOGIN: "/onboarding/login",
+  ONBOARDING_CONSENT: "/onboarding/consent",
+  ONBOARDING_ACCOUNT_CONFIRM: "/onboarding/account-confirm",
+  ONBOARDING_ACCOUNT_COMPLETE: "/onboarding/account-complete",
+  ONBOARDING_ADD_ACCOUNT: "/onboarding/add-account",
+  ONBOARDING_COMPLETE: "/onboarding/complete",
+
   HOME: "/home",
   ORGANIZE: "/organize",
   MY: "/my",
 
-  // 홈 > 계정관리 > 보안조치 > 보안메일 (계층 플로우)
   ACCOUNT_DETAIL: "/account",
   SECURITY_ACTION: "/account/security",
   SECURITY_MAIL: "/account/security/mail",
