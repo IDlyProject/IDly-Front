@@ -17,10 +17,11 @@ import Organize from "@/pages/Organize";
 import My from "@/pages/My";
 import AccountDetail from "@/pages/AccountDetail";
 import AccountAction from "@/pages/AccountAction";
+import AuthCallback from "@/pages/AuthCallback";
 
 export const router = createBrowserRouter([
   { path: ROUTES.SPLASH, element: <Splash /> },
-
+  { path: ROUTES.AUTH_CALLBACK, element: <AuthCallback /> },
   { path: ROUTES.ONBOARDING_LOGIN, element: <Login /> },
   { path: ROUTES.ONBOARDING_CONSENT, element: <Consent /> },
   { path: ROUTES.ONBOARDING_ACCOUNT_CONFIRM, element: <AccountConfirm /> },

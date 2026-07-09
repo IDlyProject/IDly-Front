@@ -1,16 +1,43 @@
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/constants/routes";
 import PageBackground from "@/components/layouts/PageBackground";
+import { API_BASE_URL } from "@/constants/api";
+import { getPrimaryGmailAccount } from "@/api/auth";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { toMailAccount } from "@/utils/mailAccount";
 
-// TODO: /accounts 응답으로 대표/연결 계정 목록 렌더링
 function AddAccount() {
   const navigate = useNavigate();
-  const primaryEmail = "minji.kim@gmail.com";
+  const { user, status } = useCurrentUser();
 
   const handleStartConnect = () => {
-    // TODO: Firebase 연동 후 /auth/google/start?purpose=connect 로 교체
-    navigate(ROUTES.ONBOARDING_COMPLETE); // 혹은 원하는 임시 목적지
+    // 로그인 쿠키(httpOnly)가 자동으로 실려가므로 별도 토큰 전달 불필요
+    window.location.href = `${API_BASE_URL}/api/auth/google`;
   };
+
+  if (status === "loading") {
+    return (
+      <PageBackground variant="default">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <PageBackground variant="default">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">
+            계정 정보를 불러오지 못했어요.
+          </p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  const primaryEmail = getPrimaryGmailAccount(user)?.email ?? "";
+  const mailAccounts = user.gmailAccounts.map(toMailAccount);
 
   return (
     <PageBackground variant="default">
@@ -41,22 +68,30 @@ function AddAccount() {
         </div>
 
         <div className="mt-4 space-y-3">
-          <div className="grid grid-cols-[34px_1fr_auto] items-center gap-3 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
-            <div className="grid h-[34px] w-[34px] place-items-center rounded-xl bg-gradient-to-br from-[#3b6cff] to-[#5b7dff] text-sm font-bold text-white">
-              M
+          {mailAccounts.map((account) => (
+            <div
+              key={account.id}
+              className="grid grid-cols-[34px_1fr_auto] items-center gap-3 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm"
+            >
+              <div
+                className="grid h-[34px] w-[34px] place-items-center rounded-xl text-sm font-bold text-white"
+                style={{ background: account.avatarBg }}
+              >
+                {account.avatarLabel}
+              </div>
+              <div>
+                <strong className="block text-[13px] text-[#191f28]">
+                  {account.email}
+                </strong>
+                <small className="mt-0.5 block text-[10px] text-[#6b7684]">
+                  {account.isPrimary ? "대표 계정" : "연결된 계정"}
+                </small>
+              </div>
+              <span className="rounded-full bg-[#eafaf2] px-2.5 py-1 text-[11px] font-bold text-[#12b886]">
+                연결됨
+              </span>
             </div>
-            <div>
-              <strong className="block text-[13px] text-[#191f28]">
-                My Gmail
-              </strong>
-              <small className="mt-0.5 block text-[10px] text-[#6b7684]">
-                {primaryEmail} · 대표
-              </small>
-            </div>
-            <span className="rounded-full bg-[#eafaf2] px-2.5 py-1 text-[11px] font-bold text-[#12b886]">
-              연결됨
-            </span>
-          </div>
+          ))}
 
           <button
             onClick={handleStartConnect}
@@ -67,7 +102,7 @@ function AddAccount() {
             </div>
             <div className="text-left">
               <strong className="block text-[13px] text-[#191f28]">
-                업무 Gmail
+                새 Gmail 추가
               </strong>
               <small className="mt-0.5 block text-[10px] text-[#6b7684]">
                 업무/학교 계정을 추가로 연결

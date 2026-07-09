@@ -8,8 +8,10 @@ import RiskBanner from "./components/RiskBanner";
 import RecommendCard from "./components/RecommendCard";
 import Apartment from "./components/Apartment";
 import { MOCK_EMAILS, MOCK_ACCOUNTS } from "./mockData";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 function Home() {
+  const { user } = useCurrentUser();
   const [selectedEmailId, setSelectedEmailId] = useState("all");
 
   const filteredAccounts = useMemo(() => {
@@ -30,7 +32,7 @@ function Home() {
     <PageBackground variant="default">
       <div className="min-h-dvh px-4 pb-4 pt-[max(16px,env(safe-area-inset-top))]">
         <h3 className="mb-4 text-xl font-bold text-[#191f28]">
-          민지님의 계정아파트
+          {user?.name ?? "회원"}님의 계정아파트
         </h3>
 
         <EmailSelector

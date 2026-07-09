@@ -3,10 +3,13 @@ import SuccessMark from "../components/SuccessMark";
 import Button from "@/components/ui/Button";
 import { ROUTES } from "@/constants/routes";
 import PageBackground from "@/components/layouts/PageBackground";
+import { getPrimaryGmailAccount } from "@/api/auth";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 function AccountComplete() {
   const navigate = useNavigate();
-  const primaryEmail = "minji.kim@gmail.com"; // TODO: 실제 데이터로 교체
+  const { user } = useCurrentUser();
+  const primaryEmail = getPrimaryGmailAccount(user)?.email ?? "";
 
   const handleAddAccount = () => {
     // TODO: /auth/google/start?purpose=connect 로 이동

@@ -1,7 +1,7 @@
 // src/constants/routes.js
 export const ROUTES = {
   SPLASH: "/",
-
+  AUTH_CALLBACK: "/auth/callback",
   ONBOARDING_LOGIN: "/onboarding/login",
   ONBOARDING_CONSENT: "/onboarding/consent",
   ONBOARDING_ACCOUNT_CONFIRM: "/onboarding/account-confirm",

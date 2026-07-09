@@ -1,67 +1,70 @@
 // src/pages/My/index.jsx
-import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import ProfileCard from "./components/ProfileCard";
 import MailAccountRow from "./components/MailAccountRow";
-import { ROUTES } from "@/constants/routes";
-
-// TODO: 실제로는 /users/me, /accounts/emails 응답으로 교체
-const MOCK_USER = {
-  name: "민지",
-  email: "minji.kim@gmail.com",
-  age: "28세",
-  phone: "010-1234-5678",
-};
-
-const MOCK_MAIL_ACCOUNTS = [
-  {
-    id: "gmail",
-    email: "minji.kim@gmail.com",
-    linkedCount: 13,
-    isPrimary: true,
-    avatarBg: "#3b6cff",
-    avatarLabel: "M",
-  },
-  {
-    id: "work",
-    email: "minji.work@gmail.com",
-    linkedCount: 5,
-    isPrimary: false,
-    avatarBg: "linear-gradient(135deg,#16b886,#0da87c)",
-    avatarLabel: "W",
-  },
-];
+import { getPrimaryGmailAccount } from "@/api/auth";
+import { API_BASE_URL } from "@/constants/api";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { toMailAccount } from "@/utils/mailAccount";
 
 function My() {
-  const navigate = useNavigate();
+  const { user, status } = useCurrentUser();
 
   const handleAddMail = () => {
-    // TODO: /auth/google/start?purpose=connect 로 이동
-    window.open(
-      "/auth/google/start?purpose=connect",
-      "_blank",
-      "noopener,noreferrer",
-    );
+    // 로그인 쿠키(httpOnly)가 자동으로 실려가므로 별도 토큰 전달 불필요
+    window.location.href = `${API_BASE_URL}/api/auth/google`;
   };
+
+  if (status === "loading") {
+    return (
+      <PageBackground variant="default">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <PageBackground variant="default">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">
+            프로필을 불러오지 못했어요.
+          </p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  const primaryGmail = getPrimaryGmailAccount(user);
+  const mailAccounts = user.gmailAccounts.map(toMailAccount);
 
   return (
     <PageBackground variant="default">
       <div className="min-h-dvh px-4 pt-[max(16px,env(safe-area-inset-top))]">
         <h3 className="mb-4 text-xl font-bold text-[#191f28]">마이</h3>
 
-        <ProfileCard user={MOCK_USER} />
+        <ProfileCard
+          user={{
+            name: user.name ?? "이름 미입력",
+            email: primaryGmail?.email ?? "",
+            age: user.ageGroup ?? "미입력",
+            phone: user.phone ?? "미입력",
+          }}
+        />
 
         <div className="mb-2.5 flex items-center justify-between">
           <span className="text-[13px] font-bold text-[#485367]">
             연결된 이메일
           </span>
           <span className="rounded-full bg-[#eef2ff] px-2.5 py-1 text-[11px] font-bold text-[#3b6cff]">
-            {MOCK_MAIL_ACCOUNTS.length}개
+            {mailAccounts.length}개
           </span>
         </div>
 
         <div className="grid gap-2.5">
-          {MOCK_MAIL_ACCOUNTS.map((account) => (
+          {mailAccounts.map((account) => (
             <MailAccountRow key={account.id} account={account} />
           ))}
         </div>

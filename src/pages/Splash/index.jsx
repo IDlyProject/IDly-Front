@@ -1,10 +1,20 @@
 // src/pages/Splash/index.jsx
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
+import { fetchCurrentUser } from "@/api/auth";
 
 function Splash() {
-  // TODO: Firebase 연동 후 실제 로그인 상태 체크로 교체
-  return <Navigate to={ROUTES.ONBOARDING_LOGIN} replace />;
+  const [dest, setDest] = useState(null);
+
+  useEffect(() => {
+    fetchCurrentUser().then((user) => {
+      setDest(user ? ROUTES.HOME : ROUTES.ONBOARDING_LOGIN);
+    });
+  }, []);
+
+  if (!dest) return null;
+  return <Navigate to={dest} replace />;
 }
 
 export default Splash;

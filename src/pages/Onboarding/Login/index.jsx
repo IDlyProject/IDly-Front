@@ -1,19 +1,17 @@
 // src/pages/Onboarding/Login/index.jsx
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import BrandMark from "../components/BrandMark";
 import Button from "@/components/ui/Button";
-import { ROUTES } from "@/constants/routes";
 import PageBackground from "@/components/layouts/PageBackground";
+import { API_BASE_URL } from "@/constants/api";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
     if (isLoading) return;
     setIsLoading(true);
-    navigate(ROUTES.ONBOARDING_CONSENT);
+    window.location.href = `${API_BASE_URL}/api/auth/google`;
   };
 
   return (
