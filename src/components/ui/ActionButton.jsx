@@ -4,7 +4,7 @@ function ActionButton({
   bgColor = "var(--main100)",
   textColor = "var(--white)",
   bordered = false,
-  borderColor = "var(--gray20)",
+  borderColor,
   onClick,
   disabled = false,
   className = "",
