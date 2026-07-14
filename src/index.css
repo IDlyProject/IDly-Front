@@ -37,3 +37,27 @@ body {
 button {
   touch-action: manipulation; /* 더블탭 확대(zoom) 방지 */
 }
+
+@theme {
+  --color-background: #ecf1f9;
+  --color-main100: #08257e;
+  --color-main50: #08257e80;
+  --color-main10: #08257e1a;
+  --color-danger50: #ee4e4e;
+  --color-danger30: #f17878;
+  --color-info50: #5d7eeb;
+  --color-info30: #7d98ee;
+  --color-info10: #bac8f4;
+  --color-white: #ffffff;
+  --color-gray100: #212125;
+  --color-gray90: #2c2e31;
+  --color-gray80: #414247;
+  --color-gray70: #595b61;
+  --color-gray60: #70737a;
+  --color-gray50: #8c8f96;
+  --color-gray40: #a1a4aa;
+  --color-gray30: #b7b9bf;
+  --color-gray20: #caccd3;
+  --color-gray10: #e5e7eb;
+  --color-gray5: #f0f1f4;
+}
