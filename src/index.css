@@ -60,4 +60,79 @@ button {
   --color-gray20: #caccd3;
   --color-gray10: #e5e7eb;
   --color-gray5: #f0f1f4;
+
+  --text-sb32: 2rem;
+  --text-sb32--line-height: 1.5;
+  --text-sb32--letter-spacing: -0.01em;
+  --text-sb32--font-weight: 600;
+
+  --text-b24: 1.5rem;
+  --text-b24--line-height: 1.5;
+  --text-b24--letter-spacing: -0.01em;
+  --text-b24--font-weight: 700;
+
+  --text-sb24: 1.5rem;
+  --text-sb24--line-height: 1.5;
+  --text-sb24--letter-spacing: -0.01em;
+  --text-sb24--font-weight: 600;
+
+  --text-m24: 1.5rem;
+  --text-m24--line-height: 1.5;
+  --text-m24--letter-spacing: -0.01em;
+  --text-m24--font-weight: 500;
+
+  --text-sb20: 1.25rem;
+  --text-sb20--line-height: 1.5;
+  --text-sb20--letter-spacing: -0.01em;
+  --text-sb20--font-weight: 600;
+
+  --text-m20: 1.25rem;
+  --text-m20--line-height: 1.5;
+  --text-m20--letter-spacing: -0.01em;
+  --text-m20--font-weight: 500;
+
+  --text-r20: 1.25rem;
+  --text-r20--line-height: 1.5;
+  --text-r20--letter-spacing: -0.01em;
+  --text-r20--font-weight: 400;
+
+  --text-sb18: 1.125rem;
+  --text-sb18--line-height: 1.5;
+  --text-sb18--letter-spacing: -0.01em;
+  --text-sb18--font-weight: 600;
+
+  --text-m18: 1.125rem;
+  --text-m18--line-height: 1.5;
+  --text-m18--letter-spacing: -0.01em;
+  --text-m18--font-weight: 500;
+
+  --text-sb16: 1rem;
+  --text-sb16--line-height: 1.5;
+  --text-sb16--letter-spacing: -0.01em;
+  --text-sb16--font-weight: 600;
+
+  --text-m16: 1rem;
+  --text-m16--line-height: 1.5;
+  --text-m16--letter-spacing: -0.01em;
+  --text-m16--font-weight: 500;
+
+  --text-r16: 1rem;
+  --text-r16--line-height: 1.5;
+  --text-r16--letter-spacing: -0.01em;
+  --text-r16--font-weight: 400;
+
+  --text-m14: 0.875rem;
+  --text-m14--line-height: 1.5;
+  --text-m14--letter-spacing: -0.01em;
+  --text-m14--font-weight: 500;
+
+  --text-r14: 0.875rem;
+  --text-r14--line-height: 1.5;
+  --text-r14--letter-spacing: -0.01em;
+  --text-r14--font-weight: 400;
+
+  --text-l14: 0.875rem;
+  --text-l14--line-height: 1.5;
+  --text-l14--letter-spacing: -0.01em;
+  --text-l14--font-weight: 300;
 }
