@@ -1,38 +1,55 @@
+// src/pages/Onboarding/Consent/index.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "@/components/ui/Button";
 import { ROUTES } from "@/constants/routes";
 import PageBackground from "@/components/layouts/PageBackground";
+import NotificationConfirmModal from "./components/NotificationConfirmModal";
 
 const REQUIRED_ITEMS = [
-  { id: "terms", label: "서비스 이용 약관 동의 (필수)", hasDetail: true },
-  { id: "privacy", label: "개인정보 처리방침 동의 (필수)", hasDetail: true },
-  {
-    id: "gmailReadonly",
-    label: "Gmail 읽기 전용 연결 동의 (필수)",
-    desc: "메일 발송·삭제 권한은 요청하지 않아요.",
-    hasDetail: true,
-  },
+  { id: "terms", label: "(필수) 서비스 이용약관", required: true },
+  { id: "privacy", label: "(필수) 개인정보 처리방침", required: true },
+  { id: "location", label: "(필수) 위치기반 서비스 이용약관", required: true },
   {
     id: "notification",
-    label: "알림 설정 (강하게 권장)",
-    desc: "실시간 보안 알림을 받아야 조치할 수 있어요.",
-    hasDetail: false,
+    label: "(선택) 실시간 보안 알림 수신 동의",
+    required: false,
   },
+  { id: "marketing", label: "(선택) 마케팅 정보 수신 동의", required: false },
 ];
 
-// 체크박스 하나를 표현하는 컴포넌트
+function ProgressDots({ current, total }) {
+  return (
+    <div className="mb-6 flex items-center gap-1.5">
+      {Array.from({ length: total }).map((_, i) => {
+        const step = i + 1;
+
+        if (step < current) {
+          return (
+            <span key={i} className="h-1.5 w-1.5 rounded-full bg-[#3b6cff]" />
+          );
+        }
+        if (step === current) {
+          return (
+            <span key={i} className="h-1.5 w-6 rounded-full bg-[#3b6cff]" />
+          );
+        }
+        return (
+          <span key={i} className="h-1.5 w-1.5 rounded-full bg-gray-200" />
+        );
+      })}
+    </div>
+  );
+}
+
 function Checkbox({ checked }) {
   return (
     <span
-      className={`grid h-5 w-5 flex-shrink-0 place-items-center rounded-md border transition-colors ${
-        checked
-          ? "border-[#3b6cff] bg-[#3b6cff]"
-          : "border-gray-300 bg-[#f8fafc]"
+      className={`grid h-5 w-5 flex-shrink-0 place-items-center rounded-full border transition-colors ${
+        checked ? "border-[#3b6cff] bg-[#3b6cff]" : "border-gray-300 bg-white"
       }`}
     >
       {checked && (
-        <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+        <svg width="11" height="9" viewBox="0 0 12 10" fill="none">
           <path
             d="M1 5L4.5 8.5L11 1.5"
             stroke="white"
@@ -49,8 +66,12 @@ function Checkbox({ checked }) {
 function Consent() {
   const navigate = useNavigate();
   const [checked, setChecked] = useState({});
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
 
+  const requiredItems = REQUIRED_ITEMS.filter((item) => item.required);
+  const allRequiredChecked = requiredItems.every((item) => checked[item.id]);
   const allChecked = REQUIRED_ITEMS.every((item) => checked[item.id]);
+  const notificationChecked = !!checked.notification;
 
   const toggleAll = () => {
     const next = {};
@@ -62,83 +83,92 @@ function Consent() {
     setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const handleViewDetail = (id) => {
-    // TODO: 약관 상세 모달/페이지 오픈
-    console.log(`${id} 상세 보기`);
+  const goToNextStep = () => {
+    // TODO: 동의 상태를 서버에 저장하는 API 호출 필요 시 여기에 추가
+    navigate(ROUTES.ONBOARDING_ACCOUNT_COMPLETE);
+  };
+
+  const handleAgreeClick = () => {
+    if (!allRequiredChecked) return;
+
+    // 필수 항목은 통과했지만, 알림 동의를 안 했다면 한 번 더 확인
+    if (!notificationChecked) {
+      setShowNotificationModal(true);
+      return;
+    }
+
+    goToNextStep();
+  };
+
+  const handleModalAgree = () => {
+    // 모달에서 "동의하고 계속하기" - 알림 동의 체크를 켜고 진행
+    setChecked((prev) => ({ ...prev, notification: true }));
+    setShowNotificationModal(false);
+    goToNextStep();
+  };
+
+  const handleModalDismiss = () => {
+    // "동의하지 않고 계속하기" - 알림 동의는 그대로 미체크 상태로 진행
+    setShowNotificationModal(false);
+    goToNextStep();
   };
 
   return (
     <PageBackground variant="default">
-      <div className="flex min-h-dvh flex-col px-6 pt-10 pb-8">
-        <h1 className="text-[26px] font-bold leading-snug text-[#191f28]">
-          안녕하세요,
-          <br />
-          계정을 지키는
-          <br />
-          IDly입니다!
-        </h1>
+      <div className="flex min-h-dvh flex-col px-6 pt-8 pb-8">
+        <ProgressDots current={4} total={6} />
 
-        <div className="mt-8 flex-1 space-y-3">
-          {/* 전체 동의하기 */}
+        <h1 className="text-[22px] font-bold leading-snug text-[#191f28]">
+          서비스 이용 동의
+        </h1>
+        <p className="mt-1.5 text-[13px] font-bold text-[#9aa4b2]">
+          idly 서비스 이용을 위해 약관에 동의해 주세요.
+        </p>
+
+        <div className="mt-6 flex-1">
           <button
             onClick={toggleAll}
-            className="flex w-full items-center gap-3 rounded-2xl bg-white p-4 text-left shadow-sm active:bg-gray-50"
+            className="mb-4 flex w-full items-center gap-3 rounded-2xl bg-[#eef2ff] p-3.5 text-left"
           >
             <Checkbox checked={allChecked} />
-            <b className="text-[15px] text-[#191f28]">전체 동의하기</b>
+            <b className="text-sm text-[#191f28]">전체 동의</b>
           </button>
 
-          {/* 개별 항목 */}
-          {REQUIRED_ITEMS.map((item) => (
-            <div
-              key={item.id}
-              className="flex w-full items-center gap-3 rounded-2xl bg-white p-4 shadow-sm"
-            >
-              {/* 체크박스만 클릭 → 체크 토글 */}
+          <div className="h-px bg-gray-100" />
+
+          <div className="mt-4 space-y-4">
+            {REQUIRED_ITEMS.map((item) => (
               <button
+                key={item.id}
                 onClick={() => toggleOne(item.id)}
-                className="flex flex-shrink-0 items-center"
-                aria-label={`${item.label} 동의`}
+                className="flex w-full items-center gap-3 text-left"
               >
                 <Checkbox checked={!!checked[item.id]} />
+                <span className="text-[13px] font-bold text-[#191f28]">
+                  {item.label}
+                </span>
               </button>
-
-              {/* 텍스트도 클릭 → 체크 토글 (터치 영역 넓힘) */}
-              <button
-                onClick={() => toggleOne(item.id)}
-                className="flex-1 text-left"
-              >
-                <b className="block text-[14px] text-[#191f28]">{item.label}</b>
-                {item.desc && (
-                  <small className="mt-1 block text-[11px] text-gray-400">
-                    {item.desc}
-                  </small>
-                )}
-              </button>
-
-              {/* 상세보기는 별도 버튼 → 약관 상세로 이동 */}
-              {item.hasDetail && (
-                <button
-                  onClick={() => handleViewDetail(item.id)}
-                  className="flex-shrink-0 px-1 text-gray-300"
-                  aria-label="상세 보기"
-                >
-                  ›
-                </button>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        <Button
-          variant="primary"
-          disabled={!allChecked}
-          className={!allChecked ? "opacity-40" : ""}
-          onClick={() => navigate(ROUTES.ONBOARDING_ACCOUNT_CONFIRM)}
+        <button
+          onClick={handleAgreeClick}
+          disabled={!allRequiredChecked}
+          className={`h-14 w-full rounded-2xl text-[15px] font-bold text-white transition-opacity ${
+            allRequiredChecked ? "bg-[#12206b]" : "bg-[#12206b] opacity-40"
+          }`}
         >
-          다음
-        </Button>
+          동의하고 시작하기
+        </button>
       </div>
+
+      {showNotificationModal && (
+        <NotificationConfirmModal
+          onAgree={handleModalAgree}
+          onDismiss={handleModalDismiss}
+        />
+      )}
     </PageBackground>
   );
 }

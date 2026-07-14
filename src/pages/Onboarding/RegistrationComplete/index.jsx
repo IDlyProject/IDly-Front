@@ -1,40 +1,180 @@
+// src/pages/Onboarding/RegistrationComplete/index.jsx
 import { useNavigate } from "react-router-dom";
-import SuccessMark from "../components/SuccessMark";
-import Button from "@/components/ui/Button";
 import { ROUTES } from "@/constants/routes";
 import PageBackground from "@/components/layouts/PageBackground";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { getPrimaryGmailAccount } from "@/api/auth";
 
-// TODO: 대표/연결 계정 수는 /accounts 응답 기준으로 계산
+function ProgressDots({ current, total }) {
+  return (
+    <div className="mb-6 flex items-center gap-1.5">
+      {Array.from({ length: total }).map((_, i) => {
+        const step = i + 1;
+
+        if (step < current) {
+          return (
+            <span key={i} className="h-1.5 w-1.5 rounded-full bg-[#3b6cff]" />
+          );
+        }
+        if (step === current) {
+          return (
+            <span key={i} className="h-1.5 w-6 rounded-full bg-[#3b6cff]" />
+          );
+        }
+        return (
+          <span key={i} className="h-1.5 w-1.5 rounded-full bg-gray-200" />
+        );
+      })}
+    </div>
+  );
+}
+
+function ShieldMark() {
+  return (
+    <div className="mx-auto mb-5 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-br from-[#3b6cff] to-[#1a3fae] shadow-lg shadow-blue-500/30">
+      <svg
+        width="30"
+        height="30"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
+        <path d="M9 12l2 2 4-4" />
+      </svg>
+    </div>
+  );
+}
+
+function ShieldIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#3b6cff"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  );
+}
+
+function PeopleIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#3b6cff"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="9" cy="8" r="3" />
+      <path d="M3 19c0-3 2.5-5 6-5s6 2 6 5" />
+      <circle cx="17" cy="8" r="2.5" />
+      <path d="M15.5 13.2c2.5.4 4 2.1 4 4.8" />
+    </svg>
+  );
+}
+
+function BellIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#3b6cff"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 8a6 6 0 0 0-12 0c0 4-2 5-2 5h16s-2-1-2-5" />
+      <path d="M9 17a3 3 0 0 0 6 0" />
+    </svg>
+  );
+}
+
+function InfoRow({ icon, label, value }) {
+  return (
+    <div className="flex items-center gap-3 border-b border-gray-50 py-3 last:border-b-0">
+      <div className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-[#eef2ff]">
+        {icon}
+      </div>
+      <div>
+        <span className="block text-[11px] font-bold text-[#9aa4b2]">
+          {label}
+        </span>
+        <strong className="mt-0.5 block text-sm text-[#191f28]">{value}</strong>
+      </div>
+    </div>
+  );
+}
+
 function RegistrationComplete() {
   const navigate = useNavigate();
-  const primaryCount = 1;
-  const connectedCount = 1;
+  const { user } = useCurrentUser();
 
-  const handleStartAnalysis = () => {
+  const primaryEmail = getPrimaryGmailAccount(user)?.email ?? "";
+  const totalAccountCount = user?.gmailAccounts?.length ?? 0;
+  // TODO: 실제 알림 동의 상태를 유저 데이터에서 가져와야 함 (현재는 임시로 true 고정)
+  const notificationEnabled = true;
+
+  const handleStart = () => {
     navigate(ROUTES.ANALYSIS);
   };
 
   return (
-    <PageBackground variant="sky">
-      <div className="flex min-h-dvh flex-col justify-center px-8 pb-10 text-center">
-        <SuccessMark />
-        <h1 className="text-[26px] font-bold leading-snug text-[#191f28]">
-          계정 등록이
-          <br />
-          완료되었어요
-        </h1>
-        <p className="mx-auto mt-3 max-w-[280px] text-[14px] leading-relaxed text-[#6b7684]">
-          대표 계정 {primaryCount}개와 연결 계정 {connectedCount}개가
-          연결되었어요.
-          <br />
-          연결한 Gmail에서 계정 신호를 분석하고, 계정아파트로 정리합니다.
-        </p>
+    <PageBackground variant="default">
+      <div className="flex min-h-dvh flex-col px-6 pt-8 pb-8">
+        <ProgressDots current={6} total={6} />
 
-        <div className="mt-14">
-          <Button variant="primary" onClick={handleStartAnalysis}>
-            분석 시작하기
-          </Button>
+        <div className="flex flex-1 flex-col items-center justify-center text-center">
+          <ShieldMark />
+          <h1 className="text-[22px] font-bold text-[#191f28]">
+            모든 준비 완료!
+          </h1>
+          <p className="mx-auto mt-2.5 max-w-[260px] text-[13px] font-bold leading-relaxed text-[#9aa4b2]">
+            idly가 모든 계정을 안전하게 지켜드릴게요.
+            <br />
+            이상 징후가 감지되면 바로 알려드립니다.
+          </p>
+
+          <div className="mt-6 w-full rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+            <InfoRow
+              icon={<ShieldIcon />}
+              label="대표 계정"
+              value={primaryEmail}
+            />
+            <InfoRow
+              icon={<PeopleIcon />}
+              label="연동된 계정"
+              value={`총 ${totalAccountCount}개 Gmail 계정`}
+            />
+            <InfoRow
+              icon={<BellIcon />}
+              label="알림"
+              value={notificationEnabled ? "활성화됨" : "비활성화됨"}
+            />
+          </div>
         </div>
+
+        <button
+          onClick={handleStart}
+          className="h-14 w-full rounded-2xl bg-[#12206b] text-[15px] font-bold text-white"
+        >
+          시작하기
+        </button>
       </div>
     </PageBackground>
   );

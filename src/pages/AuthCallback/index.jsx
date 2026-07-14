@@ -19,7 +19,7 @@ function AuthCallback() {
 
     if (mode === "login") {
       // 신규 로그인 완료 → 온보딩 다음 단계(약관 동의)로
-      navigate(ROUTES.ONBOARDING_CONSENT, { replace: true });
+      navigate(ROUTES.ONBOARDING_ACCOUNT_CONFIRM, { replace: true });
       return;
     }
 
