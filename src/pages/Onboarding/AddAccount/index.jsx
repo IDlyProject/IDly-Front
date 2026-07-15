@@ -1,38 +1,27 @@
 // src/pages/Onboarding/AddAccount/index.jsx
 import { useNavigate } from "react-router-dom";
-import PageBackground from "@/components/layouts/PageBackground";
+import ProgressDots from "../components/ProgressDot";
+import ActionButton from "@/components/ui/ActionButton";
+import PlusIcon from "@/assets/ic_plus.svg";
 import { API_BASE_URL } from "@/constants/api";
 import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { toMailAccount } from "@/utils/mailAccount";
-
-function ProgressDots({ current, total }) {
-  return (
-    <div className="mb-6 flex items-center gap-1.5">
-      {Array.from({ length: total }).map((_, i) => {
-        const step = i + 1;
-
-        if (step < current) {
-          return (
-            <span key={i} className="h-1.5 w-1.5 rounded-full bg-[#3b6cff]" />
-          );
-        }
-        if (step === current) {
-          return (
-            <span key={i} className="h-1.5 w-6 rounded-full bg-[#3b6cff]" />
-          );
-        }
-        return (
-          <span key={i} className="h-1.5 w-1.5 rounded-full bg-gray-200" />
-        );
-      })}
-    </div>
-  );
-}
+import PageBackground from "../../../components/layouts/PageBackground";
+// 파일 상단에 임시 mock 데이터 추가 (UI 확인 끝나면 지우기)
+/*const MOCK_USER = {
+  gmailAccounts: [
+    { id: "1", email: "minsu.kim@gmail.com", isPrimary: true },
+    { id: "2", email: "minsu.work@gmail.com", isPrimary: false },
+  ],
+};
+*/
 
 function AddAccount() {
   const navigate = useNavigate();
   const { user, status } = useCurrentUser();
+  // const user = MOCK_USER;
+  // const status = "success";
 
   const handleStartConnect = () => {
     // 로그인 쿠키(httpOnly)가 자동으로 실려가므로 별도 토큰 전달 불필요
@@ -73,74 +62,77 @@ function AddAccount() {
 
   return (
     <PageBackground variant="default">
-      <div className="flex min-h-dvh flex-col px-6 pt-8 pb-8">
-        <ProgressDots current={6} total={6} />
-
-        <h1 className="text-[22px] font-bold leading-snug text-[#191f28]">
-          추가 계정 연동
-        </h1>
-        <p className="mt-1.5 text-[13px] font-bold leading-relaxed text-[#9aa4b2]">
-          관리할 Gmail 계정을 추가해 주세요.
-          <br />
-          추가된 계정의 보안 상태도 함께 모니터링합니다.
-        </p>
-
-        <div className="mt-6 flex-1 space-y-3">
-          {mailAccounts.map((account) => (
-            <div
-              key={account.id}
-              className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-3.5 shadow-sm"
-            >
+      <div className="flex min-h-dvh flex-col px-4 pb-8">
+        <div className="flex flex-col flex-1 px-1">
+          <ProgressDots current={6} total={7} />
+          <div className="py-4 flex flex-col gap-2">
+            <h1 className="text-b24 text-gray100">추가 계정 연동</h1>
+            <p className="text-r14 text-gray60">
+              관리할 Gmail 계정을 추가해 주세요.
+              <br />
+              추가된 계정의 보안 상태도 함께 모니터링합니다.
+            </p>
+          </div>
+          <div className="mt-2 flex-1 space-y-3">
+            {mailAccounts.map((account) => (
               <div
-                className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-full text-sm font-bold text-white"
-                style={{ background: account.avatarBg }}
+                key={account.id}
+                className="flex items-center gap-3.5 rounded-2xl bg-[#F0F6FF] px-4.5 py-4"
               >
-                {account.avatarLabel}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-1.5">
-                  <strong className="text-sm text-[#191f28]">
-                    {account.email}
-                  </strong>
-                  {account.isPrimary && (
-                    <span className="rounded-full bg-[#eef2ff] px-2 py-0.5 text-[10px] font-bold text-[#3b6cff]">
-                      대표
-                    </span>
-                  )}
+                <div
+                  className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-sb18 font-bold text-white"
+                  style={{ background: account.avatarBg }}
+                >
+                  {account.avatarLabel}
                 </div>
-                <span className="mt-0.5 block text-xs font-bold text-[#12b886]">
-                  연동 완료
-                </span>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <strong className="text-sb16 text-[14px] text-gray100">
+                      {account.email}
+                    </strong>
+                    {account.isPrimary && (
+                      <span className="rounded-full bg-main100 px-2 py-0.5 text-sb16 text-[10px] text-white">
+                        대표
+                      </span>
+                    )}
+                  </div>
+                  <span className="mt-0.5 block text-m14 text-[12px] text-[#12b886]">
+                    연동 완료
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          <button
-            onClick={handleStartConnect}
-            className="flex w-full items-center gap-3 rounded-2xl px-3.5 py-3 text-left"
-          >
-            <div className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-full border border-dashed border-gray-300 text-lg font-bold text-[#9aa4b2]">
-              +
-            </div>
-            <span className="text-sm font-bold text-[#6b7684]">
-              다른 Gmail 계정 추가
-            </span>
-          </button>
+            <button
+              onClick={handleStartConnect}
+              className="flex w-full items-center gap-3.5 px-4.5 py-4 text-left"
+            >
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-main100">
+                <img src={PlusIcon} className="h-3.25 w-3.25" />
+              </div>
+              <span className="text-sb16 text-[14px] text-gray60">
+                다른 Gmail 계정 추가
+              </span>
+            </button>
+          </div>
         </div>
-
-        <div className="space-y-2.5">
-          <button
+        <div className="mt-4 space-y-2.5">
+          <ActionButton
+            bgColor="var(--color-main100)"
+            textColor="var(--color-white)"
             onClick={handleComplete}
-            className="h-14 w-full rounded-2xl bg-[#12206b] text-[15px] font-bold text-white"
           >
             {mailAccounts.length}개 계정 연동 완료
-          </button>
-          <button
+          </ActionButton>
+          <ActionButton
+            bordered
+            borderColor="var(--color-gray20)"
+            textColor="var(--color-main100)"
             onClick={handleSkip}
-            className="h-14 w-full rounded-2xl border border-gray-200 bg-white text-[15px] font-bold text-[#191f28] shadow-sm"
+            className="shadow-[0_4px_14px_0_rgba(16,24,46,0.06)]"
           >
             건너뛰기
-          </button>
+          </ActionButton>
         </div>
       </div>
     </PageBackground>

@@ -51,6 +51,7 @@ function AccountComplete() {
             borderColor="var(--color-gray20)"
             textColor="var(--color-main100)"
             onClick={handleSkip}
+            className="shadow-[0_4px_14px_0_rgba(16,24,46,0.06)]"
           >
             나중에 할게요
           </ActionButton>
