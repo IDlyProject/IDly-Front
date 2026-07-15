@@ -21,7 +21,7 @@ function AccountComplete() {
       <div className="flex flex-col flex-1 px-1">
         <ProgressDots current={5} total={7} />
         <div className="flex flex-1 flex-col justify-center items-center text-center">
-          <div className="grid place-items-center w-30 h-30 rounded-full bg-[#12B886]/30">
+          <div className="grid place-items-center mb-6 w-30 h-30 rounded-full bg-[#12B886]/30">
             <div className="grid place-items-center w-20 h-20 rounded-full bg-[#12B886]">
               <img src={CheckIcon} className="h-10 w-10" />
             </div>

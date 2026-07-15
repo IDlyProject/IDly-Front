@@ -57,7 +57,7 @@ function AccountConfirm() {
           </p>
         </div>
 
-        <div className="mt-5 flex items-center gap-3 rounded-[14px] bg-[#ECF1F9] px-4 py-3.5 mb-5">
+        <div className="flex items-center gap-3 rounded-[14px] bg-[#ECF1F9] px-4 py-3.5 mb-5">
           <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-main100 text-b20 text-[17px] text-white">
             {name.trim() ? name.trim()[0] : "?"}
           </div>

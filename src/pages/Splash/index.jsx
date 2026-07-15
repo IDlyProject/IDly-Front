@@ -44,7 +44,9 @@ function Splash() {
         </p>
       </div>
 
-      <p className="pb-12 text-r12 text-white/26">© 2026 계정아파트</p>
+      <p className="pb-12 text-r14 text-[12px] text-white/26">
+        © 2026 계정아파트
+      </p>
     </div>
   );
 }

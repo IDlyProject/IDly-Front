@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import ProgressDots from "../components/ProgressDot";
+import AllCheckedBoxIcon from "@/assets/ic_all_checked_box.svg";
 import CheckedBoxIcon from "@/assets/ic_checked_box.svg";
 import UncheckedBoxIcon from "@/assets/ic_unchecked_box.svg";
 import ActionButton from "@/components/ui/ActionButton";
@@ -88,7 +89,7 @@ function Consent() {
               className="flex w-full items-center gap-3 rounded-2xl bg-[#F0F6FF] px-5 py-4.5 text-left"
             >
               <img
-                src={allChecked ? CheckedBoxIcon : UncheckedBoxIcon}
+                src={allChecked ? AllCheckedBoxIcon : UncheckedBoxIcon}
                 alt=""
                 className="h-6.5 w-6.5"
               />
