@@ -2,7 +2,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
-import PageBackground from "@/components/layouts/PageBackground";
+import ProgressDots from "../components/ProgressDot";
+import CheckedBoxIcon from "@/assets/ic_checked_box.svg";
+import UncheckedBoxIcon from "@/assets/ic_unchecked_box.svg";
+import ActionButton from "@/components/ui/ActionButton";
 import NotificationConfirmModal from "./components/NotificationConfirmModal";
 
 const REQUIRED_ITEMS = [
@@ -16,52 +19,6 @@ const REQUIRED_ITEMS = [
   },
   { id: "marketing", label: "(선택) 마케팅 정보 수신 동의", required: false },
 ];
-
-function ProgressDots({ current, total }) {
-  return (
-    <div className="mb-6 flex items-center gap-1.5">
-      {Array.from({ length: total }).map((_, i) => {
-        const step = i + 1;
-
-        if (step < current) {
-          return (
-            <span key={i} className="h-1.5 w-1.5 rounded-full bg-[#3b6cff]" />
-          );
-        }
-        if (step === current) {
-          return (
-            <span key={i} className="h-1.5 w-6 rounded-full bg-[#3b6cff]" />
-          );
-        }
-        return (
-          <span key={i} className="h-1.5 w-1.5 rounded-full bg-gray-200" />
-        );
-      })}
-    </div>
-  );
-}
-
-function Checkbox({ checked }) {
-  return (
-    <span
-      className={`grid h-5 w-5 flex-shrink-0 place-items-center rounded-full border transition-colors ${
-        checked ? "border-[#3b6cff] bg-[#3b6cff]" : "border-gray-300 bg-white"
-      }`}
-    >
-      {checked && (
-        <svg width="11" height="9" viewBox="0 0 12 10" fill="none">
-          <path
-            d="M1 5L4.5 8.5L11 1.5"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      )}
-    </span>
-  );
-}
 
 function Consent() {
   const navigate = useNavigate();
@@ -114,53 +71,58 @@ function Consent() {
   };
 
   return (
-    <PageBackground variant="default">
-      <div className="flex min-h-dvh flex-col px-6 pt-8 pb-8">
-        <ProgressDots current={4} total={6} />
+    <>
+      <div className="flex min-h-dvh flex-col px-4 pb-8">
+        <div className="flex-1 px-1">
+          <ProgressDots current={4} total={6} />
+          <div className="py-4 gap-2">
+            <h1 className="text-b24 text-gray100">서비스 이용 동의</h1>
+            <p className="text-r14 text-gray60">
+              idiy 서비스 이용을 위해 약관에 동의해 주세요.
+            </p>
+          </div>
 
-        <h1 className="text-[22px] font-bold leading-snug text-[#191f28]">
-          서비스 이용 동의
-        </h1>
-        <p className="mt-1.5 text-[13px] font-bold text-[#9aa4b2]">
-          idly 서비스 이용을 위해 약관에 동의해 주세요.
-        </p>
+          <div className="py-2">
+            <button
+              onClick={toggleAll}
+              className="flex w-full items-center gap-3 rounded-2xl bg-[#F0F6FF] px-5 py-4.5 text-left"
+            >
+              <img
+                src={allChecked ? CheckedBoxIcon : UncheckedBoxIcon}
+                alt=""
+                className="h-6.5 w-6.5"
+              />
+              <b className="text-sb16 text-gray100">전체 동의</b>
+            </button>
 
-        <div className="mt-6 flex-1">
-          <button
-            onClick={toggleAll}
-            className="mb-4 flex w-full items-center gap-3 rounded-2xl bg-[#eef2ff] p-3.5 text-left"
-          >
-            <Checkbox checked={allChecked} />
-            <b className="text-sm text-[#191f28]">전체 동의</b>
-          </button>
+            <div className="my-3 h-px bg-gray10" />
 
-          <div className="h-px bg-gray-100" />
-
-          <div className="mt-4 space-y-4">
-            {REQUIRED_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => toggleOne(item.id)}
-                className="flex w-full items-center gap-3 text-left"
-              >
-                <Checkbox checked={!!checked[item.id]} />
-                <span className="text-[13px] font-bold text-[#191f28]">
-                  {item.label}
-                </span>
-              </button>
-            ))}
+            <div>
+              {REQUIRED_ITEMS.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => toggleOne(item.id)}
+                  className="px-2 py-3.5 flex w-full items-center gap-3 text-left"
+                >
+                  <img
+                    src={checked[item.id] ? CheckedBoxIcon : UncheckedBoxIcon}
+                    alt=""
+                    className="h-5.5 w-5.5"
+                  />
+                  <span className="text-r14 text-gray100">{item.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-
-        <button
+        <ActionButton
+          bgColor="var(--color-main100)"
+          textColor="var(--color-white)"
           onClick={handleAgreeClick}
           disabled={!allRequiredChecked}
-          className={`h-14 w-full rounded-2xl text-[15px] font-bold text-white transition-opacity ${
-            allRequiredChecked ? "bg-[#12206b]" : "bg-[#12206b] opacity-40"
-          }`}
         >
           동의하고 시작하기
-        </button>
+        </ActionButton>
       </div>
 
       {showNotificationModal && (
@@ -169,7 +131,7 @@ function Consent() {
           onDismiss={handleModalDismiss}
         />
       )}
-    </PageBackground>
+    </>
   );
 }
 
