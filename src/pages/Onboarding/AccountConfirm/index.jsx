@@ -71,7 +71,7 @@ function AccountConfirm() {
               {primaryEmail}
             </span>
           </div>
-          <span className="px-2.5 py-1 text-sb16 text-[11px] text-[#43A047]">
+          <span className="px-2.5 py-1 border border-[0.6px] rounded-xl bg-[#cdf7eb] text-sb16 text-[11px] text-[#12B886]">
             Gmail
           </span>
         </div>
