@@ -5,6 +5,7 @@ import ShieldCheckIcon from "@/assets/ic_shield_check.svg";
 import AccountIcon from "@/assets/ic_account.svg";
 import BellIcon from "@/assets/ic_bell.svg";
 import ProgressDots from "../components/ProgressDot";
+import PageBackground from "@/components/layouts/PageBackground";
 import ActionButton from "@/components/ui/ActionButton";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { getPrimaryGmailAccount } from "@/api/auth";
@@ -39,48 +40,50 @@ function RegistrationComplete() {
   };
 
   return (
-    <div className="flex min-h-dvh flex-col px-4 pb-8">
-      <div className="flex flex-col flex-1 px-1">
-        <ProgressDots current={7} total={7} />
+    <PageBackground variant="default">
+      <div className="flex min-h-dvh flex-col px-4 pb-8">
+        <div className="flex flex-col flex-1 px-1">
+          <ProgressDots current={7} total={7} />
 
-        <div className="flex flex-1 flex-col items-center justify-center text-center gap-6.25">
-          <img src={CompleteMark} className="h-25 w-25 m-5" />
-          <div className="flex flex-col gap-3">
-            <h1 className="text-b24 text-gray100">모든 준비 완료!</h1>
-            <p className="mx-auto max-w-65 text-r14 text-gray60">
-              idly가 모든 계정을 안전하게 지켜드릴게요.
-              <br />
-              이상 징후가 감지되면 바로 알려드립니다.
-            </p>
-          </div>
+          <div className="flex flex-1 flex-col items-center justify-center text-center gap-6.25">
+            <img src={CompleteMark} className="h-25 w-25 m-5" />
+            <div className="flex flex-col gap-3">
+              <h1 className="text-b24 text-gray100">모든 준비 완료!</h1>
+              <p className="mx-auto max-w-65 text-r14 text-gray60">
+                idly가 모든 계정을 안전하게 지켜드릴게요.
+                <br />
+                이상 징후가 감지되면 바로 알려드립니다.
+              </p>
+            </div>
 
-          <div className="flex flex-col gap-3.5 w-full rounded-[18px] bg-[#F0F6FF] p-5">
-            <InfoRow
-              icon={<img src={ShieldCheckIcon} />}
-              label="대표 계정"
-              value={primaryEmail}
-            />
-            <InfoRow
-              icon={<img src={AccountIcon} />}
-              label="연동된 계정"
-              value={`총 ${totalAccountCount}개 Gmail 계정`}
-            />
-            <InfoRow
-              icon={<img src={BellIcon} />}
-              label="알림"
-              value={notificationEnabled ? "활성화됨" : "비활성화됨"}
-            />
+            <div className="flex flex-col gap-3.5 w-full rounded-[18px] bg-[#F0F6FF] p-5">
+              <InfoRow
+                icon={<img src={ShieldCheckIcon} />}
+                label="대표 계정"
+                value={primaryEmail}
+              />
+              <InfoRow
+                icon={<img src={AccountIcon} />}
+                label="연동된 계정"
+                value={`총 ${totalAccountCount}개 Gmail 계정`}
+              />
+              <InfoRow
+                icon={<img src={BellIcon} />}
+                label="알림"
+                value={notificationEnabled ? "활성화됨" : "비활성화됨"}
+              />
+            </div>
           </div>
         </div>
+        <ActionButton
+          bgColor="var(--color-main100)"
+          textColor="var(--color-white)"
+          onClick={handleStart}
+        >
+          시작하기
+        </ActionButton>
       </div>
-      <ActionButton
-        bgColor="var(--color-main100)"
-        textColor="var(--color-white)"
-        onClick={handleStart}
-      >
-        시작하기
-      </ActionButton>
-    </div>
+    </PageBackground>
   );
 }
 

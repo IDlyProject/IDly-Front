@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import { fetchCurrentUser } from "@/api/auth";
 import typoLogo from "@/assets/ic_typo_logo_white.svg";
-
+import PageBackground from "@/components/layouts/PageBackground";
 const MIN_DISPLAY_TIME = 1200;
 
 function Splash() {
@@ -36,18 +36,20 @@ function Splash() {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center bg-main100 px-8">
-      <div className="flex flex-1 flex-col items-center justify-center">
-        <img src={typoLogo} alt="IDly" />
-        <p className="mt-5 text-r16 text-white/60">
-          이메일로 확인하는 나의 모든 계정
+    <PageBackground variant="splash">
+      <div className="flex min-h-dvh flex-col items-center justify-center bg-main100 px-8">
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <img src={typoLogo} alt="IDly" />
+          <p className="mt-5 text-r16 text-white/60">
+            이메일로 확인하는 나의 모든 계정
+          </p>
+        </div>
+
+        <p className="pb-12 text-r14 text-[12px] text-white/26">
+          © 2026 계정아파트
         </p>
       </div>
-
-      <p className="pb-12 text-r14 text-[12px] text-white/26">
-        © 2026 계정아파트
-      </p>
-    </div>
+    </PageBackground>
   );
 }
 

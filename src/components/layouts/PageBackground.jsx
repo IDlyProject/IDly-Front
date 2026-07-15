@@ -2,18 +2,21 @@
 import { useLayoutEffect } from "react";
 
 const BG_VALUES = {
+  splash: "#08257E",
   sky: "linear-gradient(180deg, #bcdcff 0%, #dcebff 48%, #fdf2e4 100%)",
-  default: "#f2f4f6",
+  default: "#ffffff",
 };
 
 const THEME_COLOR = {
+  splash: "#08257E",
   sky: "#fdf2e4", // 그라데이션 하단 색과 맞춤 (하단 툴바 쪽에 더 가까운 색)
-  default: "#f2f4f6",
+  default: "#ffffff",
 };
 
 const BG_CLASSES = {
+  splash: "bg-[#08257E]",
   sky: "bg-gradient-to-b from-[#bcdcff] via-[#dcebff] to-[#fdf2e4]",
-  default: "bg-[#f2f4f6]",
+  default: "bg-white",
 };
 
 function PageBackground({ variant = "default", children }) {

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import ProgressDots from "../components/ProgressDot";
+import PageBackground from "@/components/layouts/PageBackground";
 import AllCheckedBoxIcon from "@/assets/ic_all_checked_box.svg";
 import CheckedBoxIcon from "@/assets/ic_checked_box.svg";
 import UncheckedBoxIcon from "@/assets/ic_unchecked_box.svg";
@@ -72,7 +73,7 @@ function Consent() {
   };
 
   return (
-    <>
+    <PageBackground variant="default">
       <div className="flex min-h-dvh flex-col px-4 pb-8">
         <div className="flex-1 px-1">
           <ProgressDots current={4} total={6} />
@@ -132,7 +133,7 @@ function Consent() {
           onDismiss={handleModalDismiss}
         />
       )}
-    </>
+    </PageBackground>
   );
 }
 
