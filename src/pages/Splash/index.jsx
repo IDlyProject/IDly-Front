@@ -23,7 +23,7 @@ function Splash() {
 
     fetchCurrentUser()
       .then((user) => {
-        goTo(user ? ROUTES.HOME : ROUTES.ONBOARDING_LOGIN);
+        goTo(user ? ROUTES.ONBOARDING_LOGIN : ROUTES.ONBOARDING_LOGIN);
       })
       .catch((error) => {
         console.error("Failed to fetch current user:", error);
