@@ -1,32 +1,8 @@
-// src/pages/Onboarding/AccountComplete/index.jsx
 import { useNavigate } from "react-router-dom";
-import SuccessMark from "../components/SuccessMark";
+import ProgressDots from "../components/ProgressDot";
 import { ROUTES } from "@/constants/routes";
-import PageBackground from "@/components/layouts/PageBackground";
-
-function ProgressDots({ current, total }) {
-  return (
-    <div className="mb-6 flex items-center gap-1.5">
-      {Array.from({ length: total }).map((_, i) => {
-        const step = i + 1;
-
-        if (step < current) {
-          return (
-            <span key={i} className="h-1.5 w-1.5 rounded-full bg-[#3b6cff]" />
-          );
-        }
-        if (step === current) {
-          return (
-            <span key={i} className="h-1.5 w-6 rounded-full bg-[#3b6cff]" />
-          );
-        }
-        return (
-          <span key={i} className="h-1.5 w-1.5 rounded-full bg-gray-200" />
-        );
-      })}
-    </div>
-  );
-}
+import CheckIcon from "@/assets/ic_check.svg";
+import ActionButton from "@/components/ui/ActionButton";
 
 function AccountComplete() {
   const navigate = useNavigate();
@@ -41,14 +17,17 @@ function AccountComplete() {
   };
 
   return (
-    <PageBackground variant="default">
-      <div className="flex min-h-dvh flex-col px-6 pt-8 pb-8">
-        <ProgressDots current={5} total={6} />
-
-        <div className="flex flex-1 flex-col items-center justify-center text-center">
-          <SuccessMark />
-          <h1 className="text-[22px] font-bold text-[#191f28]">입주 완료!</h1>
-          <p className="mx-auto mt-2.5 max-w-[260px] text-[13px] font-bold leading-relaxed text-[#9aa4b2]">
+    <div className="flex min-h-dvh flex-col px-4 pb-8">
+      <div className="flex flex-col flex-1 px-1">
+        <ProgressDots current={5} total={7} />
+        <div className="flex flex-1 flex-col justify-center items-center text-center">
+          <div className="grid place-items-center w-30 h-30 rounded-full bg-[#12B886]/30">
+            <div className="grid place-items-center w-20 h-20 rounded-full bg-[#12B886]">
+              <img src={CheckIcon} className="h-10 w-10" />
+            </div>
+          </div>
+          <h1 className="text-b24 text-gray100">입주 완료!</h1>
+          <p className="mx-auto mt-2.5 max-w-65 text-r14 text-gray60">
             대표 계정 등록이 완료되었어요.
             <br />
             추가 Gmail 계정을 연동하면
@@ -56,23 +35,25 @@ function AccountComplete() {
             모든 계정을 한 번에 관리할 수 있어요.
           </p>
         </div>
-
-        <div className="space-y-2.5">
-          <button
-            onClick={handleAddAccount}
-            className="h-14 w-full rounded-2xl bg-[#12206b] text-[15px] font-bold text-white"
-          >
-            추가 Gmail 계정 연동하기
-          </button>
-          <button
-            onClick={handleSkip}
-            className="h-14 w-full rounded-2xl border border-gray-200 bg-white text-[15px] font-bold text-[#191f28] shadow-sm"
-          >
-            나중에 할게요
-          </button>
-        </div>
       </div>
-    </PageBackground>
+      <div className="mt-4 space-y-2.5">
+        <ActionButton
+          bgColor="var(--color-main100)"
+          textColor="var(--color-white)"
+          onClick={handleAddAccount}
+        >
+          추가 Gmail 계정 연동하기
+        </ActionButton>
+        <ActionButton
+          bordered
+          borderColor="var(--color-gray20)"
+          textColor="var(--color-main100)"
+          onClick={handleSkip}
+        >
+          나중에 할게요
+        </ActionButton>
+      </div>
+    </div>
   );
 }
 
