@@ -1,93 +1,119 @@
 // src/pages/AccountDetail/mockDetailData.js
-// TODO: 실제로는 GET /accounts/:accountId 응답으로 대체
-// 서버는 accountId로 조회하되, 응답에 service 정보(로고/이름/대응템플릿)를 포함해서 내려줄 것으로 예상
-
 import { MOCK_ACCOUNTS } from "@/pages/Home/mockData";
+import KeyIcon from "@/assets/ic_key.svg";
+import ShieldIcon from "@/assets/ic_shield_check.svg";
+import LogoutIcon from "@/assets/ic_logout.svg";
 
-// service별 위험 신호/대응 템플릿 (실제로는 riskType 기반 템플릿을 서버가 매칭해서 내려줌)
-const SERVICE_TEMPLATES = {
+export const MOCK_DETAIL = {
   disney: {
-    riskLevel: "높음",
-    meta: ["새 기기 로그인", "월 9,900원"],
-    summaryTitle: "오늘 안에 확인 필요",
-    summaryDesc: "새 기기 로그인과 오래된 비밀번호 신호가 함께 확인됐습니다.",
-    signals: [
+    name: "Disney+",
+    iconBg: "#1a3fae",
+    iconText: "D",
+    riskBadgeLabel: "보안 위험",
+    isRisk: true,
+
+    riskTitle: "보안 조치가 필요해요",
+    summaryTitle: "새로운 기기에서 로그인되었습니다",
+    summarySub: "다른 사이트와 같은 비밀번호를 쓰고 있어요",
+    sourceLabel: "Disney+ 보안팀 · 2일 전 수신",
+    ctaLabel: "지금 바로 조치하기",
+
+    newsText:
+      "비밀번호 하나 뚫리면 어디까지 털릴까?\n3분이면 끝나는 재사용 끊기",
+    newsUrl: "https://idly-apt.tistory.com/2",
+
+    events: [
       {
-        id: 1,
-        level: "red",
-        title: "새 기기 로그인 감지",
-        desc: "6월 23일 02:14 · Windows PC 로그인",
-        source: "Disney+ 보안팀 메일",
+        id: "e1",
+        type: "suspicious_login",
+        name: "의심 로그인 감지",
+        time: "오늘 오전 8:44 · 서울",
       },
       {
-        id: 2,
-        level: "yellow",
-        title: "비밀번호 변경 기록 부족",
-        desc: "최근 6개월 내 변경 신호 없음",
+        id: "e2",
+        type: "new_device",
+        name: "새 기기에서 접근",
+        time: "어제 오후 11:20",
       },
       {
-        id: 3,
-        level: "gray",
-        title: "결제 정보가 연결된 계정",
-        desc: "월 9,900원 결제 계정 · 우선 확인",
-        source: "Disney+ 결제 알림 메일",
+        id: "e3",
+        type: "password_change",
+        name: "비밀번호 변경 감지",
+        time: "3일 전 오후 2:05",
+      },
+      {
+        id: "e4",
+        type: "location_change",
+        name: "로그인 위치 변경",
+        time: "4일 전 오후 6:15",
+      },
+      {
+        id: "e5",
+        type: "recovery_email",
+        name: "복구 이메일 등록",
+        time: "6일 전 오전 11:40",
       },
     ],
-    responseDesc:
-      "본인 활동이 아니면 비밀번호를 바꾸고 알 수 없는 기기에서 로그아웃합니다.",
-    responseSteps: [
-      { label: "1. 비밀번호 변경", required: true },
-      { label: "2. 모든 기기 로그아웃", required: true },
-      { label: "3. 같은 비밀번호 계정 점검", required: false },
-    ],
-    officialUrl: "https://www.disneyplus.com/",
-    tasks: [
-      {
-        id: "open",
-        type: "link",
-        title: "Disney+ 공식 페이지 열기",
-        desc: "메일 링크가 아니라 공식 사이트로 이동해요",
-        required: false,
-      },
+
+    // ↓ AccountAction(챗봇 화면)에서 사용
+    chatBadge: "보안 위험 감지",
+    chatIntro:
+      "새로운 기기에서 로그인이 감지되었고, 다른 사이트와 같은 비밀번호를 사용 중이에요.",
+    actions: [
       {
         id: "password",
-        type: "check",
-        title: "새 비밀번호로 변경",
-        desc: "이전 조합과 겹치지 않게 설정",
-        required: true,
+        name: "비밀번호 변경하기",
+        sub: "고유한 비밀번호로 변경",
+        icon: KeyIcon,
+        color: "#08257e",
+        title: "비밀번호 변경",
+        url: "www.disneyplus.com/settings/password",
+        help: "Disney+ 설정 → 비밀번호 순으로 들어가서, 현재 비밀번호 입력 후 새 비밀번호로 바꾸면 돼요. 아래 링크로 바로 이동할 수 있어요!",
+        ad: {
+          icon: "🔑",
+          text: "비밀번호 하나 뚫리면 어디까지 털릴까?\n3분이면 끝나는 재사용 끊기",
+          cta: "카드뉴스 ↗",
+          url: "https://idly-apt.tistory.com/2",
+        },
+      },
+      {
+        id: "twofactor",
+        name: "2단계 인증 설정",
+        sub: "추가 보안 계층 활성화",
+        icon: ShieldIcon,
+        color: "#08257e",
+        title: "2단계 인증 설정",
+        url: "www.disneyplus.com/settings/security",
+        help: "Disney+ 설정 → 보안에서 2단계 인증을 SMS나 인증 앱 중 편한 방식으로 켜면 돼요. 아래 링크로 바로 이동할 수 있어요!",
+        ad: {
+          icon: "🛡️",
+          text: "Google Authenticator vs Authy\n내 상황엔 어떤 게 맞을까?",
+          cta: "비교하기 ↗",
+          url: "https://idly-apt.tistory.com/2",
+        },
       },
       {
         id: "logout",
-        type: "check",
-        title: "알 수 없는 기기 로그아웃",
-        desc: "최근 로그인 기기 목록 확인",
-        required: true,
-      },
-      {
-        id: "reuse",
-        type: "check",
-        title: "같은 비밀번호 사용 계정 점검",
-        desc: "Adobe, Dropbox 등 함께 점검",
-        required: false,
+        name: "모든 기기 로그아웃",
+        sub: "의심 기기 접근 차단",
+        icon: LogoutIcon,
+        color: "#08257e",
+        title: "세션 관리",
+        url: "www.disneyplus.com/settings/devices",
+        help: "Disney+ 설정 → 기기 관리에서 '모든 기기 로그아웃' 버튼을 누르면 돼요. 아래 링크로 바로 이동할 수 있어요!",
+        ad: {
+          icon: "🔒",
+          text: "로그아웃만으로 충분할까?\n세션 보안 완벽 체크리스트",
+          cta: "확인하기 ↗",
+          url: "https://idly-apt.tistory.com/2",
+        },
       },
     ],
   },
-  // TODO: adobe 등 다른 위험 서비스도 필요하면 추가
 };
 
 export function getDetailByAccountId(accountId) {
   const account = MOCK_ACCOUNTS.find((a) => a.id === accountId);
   if (!account) return null;
-
-  const template = SERVICE_TEMPLATES[account.service];
-  if (!template) return null;
-
-  return {
-    name: account.name,
-    iconBg: account.iconBg,
-    iconText: account.iconText,
-    status: account.status,
-    emailGroup: account.emailGroup,
-    ...template,
-  };
+  return MOCK_DETAIL[account.service] ?? null;
 }

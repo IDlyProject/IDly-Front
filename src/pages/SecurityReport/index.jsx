@@ -58,7 +58,7 @@ function SecurityReport() {
   };
 
   return (
-    <PageBackground variant="default">
+    <PageBackground variant="frost">
       <div className="min-h-dvh px-4 pb-8 pt-[max(12px,env(safe-area-inset-top))]">
         <div className="mb-3 flex items-center gap-3 py-2">
           <button onClick={() => navigate(-1)}>
@@ -76,20 +76,22 @@ function SecurityReport() {
           <div className="mb-3 flex items-center justify-between text-[11px] font-bold text-white/70">
             <span>{report.baseDate}</span>
             <span className="rounded-full bg-white/20 px-2.5 py-1">
-              🤖 AI 분석
+              ✨ AI 분석
             </span>
           </div>
 
           <ScoreRing score={report.score} />
 
+          {/* isSafe 여부와 상관없이 같은 문구를 보여주던 버그를 제거하고,
+              등급별로 라벨/색을 분리했습니다. */}
           <p
             className="mt-3 text-sm font-bold"
-            style={{ color: report.isSafe ? "#8ff5c9" : "#ffd98a" }}
+            style={{ color: report.isSafe ? "#8ff5c9" : "#ffd200" }}
           >
-            {report.isSafe ? "양호" : "양호"}
+            {report.isSafe ? "우수" : "양호"}
           </p>
           <p className="mt-1 text-[11px] font-bold text-white/70">
-            일부 계정의 보안 조치가 필요합니다
+            일부 계정에 보안 조치가 필요합니다
           </p>
         </div>
 
@@ -111,7 +113,7 @@ function SecurityReport() {
 
         <button
           onClick={() => navigate(ROUTES.SECURITY_ASSISTANT)}
-          className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#12206b] text-sm font-bold text-white"
+          className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#08257e] text-sm font-bold text-white"
         >
           <ChatIcon />
           보안 도우미에게 문의하기

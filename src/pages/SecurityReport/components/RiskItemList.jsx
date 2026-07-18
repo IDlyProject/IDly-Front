@@ -1,11 +1,28 @@
 // src/pages/SecurityReport/components/RiskItemList.jsx
+// 위험도별 톤: leak/login → red, password/device → orange, 그 외(안전) → green
+const TONE_BY_TYPE = {
+  leak: "red",
+  login: "red",
+  password: "orange",
+  device: "orange",
+};
+
+const TONE_STYLE = {
+  red: { bg: "bg-[#fef2f2]", stroke: "#ee4e4e" },
+  orange: { bg: "bg-[#fff8e1]", stroke: "#ffb300" },
+  green: { bg: "bg-[#e8f5e9]", stroke: "#43a047" },
+};
+
 function RiskIcon({ type }) {
+  const tone = TONE_BY_TYPE[type] || "green"; // 매칭되는 타입이 없으면 안전(초록) 처리
+  const { stroke } = TONE_STYLE[tone];
+
   const commonProps = {
     width: 18,
     height: 18,
     viewBox: "0 0 24 24",
     fill: "none",
-    stroke: "#f04452",
+    stroke,
     strokeWidth: 2,
     strokeLinecap: "round",
     strokeLinejoin: "round",
@@ -43,7 +60,7 @@ function RiskIcon({ type }) {
     );
   }
   return (
-    <svg {...commonProps} stroke="#12b886">
+    <svg {...commonProps}>
       <circle cx="12" cy="12" r="9" />
       <polyline points="8 12 11 15 16 9" />
     </svg>
@@ -57,26 +74,32 @@ function RiskItemList({ items, onSelect }) {
         주요 위험 항목
       </h3>
       <div className="space-y-2">
-        {items.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => onSelect(item.id)}
-            className="flex w-full items-center gap-3 rounded-2xl bg-white p-3 text-left shadow-sm"
-          >
-            <div className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl bg-[#fff5f5]">
-              <RiskIcon type={item.type} />
-            </div>
-            <div className="flex-1">
-              <b className="block text-[13px] text-[#191f28]">{item.title}</b>
-              <small className="mt-0.5 block text-[11px] font-bold text-[#9aa4b2]">
-                {item.desc}
-              </small>
-            </div>
-            <span className="flex-shrink-0 text-[10px] font-bold text-[#c0c8d4]">
-              {item.timeAgo}
-            </span>
-          </button>
-        ))}
+        {items.map((item) => {
+          const tone = TONE_BY_TYPE[item.type] || "green";
+          const { bg } = TONE_STYLE[tone];
+          return (
+            <button
+              key={item.id}
+              onClick={() => onSelect(item.id)}
+              className="flex w-full items-center gap-3 rounded-2xl bg-white p-3 text-left shadow-sm"
+            >
+              <div
+                className={`grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl ${bg}`}
+              >
+                <RiskIcon type={item.type} />
+              </div>
+              <div className="flex-1">
+                <b className="block text-[13px] text-[#191f28]">{item.title}</b>
+                <small className="mt-0.5 block text-[11px] font-bold text-[#9aa4b2]">
+                  {item.desc}
+                </small>
+              </div>
+              <span className="flex-shrink-0 text-[10px] font-bold text-[#c0c8d4]">
+                {item.timeAgo}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ const BG_VALUES = {
   sky: "linear-gradient(180deg, #bcdcff 0%, #dcebff 48%, #fdf2e4 100%)",
   default: "#ffffff",
   frost: "linear-gradient(180deg, #F8FBFE 0%, #D5DEED 100%)",
+  detail: "linear-gradient(180deg, #D5DEED 0%, #F8FBFE 100%)",
 };
 
 const THEME_COLOR = {
@@ -13,6 +14,7 @@ const THEME_COLOR = {
   sky: "#fdf2e4", // 그라데이션 하단 색과 맞춤 (하단 툴바 쪽에 더 가까운 색)
   default: "#ffffff",
   frost: "#D5DEED",
+  detail: "#F8FBFE",
 };
 
 const BG_CLASSES = {
@@ -20,6 +22,7 @@ const BG_CLASSES = {
   sky: "bg-gradient-to-b from-[#bcdcff] via-[#dcebff] to-[#fdf2e4]",
   default: "bg-white",
   frost: "bg-gradient-to-b from-[#F8FBFE] to-[#D5DEED]",
+  detail: "bg-gradient-to-b from-[#D5DEED] to-[#F8FBFE]",
 };
 
 function PageBackground({ variant = "default", children }) {

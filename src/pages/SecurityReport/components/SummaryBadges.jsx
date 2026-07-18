@@ -18,7 +18,8 @@ function WarningIcon() {
   );
 }
 
-function ActionIcon() {
+// "주의" 배지용 시계 아이콘 (기존 ActionIcon 대체)
+function CautionIcon() {
   return (
     <svg
       width="18"
@@ -31,8 +32,7 @@ function ActionIcon() {
       strokeLinejoin="round"
     >
       <circle cx="12" cy="12" r="9" />
-      <line x1="12" y1="8" x2="12" y2="13" />
-      <circle cx="12" cy="16" r="0.5" fill="#e8a13a" />
+      <polyline points="12 7 12 12 15.5 14" />
     </svg>
   );
 }
@@ -58,7 +58,7 @@ function SafeIcon() {
 function SummaryBadges({ riskCount, actionCount, safeCount }) {
   const items = [
     { icon: <WarningIcon />, count: riskCount, label: "위험" },
-    { icon: <ActionIcon />, count: actionCount, label: "조치" },
+    { icon: <CautionIcon />, count: actionCount, label: "주의" },
     { icon: <SafeIcon />, count: safeCount, label: "안전" },
   ];
 
