@@ -2,43 +2,8 @@
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import { ROUTES } from "@/constants/routes";
-
-function ArrowLeftIcon() {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#191f28"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="19" y1="12" x2="5" y2="12" />
-      <polyline points="12 19 5 12 12 5" />
-    </svg>
-  );
-}
-
-function PersonOffIcon() {
-  return (
-    <svg
-      width="26"
-      height="26"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#f04452"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="8" r="3.2" />
-      <path d="M5.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6" />
-      <line x1="3" y1="3" x2="21" y2="21" />
-    </svg>
-  );
-}
+import BackIcon from "@/assets/ic_back.svg";
+import DeleteAccountIcon from "@/assets/ic_delete_account.svg";
 
 function Withdraw() {
   const navigate = useNavigate();
@@ -48,31 +13,32 @@ function Withdraw() {
   };
 
   return (
-    <PageBackground variant="default">
-      <div className="flex min-h-dvh flex-col px-4 pb-8 pt-[max(12px,env(safe-area-inset-top))]">
-        <button onClick={() => navigate(-1)} className="mb-6 self-start">
-          <ArrowLeftIcon />
+    <PageBackground variant="frost">
+      <div className="flex min-h-dvh flex-col px-5">
+        <button
+          onClick={() => navigate(-1)}
+          className="my-1.5 h-9 w-9 bg-white rounded-full grid place-items-center"
+        >
+          <img src={BackIcon} />
         </button>
 
-        <h1 className="text-xl font-bold leading-snug text-[#191f28]">
+        <h1 className="mt-5 mb-2 text-b24 text-gray100">
           계정을 삭제하시겠습니까?
         </h1>
-        <p className="mt-2 text-[13px] font-bold leading-relaxed text-[#9aa4b2]">
+        <p className="mb-7 text-r14 text-gray50">
           계정을 삭제하면 다음 사항에 동의하는 것으로 간주합니다.
         </p>
 
-        <div className="mt-5 flex-1 rounded-2xl bg-[#fff5f5] p-4">
-          <div className="flex items-start gap-3">
-            <PersonOffIcon />
-            <p className="text-[13px] font-bold leading-relaxed text-[#191f28]">
-              서비스 이용 정보가 영구적으로 삭제됩니다
-            </p>
-          </div>
+        <div className="flex item-center gap-3 rounded-[18px] bg-white p-5 shadow-[0_1px_3px_rgba(16,24,46,0.03)]">
+          <img src={DeleteAccountIcon} />
+          <p className="text-r14 text-gray60">
+            서비스 이용 정보가 영구적으로 삭제됩니다
+          </p>
         </div>
 
         <button
           onClick={handleConfirm}
-          className="h-14 w-full rounded-2xl bg-[#f04452] text-[15px] font-bold text-white"
+          className="fixed bottom-11 left-4 right-4 h-13 rounded-[14px] bg-[#EE4E4E] text-sb16 text-white"
         >
           확인
         </button>

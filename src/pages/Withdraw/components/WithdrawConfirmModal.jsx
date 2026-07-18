@@ -1,23 +1,21 @@
 // src/pages/Withdraw/components/WithdrawConfirmModal.jsx
 function WithdrawConfirmModal({ onConfirm, onCancel }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
-      <div className="w-full max-w-sm rounded-3xl bg-white p-6 text-center shadow-2xl">
-        <h2 className="text-base font-bold text-[#191f28]">
-          탈퇴하시겠습니까?
-        </h2>
-        <p className="mt-2 text-[13px] font-bold leading-relaxed text-[#9aa4b2]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-8.75">
+      <div className="w-full max-w-sm rounded-3xl bg-white p-6 pt-8 text-center">
+        <h2 className="text-b24 text-[18px] text-gray100">탈퇴하시겠습니까?</h2>
+        <p className="mt-2.5 mb-5 text-r14 text-gray60 text-center">
           회원 탈퇴시 모든 서비스 이용 기록이 삭제됩니다
         </p>
         <button
           onClick={onConfirm}
-          className="mt-5 h-12 w-full rounded-xl bg-[#12206b] text-sm font-bold text-white"
+          className="h-12 w-full rounded-[14px] bg-main100 text-sb16 text-[15px] text-white"
         >
           계속하기
         </button>
         <button
           onClick={onCancel}
-          className="mt-2 w-full py-2 text-[13px] font-bold text-[#9aa4b2]"
+          className="mt-2 w-full rounded-[14px] bg-white text-sb16 text-[15px] text-gray50"
         >
           취소
         </button>
