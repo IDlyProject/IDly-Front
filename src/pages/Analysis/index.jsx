@@ -31,7 +31,7 @@ function Analysis() {
       setTimeout(() => {
         setStatus("completed");
         navigate(ROUTES.HOME, { replace: true });
-      }, 50000),
+      }, 3200),
     );
 
     return () => timers.forEach(clearTimeout);
