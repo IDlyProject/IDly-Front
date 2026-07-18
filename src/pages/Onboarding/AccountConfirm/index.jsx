@@ -130,8 +130,7 @@ function AccountConfirm() {
               <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
                 연령대
               </span>
-              <div className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-gray10 bg-white focus-within:border-main100">
-                <img src={CalendarIcon} alt="" className="h-4.5 w-4.5" />
+              <div className="p-3.75 flex h-12 items-center rounded-xl border border-gray10 bg-white focus-within:border-main100">
                 <select
                   value={ageGroup}
                   onChange={(e) => setAgeGroup(e.target.value)}
