@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { logout } from "@/api/auth";
 import SettingIcon from "@/assets/ic_setting.svg";
 import AccountManageIcon from "@/assets/ic_account_manage.svg";
 import HeadphoneIcon from "@/assets/ic_headphone.svg";
@@ -30,8 +31,8 @@ function My() {
   const { user } = useCurrentUser();
   const isSafe = false;
 
-  const handleLogout = () => {
-    // TODO: 실제 로그아웃 API 호출 필요 (쿠키/토큰 삭제)
+  const handleLogout = async () => {
+    await logout();
     navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
   };
 

@@ -11,6 +11,16 @@ export async function updateProfile(payload) {
   return res.json(); // UserDto
 }
 
+export async function saveConsent(payload) {
+  const res = await apiFetch("/api/users/me/consent", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) throw new Error(`consent save failed: ${res.status}`);
+  return res.json();
+}
+
 export async function deleteAccount(payload) {
   const res = await apiFetch("/api/users/me", {
     method: "DELETE",
