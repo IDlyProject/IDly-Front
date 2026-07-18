@@ -2,43 +2,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
-
-function ArrowLeftIcon() {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#191f28"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="19" y1="12" x2="5" y2="12" />
-      <polyline points="12 19 5 12 12 5" />
-    </svg>
-  );
-}
-
-function InfoIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#3b6cff"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="9" />
-      <line x1="12" y1="16" x2="12" y2="12" />
-      <line x1="12" y1="8" x2="12.01" y2="8" />
-    </svg>
-  );
-}
+import BackIcon from "@/assets/ic_back.svg";
+import InfoIcon from "@/assets/ic_information.svg";
 
 // TODO: 실제로는 /accounts?status=dormant API로 대체
 const MOCK_DORMANT = [
@@ -83,47 +48,50 @@ function DormantAccounts() {
   };
 
   return (
-    <PageBackground variant="default">
-      <div className="min-h-dvh px-4 pb-8 pt-[max(12px,env(safe-area-inset-top))]">
-        <div className="mb-3 flex items-center gap-3 py-2">
-          <button onClick={() => navigate(-1)}>
-            <ArrowLeftIcon />
+    <PageBackground variant="frost">
+      <div className="min-h-dvh px-5">
+        <div className="flex items-center gap-3 py-3.5">
+          <button
+            onClick={() => navigate(-1)}
+            className="grid w-9 h-9 place-items-center bg-white  rounded-full"
+          >
+            <img src={BackIcon} className="w-5 h-5" />
           </button>
-          <h1 className="text-lg font-bold text-[#191f28]">휴면 계정</h1>
+          <h1 className="text-b24 text-[18px] text-gray100">휴면 계정</h1>
         </div>
 
-        <div className="mb-4 flex items-start gap-2 rounded-2xl bg-[#eef6ff] p-3.5">
-          <InfoIcon />
-          <p className="text-[12px] font-bold leading-relaxed text-[#334155]">
+        <div className="my-3 flex items-center gap-2.5 rounded-[14px] bg-[#ECF1F9] p-3.5">
+          <img src={InfoIcon} className="w-4.5 h-4.5" />
+          <p className="text-start text-r14 text-[13px] text-gray60">
             숨겨둔 계정을 여기에서 관리할 수 있어요.
             <br />
             복원하면 다시 홈 화면에 표시됩니다.
           </p>
         </div>
 
-        <div className="space-y-2.5">
+        <div className="space-y-2.5 my-2">
           {accounts.map((account) => (
             <div
               key={account.id}
-              className="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm"
+              className="flex items-center gap-3.5 rounded-2xl bg-white px-4 py-3.5 shadow-[0_1px_3px_rgba(16,24,46,0.04)]"
             >
               <div
-                className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl text-sm font-bold text-white"
+                className="grid h-10.5 w-10.5 shrink-0 place-items-center rounded-[13px] text-[14px] font-bold text-white"
                 style={{ background: account.iconBg }}
               >
                 {account.iconText}
               </div>
               <div className="flex-1">
-                <b className="block text-[13px] text-[#191f28]">
+                <b className="block text-sb16 text-[15px] text-gray100">
                   {account.name}
                 </b>
-                <small className="mt-0.5 block text-[11px] font-bold text-[#9aa4b2]">
+                <small className="mt-0.75 block text-r14 text-[12px] text-gray50">
                   {account.email} · {account.dormantAgo}
                 </small>
               </div>
               <button
                 onClick={() => handleRestore(account.id)}
-                className="rounded-full bg-[#12206b] px-3.5 py-1.5 text-[11px] font-bold text-white"
+                className="rounded-[10px] bg-main100 px-3.5 py-2 text-[12px] font-bold text-white"
               >
                 복원
               </button>
@@ -132,17 +100,17 @@ function DormantAccounts() {
         </div>
 
         {accounts.length > 0 && (
-          <>
-            <p className="mt-4 text-center text-[11px] font-bold text-[#c0c8d4]">
+          <div className="flex flex-col gap-3 my-6">
+            <p className="text-center text-r14 text-[12px] text-gray50">
               휴면 계정은 보안 검사 대상에서 제외됩니다.
             </p>
             <button
               onClick={handleRestoreAll}
-              className="mt-2 w-full text-center text-[13px] font-bold text-[#3b6cff]"
+              className="w-full text-center text-sb16 text-[14px] text-main100"
             >
               모두 복원하기
             </button>
-          </>
+          </div>
         )}
       </div>
     </PageBackground>
