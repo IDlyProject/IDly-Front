@@ -4,13 +4,10 @@ import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import WithdrawConfirmModal from "@/pages/Withdraw/components/WithdrawConfirmModal";
 import { ROUTES } from "@/constants/routes";
-import { deleteAccount } from "@/api/users";
-import { logout } from "@/api/auth";
 
-// 백엔드 DeleteReason enum 과 동일
 const REASONS = [
-  { id: "not_frequent", label: "자주 이용하지 않아요" },
-  { id: "frequent_errors", label: "오류가 자주 발생해요" },
+  { id: "rare_use", label: "자주 이용하지 않아요" },
+  { id: "frequent_error", label: "오류가 자주 발생해요" },
   { id: "inconvenient", label: "기능이 편리하지 않아요" },
   { id: "other", label: "기타" },
 ];
@@ -59,26 +56,9 @@ function WithdrawReason() {
     setShowConfirmModal(true);
   };
 
-  const [isWithdrawing, setIsWithdrawing] = useState(false);
-
-  const handleConfirmWithdraw = async () => {
-    if (isWithdrawing) return;
-    setIsWithdrawing(true);
-    try {
-      await deleteAccount({
-        reason: selectedReason,
-        ...(selectedReason === "other"
-          ? { reasonDetail: otherText.trim() }
-          : {}),
-      });
-      // 탈퇴 후 잔여 쿠키 정리 (user cascade 로 refresh row 는 이미 삭제됨)
-      await logout();
-      navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
-    } catch (err) {
-      console.error("withdraw failed", err);
-      setIsWithdrawing(false);
-      setShowConfirmModal(false);
-    }
+  const handleConfirmWithdraw = () => {
+    // TODO: 실제 회원 탈퇴 API 호출 필요 (reason, otherText 전달)
+    navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
   };
 
   return (
