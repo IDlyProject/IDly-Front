@@ -5,60 +5,9 @@ import PageBackground from "@/components/layouts/PageBackground";
 import UnlinkConfirmModal from "./components/UnlinkConfirmModal";
 import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-
-function ArrowLeftIcon() {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#191f28"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="19" y1="12" x2="5" y2="12" />
-      <polyline points="12 19 5 12 12 5" />
-    </svg>
-  );
-}
-
-function PencilIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#9aa4b2"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 20h9" />
-      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-    </svg>
-  );
-}
-
-function XIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#c0c8d4"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="18" y1="6" x2="6" y2="18" />
-      <line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-  );
-}
+import BackIcon from "@/assets/ic_back.svg";
+import PencilIcon from "@/assets/ic_pencil.svg";
+import CancelIcon from "@/assets/ic_cancel.svg";
 
 // TODO: 실제로는 /accounts/linked API에서 교체
 const MOCK_LINKED = [
@@ -105,83 +54,78 @@ function AccountManagement() {
   };
 
   return (
-    <PageBackground variant="default">
-      <div className="min-h-dvh px-4 pb-8 pt-[max(12px,env(safe-area-inset-top))]">
-        <div className="mb-3 flex items-center gap-3 py-2">
-          <button onClick={() => navigate(-1)}>
-            <ArrowLeftIcon />
+    <PageBackground variant="frost">
+      <div className="min-h-dvh px-4 pb-8">
+        <div className="mb-4 flex items-center gap-3 px-1 py-1.5">
+          <button
+            onClick={() => navigate(-1)}
+            className="grid h-9 w-9 place-items-center rounded-full bg-white"
+          >
+            <img src={BackIcon} alt="" className="h-5 w-5" />
           </button>
-          <h1 className="text-lg font-bold text-[#191f28]">계정 관리</h1>
+          <h1 className="text-[18px] font-bold text-gray100">계정 관리</h1>
         </div>
 
-        <div className="mb-5 flex items-center gap-3 rounded-2xl bg-white p-3.5 shadow-sm">
-          <div className="grid h-11 w-11 flex-shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#3b6cff] to-[#5b7dff] text-sm font-bold text-white">
+        <div className="mb-6 flex items-center gap-4 rounded-[18px] bg-white p-5 shadow-[0_1px_3px_rgba(16,24,46,0.03)]">
+          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-main100 text-[22px] font-bold text-white">
             {user?.name?.[0] ?? "?"}
           </div>
           <div className="flex-1">
-            <b className="block text-sm text-[#191f28]">
+            <b className="block text-[17px] text-bold text-gray100">
               {user?.name ?? "회원"}
             </b>
-            <span className="mt-0.5 block text-xs font-bold text-[#9aa4b2]">
-              {user?.email}
+            <span className="mt-1 block text-r14 text-[13px] text-gray60">
+              {user?.email ?? "이메일 하드코딩"}
             </span>
           </div>
           <button>
-            <PencilIcon />
+            <img src={PencilIcon} className="w-5 h-5" />
           </button>
         </div>
 
-        <h3 className="mb-2 text-[13px] font-bold text-[#191f28]">
-          연동된 계정
-        </h3>
-        <div className="mb-5 space-y-2">
-          {linkedAccounts.map((account) => (
+        <h3 className="mb-6 text-[16px] font-bold text-gray100">연동된 계정</h3>
+        <div className="mb-5 overflow-hidden rounded-[18px] bg-white shadow-[0_1px_3px_rgba(16,24,46,0.03)]">
+          {linkedAccounts.map((account, idx) => (
             <div
               key={account.id}
-              className="flex items-center gap-3 rounded-2xl bg-white p-3 shadow-sm"
+              className={`flex items-center px-5 py-4.75 ${
+                idx < linkedAccounts.length - 1
+                  ? "border-b-[1.33px] border-[#E5E7EB]"
+                  : ""
+              }`}
             >
-              <div
-                className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full text-sm font-bold text-white"
-                style={{ background: account.iconBg }}
-              >
-                {account.iconText}
-              </div>
               <div className="flex-1">
-                <b className="block text-[13px] text-[#191f28]">
+                <b className="block text-[15px] font-semibold text-gray100">
                   {account.provider}
                 </b>
-                <small className="mt-0.5 block text-[11px] font-bold text-[#9aa4b2]">
+                <small className="block text-r14 text-[12px] text-gray50">
                   {account.email}
                 </small>
               </div>
               <button onClick={() => setUnlinkTarget(account)}>
-                <XIcon />
+                <img src={CancelIcon} alt="" className="h-5 w-5" />
               </button>
             </div>
           ))}
         </div>
 
-        <h3 className="mb-2 text-[13px] font-bold text-[#191f28]">계정 정보</h3>
-        <div className="mb-6 overflow-hidden rounded-2xl bg-white shadow-sm">
-          <div className="flex items-center justify-between border-b border-gray-50 px-3.5 py-3">
-            <span className="text-[13px] font-bold text-[#9aa4b2]">가입일</span>
-            <span className="text-[13px] font-bold text-[#191f28]">
+        <h3 className="mb-6 text-[16px] font-bold text-gray100">계정 정보</h3>
+        <div className="mb-6 overflow-hidden rounded-[18px] bg-white shadow-[0_1px_3px_rgba(16,24,46,0.03)]">
+          <div className="flex items-center justify-between border-b-[1.33px] border-[#E5E7EB] px-5 py-4">
+            <span className="text-r14 text-gray60">가입일</span>
+            <span className="text-sb16 text-[14px] text-gray100">
               2024년 3월 15일
             </span>
           </div>
-          <div className="flex items-center justify-between border-b border-gray-50 px-3.5 py-3">
-            <span className="text-[13px] font-bold text-[#9aa4b2]">
-              마지막 로그인
-            </span>
-            <span className="text-[13px] font-bold text-[#191f28]">
+          <div className="flex items-center justify-between border-b-[1.33px] border-[#E5E7EB] px-5 py-4">
+            <span className="text-r14 text-gray60">마지막 로그인</span>
+            <span className="text-sb16 text-[14px] text-gray100">
               2026년 7월 16일
             </span>
           </div>
-          <div className="flex items-center justify-between px-3.5 py-3">
-            <span className="text-[13px] font-bold text-[#9aa4b2]">
-              추가 연동 계정 수
-            </span>
-            <span className="text-[13px] font-bold text-[#191f28]">
+          <div className="flex items-center justify-between border-b-[1.33px] border-[#E5E7EB] px-5 py-4">
+            <span className="text-r14 text-gray60">추가 연동 계정 수</span>
+            <span className="text-sb16 text-[14px] text-gray100">
               {linkedAccounts.length}개
             </span>
           </div>
@@ -189,7 +133,7 @@ function AccountManagement() {
 
         <button
           onClick={() => navigate(ROUTES.WITHDRAW)}
-          className="h-12 w-full rounded-2xl border border-[#f04452]/30 bg-white text-sm font-bold text-[#f04452]"
+          className="h-12.5 w-full rounded-[14px] border border-[#EE4E4E] text-sb16 text-[16px] text-[#EE4E4E]"
         >
           탈퇴하기
         </button>
