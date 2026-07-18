@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
+import { saveConsent } from "@/api/users";
 import ProgressDots from "../components/ProgressDot";
 import PageBackground from "@/components/layouts/PageBackground";
 import AllCheckedBoxIcon from "@/assets/ic_all_checked_box.svg";
@@ -42,9 +43,22 @@ function Consent() {
     setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const goToNextStep = () => {
-    // TODO: 동의 상태를 서버에 저장하는 API 호출 필요 시 여기에 추가
-    navigate(ROUTES.ONBOARDING_ACCOUNT_COMPLETE);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const goToNextStep = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      await saveConsent({
+        requiredTermsAgreed: true,
+        notificationAgreed: !!checked.notification,
+        marketingAgreed: !!checked.marketing,
+      });
+      navigate(ROUTES.ONBOARDING_ACCOUNT_COMPLETE);
+    } catch (err) {
+      console.error("consent save failed", err);
+      setIsSubmitting(false);
+    }
   };
 
   const handleAgreeClick = () => {
