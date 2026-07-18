@@ -50,7 +50,7 @@ function DormantAccounts() {
   return (
     <PageBackground variant="frost">
       <div className="min-h-dvh px-5">
-        <div className="flex items-center gap-3 py-3.5">
+        <div className="flex items-center gap-3 my-1.5">
           <button
             onClick={() => navigate(-1)}
             className="grid w-9 h-9 place-items-center bg-white  rounded-full"
