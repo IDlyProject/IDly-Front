@@ -12,8 +12,16 @@ export const ROUTES = {
   ANALYSIS: "/analysis",
 
   HOME: "/home",
+  NOTIFICATION: "/notifications",
+  SECURITY_REPORT: "/security-report",
+  SECURITY_ASSISTANT: "/security-report/assistant",
   ORGANIZE: "/organize",
   MY: "/my",
+  ACCOUNT_MANAGEMENT: "/my/account",
+  DORMANT_ACCOUNTS: "/my/dormant",
+  NOTIFICATION_SETTINGS: "/my/notification-settings",
+  WITHDRAW: "/my/withdraw",
+  WITHDRAW_REASON: "/my/withdraw/reason",
 
   // 특정 서비스 계정(Disney+ 등)의 문제 상세/대응 - id가 필수
   ACCOUNT_DETAIL: (id) => `/account/${id}`,

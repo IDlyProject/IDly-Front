@@ -15,9 +15,17 @@ import Analysis from "@/pages/Analysis";
 import Home from "@/pages/Home";
 import Organize from "@/pages/Organize";
 import My from "@/pages/My";
+import AccountManagement from "@/pages/AccountManagement";
+import DormantAccounts from "@/pages/DormantAccounts";
+import NotificationSettings from "@/pages/NotificationSettings";
+import Withdraw from "@/pages/Withdraw";
+import WithdrawReason from "@/pages/WithdrawReason";
 import AccountDetail from "@/pages/AccountDetail";
 import AccountAction from "@/pages/AccountAction";
 import AuthCallback from "@/pages/AuthCallback";
+import NotificationCenter from "../pages/NotificationCenter";
+import SecurityReport from "../pages/SecurityReport";
+import SecurityAssistant from "../pages/SecurityAssistant";
 
 export const router = createBrowserRouter([
   { path: ROUTES.SPLASH, element: <Splash /> },
@@ -28,6 +36,31 @@ export const router = createBrowserRouter([
   { path: ROUTES.ONBOARDING_ACCOUNT_COMPLETE, element: <AccountComplete /> },
   { path: ROUTES.ONBOARDING_ADD_ACCOUNT, element: <AddAccount /> },
   { path: ROUTES.ONBOARDING_COMPLETE, element: <RegistrationComplete /> },
+  { path: ROUTES.NOTIFICATION, element: <NotificationCenter /> },
+  {
+    path: ROUTES.ACCOUNT_MANAGEMENT,
+    element: (
+      <ProtectedRoute>
+        <AccountManagement />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.DORMANT_ACCOUNTS,
+    element: (
+      <ProtectedRoute>
+        <DormantAccounts />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.NOTIFICATION_SETTINGS,
+    element: (
+      <ProtectedRoute>
+        <NotificationSettings />
+      </ProtectedRoute>
+    ),
+  },
 
   {
     path: ROUTES.ANALYSIS,
@@ -51,6 +84,39 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <AccountAction />
+      </ProtectedRoute>
+    ),
+  },
+
+  {
+    path: ROUTES.SECURITY_REPORT,
+    element: (
+      <ProtectedRoute>
+        <SecurityReport />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.SECURITY_ASSISTANT,
+    element: (
+      <ProtectedRoute>
+        <SecurityAssistant />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.WITHDRAW,
+    element: (
+      <ProtectedRoute>
+        <Withdraw />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.WITHDRAW_REASON,
+    element: (
+      <ProtectedRoute>
+        <WithdrawReason />
       </ProtectedRoute>
     ),
   },
