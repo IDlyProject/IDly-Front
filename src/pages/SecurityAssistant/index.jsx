@@ -1,22 +1,88 @@
 // src/pages/SecurityAssistant/index.jsx
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import ChatHeader from "@/pages/AccountAction/components/ChatHeader";
 import ChatInputBar from "@/pages/AccountAction/components/ChatInputBar";
 import OwlAvatar from "@/pages/AccountAction/components/OwlAvatar";
 import UserBubble from "@/pages/AccountAction/components/UserBubble";
+import TextBubble from "@/pages/AccountAction/components/TextBubble";
+import TypingIndicator from "@/pages/AccountAction/components/TypingIndicator";
+import { getSecurityChat, sendSecurityChatMessage } from "@/api/securityChat";
+
+// getChat 응답 모양이 문서화되어 있지 않아 배열/{messages}/{history} 등 흔한 형태를 모두 시도
+function normalizeMessages(raw) {
+  const list = Array.isArray(raw) ? raw : (raw?.messages ?? raw?.history ?? []);
+  return list.map((m, idx) => ({
+    id: m.id ?? `h${idx}`,
+    role: m.role ?? (m.isUser ? "user" : "assistant"),
+    text: m.text ?? m.message ?? m.content ?? "",
+  }));
+}
 
 function SecurityAssistant() {
   const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
+  const scrollRef = useRef(null);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    // TODO: 실제 챗봇 API 연동 필요
-    setMessages((prev) => [...prev, { id: prev.length, text: input }]);
+  useEffect(() => {
+    let cancelled = false;
+    getSecurityChat()
+      .then((data) => {
+        if (cancelled) return;
+        setMessages(normalizeMessages(data));
+      })
+      .catch((err) => {
+        console.error("security chat history load failed:", err);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages, sending]);
+
+  const handleSend = async () => {
+    const text = input.trim();
+    if (!text || sending) return;
+
     setInput("");
+    setError("");
+    // sendMessage 응답 모양도 불확실해서, 보낸 후엔 getChat으로 다시 받아와 히스토리를 맞춘다
+    setMessages((prev) => [
+      ...prev,
+      { id: `local-${Date.now()}`, role: "user", text },
+    ]);
+    setSending(true);
+
+    try {
+      await sendSecurityChatMessage(text);
+      const history = await getSecurityChat();
+      setMessages(normalizeMessages(history));
+    } catch (err) {
+      console.error("security chat send failed:", err);
+      if (err.status === 400) {
+        setError("비밀번호, 인증코드, 카드번호 같은 민감정보는 보낼 수 없어요.");
+      } else if (err.status === 429) {
+        setError("메시지를 너무 빠르게 보내고 있어요. 잠시 후 다시 시도해주세요.");
+      } else {
+        setError("메시지 전송에 실패했어요. 다시 시도해주세요.");
+      }
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -29,7 +95,10 @@ function SecurityAssistant() {
           />
         </div>
 
-        <div className="flex-1 space-y-2.5 overflow-y-auto px-4 py-3">
+        <div
+          ref={scrollRef}
+          className="flex-1 space-y-2.5 overflow-y-auto px-4 py-3"
+        >
           <div className="flex items-start gap-2.5">
             <OwlAvatar />
             <div className="max-w-[280px] rounded-[4px_18px_18px_18px] bg-white p-4 shadow-[0_1px_2px_rgba(16,24,46,0.04)]">
@@ -43,12 +112,31 @@ function SecurityAssistant() {
             </div>
           </div>
 
-          {messages.map((message) => (
-            <UserBubble key={message.id} text={message.text} />
-          ))}
+          {loading && <TypingIndicator />}
+
+          {messages.map((message) =>
+            message.role === "user" ? (
+              <UserBubble key={message.id} text={message.text} />
+            ) : (
+              <TextBubble key={message.id} text={message.text} />
+            ),
+          )}
+
+          {sending && <TypingIndicator />}
+
+          {error && (
+            <p className="text-center text-xs font-bold text-danger50">
+              {error}
+            </p>
+          )}
         </div>
 
-        <ChatInputBar value={input} onChange={setInput} onSend={handleSend} />
+        <ChatInputBar
+          value={input}
+          onChange={setInput}
+          onSend={handleSend}
+          disabled={sending}
+        />
       </div>
     </PageBackground>
   );
