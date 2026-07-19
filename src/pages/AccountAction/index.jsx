@@ -9,8 +9,6 @@ import ChatHeader from "./components/ChatHeader";
 import ChatMessage from "./components/ChatMessage";
 import ChatInputBar from "./components/ChatInputBar";
 import TypingIndicator from "./components/TypingIndicator";
-import CelebrationBubble from "./components/CelebrationBubble";
-import CtaListBubble from "./components/CtaListBubble";
 
 function AccountAction() {
   const { accountId } = useParams();
@@ -86,22 +84,6 @@ function AccountAction() {
             <p className="text-center text-xs font-bold text-danger50">
               {sendError}
             </p>
-          )}
-
-          {session.completion && (
-            <>
-              <CelebrationBubble
-                message={
-                  session.completion.celebrationMessage ??
-                  "모든 보안 조치를 완료했어요!"
-                }
-              />
-              <CtaListBubble
-                onHome={() => navigate(ROUTES.HOME)}
-                onNextAccount={() => navigate(ROUTES.HOME)}
-                onReport={() => navigate(ROUTES.SECURITY_REPORT)}
-              />
-            </>
           )}
         </div>
 

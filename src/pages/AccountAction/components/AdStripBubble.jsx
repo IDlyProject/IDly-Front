@@ -12,7 +12,7 @@ function AdStripBubble({ news }) {
         className="flex max-w-[300px] items-center gap-2.25 rounded-xl bg-white p-3 text-left shadow-[0_1px_3px_rgba(16,24,46,0.07)]"
       >
         <span className="flex-shrink-0 text-[17px]">{news.emoji}</span>
-        <p className="flex-1 whitespace-pre-line text-xs font-semibold leading-snug text-[#414247]">
+        <p className="min-w-0 flex-1 whitespace-pre-line break-words text-xs font-semibold leading-snug text-[#414247]">
           {news.title}
         </p>
         <span className="flex-shrink-0 whitespace-nowrap text-[11px] font-bold text-[#1a6fdb]">

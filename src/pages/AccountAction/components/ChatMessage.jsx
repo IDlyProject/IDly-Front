@@ -8,6 +8,8 @@ import AdStripBubble from "./AdStripBubble";
 import TipBubble from "./TipBubble";
 import ConfirmOptionsBubble from "./ConfirmOptionsBubble";
 import TextBubble from "./TextBubble";
+import CelebrationBubble from "./CelebrationBubble";
+import CtaListBubble from "./CtaListBubble";
 import { resolveOfficialLinkCard, resolveCardNews } from "../utils/messageContent";
 
 // session.messages[] 항목(role/type/text/metadata)을 화면 버블로 변환.
@@ -55,6 +57,25 @@ function ChatMessage({ message, session, isLatest, onSelectAction, onDone, onFai
 
     case "tip":
       return <TipBubble text={message.text} />;
+
+    case "celebration": {
+      const c = message.metadata?.celebration;
+      return (
+        <CelebrationBubble
+          emoji={c?.emoji}
+          title={c?.title ?? message.text}
+          subtitle={c?.subtitle}
+        />
+      );
+    }
+
+    case "exit_cta":
+      return (
+        <CtaListBubble
+          ctas={message.metadata?.exitCtas}
+          nextServiceAccountId={session?.completion?.nextServiceAccountId}
+        />
+      );
 
     case "feedback_actions":
       return (
