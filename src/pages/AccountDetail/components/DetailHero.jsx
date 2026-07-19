@@ -13,7 +13,7 @@ function DetailHero({ detail }) {
           {detail.name}
         </h2>
         {detail.isRisk && (
-          <span className="rounded-full border border-[#f04452] bg-[#ffd7d7]/60 p-1 text-[12.5px] font-bold text-danger50">
+          <span className="rounded-full border border-[#f04452] bg-[#ffd7d7]/60 px-3 py-1 text-[12.5px] font-bold text-danger50">
             {detail.riskBadgeLabel}
           </span>
         )}
