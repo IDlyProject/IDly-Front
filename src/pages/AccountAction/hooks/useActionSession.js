@@ -24,8 +24,11 @@ function useActionSession(serviceAccountId) {
         setSession(data);
         setMessages(data.messages ?? []);
         setStatus("ready");
-      } catch {
-        if (!cancelled) setStatus("error");
+      } catch (err) {
+        if (!cancelled) {
+          console.error("action-session load failed:", err);
+          setStatus("error");
+        }
       }
     })();
 
