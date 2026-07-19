@@ -5,23 +5,13 @@ import ActionButton from "@/components/ui/ActionButton";
 import PlusIcon from "@/assets/ic_plus.svg";
 import { API_BASE_URL } from "@/constants/api";
 import { ROUTES } from "@/constants/routes";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useGmailAccounts } from "@/hooks/useGmailAccounts";
 import { toMailAccount } from "@/utils/mailAccount";
 import PageBackground from "../../../components/layouts/PageBackground";
-// 파일 상단에 임시 mock 데이터 추가 (UI 확인 끝나면 지우기)
-/*const MOCK_USER = {
-  gmailAccounts: [
-    { id: "1", email: "minsu.kim@gmail.com", isPrimary: true },
-    { id: "2", email: "minsu.work@gmail.com", isPrimary: false },
-  ],
-};
-*/
 
 function AddAccount() {
   const navigate = useNavigate();
-  const { user, status } = useCurrentUser();
-  // const user = MOCK_USER;
-  // const status = "success";
+  const { accounts, status } = useGmailAccounts();
 
   const handleStartConnect = () => {
     // 로그인 쿠키(httpOnly)가 자동으로 실려가므로 별도 토큰 전달 불필요
@@ -58,7 +48,7 @@ function AddAccount() {
     );
   }
 
-  const mailAccounts = user.gmailAccounts.map(toMailAccount);
+  const mailAccounts = accounts.map(toMailAccount);
 
   return (
     <PageBackground variant="default">

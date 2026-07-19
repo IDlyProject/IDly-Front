@@ -5,6 +5,7 @@ import PageBackground from "@/components/layouts/PageBackground";
 import UnlinkConfirmModal from "./components/UnlinkConfirmModal";
 import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useGmailAccounts } from "@/hooks/useGmailAccounts";
 import BackIcon from "@/assets/ic_back.svg";
 import PencilIcon from "@/assets/ic_pencil.svg";
 import CancelIcon from "@/assets/ic_cancel.svg";
@@ -18,47 +19,23 @@ function formatDate(isoString) {
   });
 }
 
-// TODO: 실제로는 /accounts/linked API에서 교체
-const MOCK_LINKED = [
-  {
-    id: "l1",
-    provider: "Google",
-    email: "minji.kim@gmail.com",
-    iconBg: "#4285f4",
-    iconText: "G",
-  },
-  {
-    id: "l2",
-    provider: "Naver",
-    email: "minji.kim@icloud.com",
-    iconBg: "#03c75a",
-    iconText: "N",
-  },
-  {
-    id: "l3",
-    provider: "Google",
-    email: "minji.kim@gmail.com",
-    iconBg: "#4285f4",
-    iconText: "G",
-  },
-  {
-    id: "l4",
-    provider: "Google",
-    email: "minji.kim@gmail.com",
-    iconBg: "#4285f4",
-    iconText: "G",
-  },
-];
-
 function AccountManagement() {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
-  const [linkedAccounts, setLinkedAccounts] = useState(MOCK_LINKED);
+  const { accounts } = useGmailAccounts();
+  // 실제 해지 API(DELETE /api/users/me/accounts/{id})가 아직 없어서, 연동 해제는
+  // 서버 목록에서 낙관적으로 숨기는 것까지만 처리한다.
+  const [removedIds, setRemovedIds] = useState(new Set());
   const [unlinkTarget, setUnlinkTarget] = useState(null);
 
+  const linkedAccounts = accounts.filter((a) => !removedIds.has(a.id));
+  const additionalAccountCount = linkedAccounts.filter(
+    (a) => !a.isPrimary,
+  ).length;
+
   const handleUnlinkConfirm = () => {
-    // TODO: 실제 연동 해지 API 호출 필요
-    setLinkedAccounts((prev) => prev.filter((a) => a.id !== unlinkTarget.id));
+    // TODO: 실제 연동 해지 API 호출 필요 (DELETE /api/users/me/accounts/{accountId})
+    setRemovedIds((prev) => new Set(prev).add(unlinkTarget.id));
     setUnlinkTarget(null);
   };
 
@@ -104,11 +81,18 @@ function AccountManagement() {
               }`}
             >
               <div className="flex-1">
-                <b className="block text-[15px] font-semibold text-gray100">
-                  {account.provider}
-                </b>
+                <div className="flex items-center gap-1.5">
+                  <b className="block text-[15px] font-semibold text-gray100">
+                    {account.email}
+                  </b>
+                  {account.isPrimary && (
+                    <span className="rounded-full bg-main100 px-2 py-0.5 text-[10px] text-white">
+                      대표
+                    </span>
+                  )}
+                </div>
                 <small className="block text-r14 text-[12px] text-gray50">
-                  {account.email}
+                  Gmail
                 </small>
               </div>
               <button onClick={() => setUnlinkTarget(account)}>
@@ -135,7 +119,7 @@ function AccountManagement() {
           <div className="flex items-center justify-between border-b-[1.33px] border-[#E5E7EB] px-5 py-4">
             <span className="text-r14 text-gray60">추가 연동 계정 수</span>
             <span className="text-sb16 text-[14px] text-gray100">
-              {linkedAccounts.length}개
+              {additionalAccountCount}개
             </span>
           </div>
         </div>
