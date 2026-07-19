@@ -69,11 +69,11 @@ function RiskIcon({ type }) {
 
 function RiskItemList({ items, onSelect }) {
   return (
-    <div className="mb-5">
-      <h3 className="mb-2.5 text-[13px] font-bold text-[#191f28]">
+    <div className="mb-6">
+      <h3 className="mb-6 text-[18px] font-bold text-gray100">
         주요 위험 항목
       </h3>
-      <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+      <div className="overflow-hidden rounded-[18px] bg-white shadow-[0_1px_3px_(16,24,46,0.03)]">
         {items.map((item, idx) => {
           const tone = TONE_BY_TYPE[item.type] || "green";
           const { bg } = TONE_STYLE[tone];
@@ -81,22 +81,26 @@ function RiskItemList({ items, onSelect }) {
             <button
               key={item.id}
               onClick={() => onSelect(item.id)}
-              className={`flex w-full items-center gap-3 px-3.5 py-3 text-left ${
-                idx < items.length - 1 ? "border-b border-gray-50" : ""
+              className={`flex w-full items-center gap-3 px-4 py-3.5 text-left ${
+                idx < items.length - 1
+                  ? "border-b-[1.33px] border-[#E5E7EB]"
+                  : ""
               }`}
             >
               <div
-                className={`grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl ${bg}`}
+                className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl ${bg}`}
               >
                 <RiskIcon type={item.type} />
               </div>
               <div className="flex-1">
-                <b className="block text-[13px] text-[#191f28]">{item.title}</b>
-                <small className="mt-0.5 block text-[11px] font-bold text-[#9aa4b2]">
+                <b className="block text-sb16 text-[14px] text-gray100">
+                  {item.title}
+                </b>
+                <small className="mt-1 block text-r14 text-[12px] text-gray60">
                   {item.desc}
                 </small>
               </div>
-              <span className="flex-shrink-0 text-[10px] font-bold text-[#c0c8d4]">
+              <span className="shrink-0 text-r14 text-[11px] text-gray50">
                 {item.timeAgo}
               </span>
             </button>

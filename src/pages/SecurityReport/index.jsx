@@ -1,6 +1,7 @@
 // src/pages/SecurityReport/index.jsx
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
+import ActionButton from "@/components/ui/ActionButton";
 import SummaryBadges from "./components/SummaryBadges";
 import RecommendationList from "./components/RecommendationList";
 import RiskItemList from "./components/RiskItemList";
@@ -49,23 +50,6 @@ function ArrowLeftIcon() {
     >
       <line x1="19" y1="12" x2="5" y2="12" />
       <polyline points="12 19 5 12 12 5" />
-    </svg>
-  );
-}
-
-function ChatIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" />
     </svg>
   );
 }
@@ -130,49 +114,52 @@ function SecurityReport() {
 
   return (
     <PageBackground variant="frost">
-      <div className="min-h-dvh px-4 pb-8 pt-[max(12px,env(safe-area-inset-top))]">
-        <div className="mb-3 flex items-center gap-3 py-2">
-          <button onClick={() => navigate(-1)}>
+      <div className="min-h-dvh px-4">
+        <div className="mt-1.5 flex items-center gap-3">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-9 h-9 bg-white rounded-full grid place-items-center"
+          >
             <ArrowLeftIcon />
           </button>
-          <h1 className="text-lg font-bold text-[#191f28]">보안 리포트</h1>
+          <h1 className="text-b24 text-[18px] text-gray100">보안 리포트</h1>
         </div>
 
         <div
-          className="mb-5 rounded-3xl p-5 text-center text-white shadow-lg"
+          className="mb-6 rounded-[20px] px-6 py-7 text-center text-white shadow-[0_8px_24px_rgba(8,37,126,0.2)]"
           style={{
             background: isSafe
               ? "linear-gradient(135deg, #3B6CFF 0%, #08257E 100%)"
               : "linear-gradient(135deg, #E43939 0%, #08257E 100%)",
           }}
         >
-          <div className="mb-3 flex items-center justify-between text-[11px] font-bold text-white/70">
+          <div className="mb-3 flex items-center justify-between text-m14 text-[12px] text-white/80">
             <span>{formatBaseDate(report.analyzedAt)}</span>
             {report.hasAiSnapshot && (
-              <span className="rounded-full bg-white/20 px-2.5 py-1">
+              <span className="text-white rounded-10px text-sb16 text-[11px] bg-white/10 px-2 py-1">
                 ✨ AI 분석
               </span>
             )}
           </div>
 
           <div className="mx-auto flex h-40 w-40 items-center justify-center rounded-full bg-white/10">
-            <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-white/15">
+            <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-white/10">
               <span className="text-[40px] font-bold leading-none text-white">
                 {report.securityScore}
               </span>
-              <span className="mt-1 text-[11px] font-bold text-white/60">
+              <span className="mt-1 text-[11px] font-regular text-white/60">
                 /100
               </span>
             </div>
           </div>
 
           <p
-            className="mt-3 text-sm font-bold"
+            className="mt-2 text-sb16 font-bold"
             style={{ color: GRADE_COLOR[report.grade] ?? "#ffd200" }}
           >
             {report.grade}
           </p>
-          <p className="mt-1 text-[11px] font-bold text-white/70">
+          <p className="mt-2 text-m14 text-[13px]  text-white">
             {report.scoreDescription}
           </p>
         </div>
@@ -190,13 +177,13 @@ function SecurityReport() {
 
         <RiskItemList items={riskItems} onSelect={handleSelectRiskItem} />
 
-        <button
+        <ActionButton
+          bgColor="var(--color-main100)"
+          textColor="var(--color-white)"
           onClick={() => navigate(ROUTES.SECURITY_ASSISTANT)}
-          className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#08257e] text-sm font-bold text-white"
         >
-          <ChatIcon />
           보안 도우미에게 문의하기
-        </button>
+        </ActionButton>
       </div>
     </PageBackground>
   );

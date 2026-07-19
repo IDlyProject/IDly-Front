@@ -55,6 +55,13 @@ function SafeIcon() {
   );
 }
 
+// 아이콘 종류별 배경색 (RiskItemList.jsx의 TONE_STYLE과 동일한 톤)
+const ICON_BG = {
+  위험: "bg-[#fef2f2]",
+  주의: "bg-[#fff8e1]",
+  안전: "bg-[#e8f5e9]",
+};
+
 function SummaryBadges({ riskCount, actionCount, safeCount }) {
   const items = [
     { icon: <WarningIcon />, count: riskCount, label: "위험" },
@@ -63,17 +70,19 @@ function SummaryBadges({ riskCount, actionCount, safeCount }) {
   ];
 
   return (
-    <div className="mb-5 grid grid-cols-3 gap-2.5">
+    <div className="mb-6 grid grid-cols-3 gap-2.5">
       {items.map((item) => (
         <div
           key={item.label}
-          className="flex flex-col items-center gap-1.5 rounded-2xl bg-white py-3.5 shadow-sm"
+          className="flex flex-col items-center gap-2 rounded-2xl bg-white py-4 shadow-[0_1px_3px_rgba(16,24,46,0.03)]"
         >
-          {item.icon}
-          <b className="text-lg font-bold text-[#191f28]">{item.count}</b>
-          <span className="text-[11px] font-bold text-[#9aa4b2]">
-            {item.label}
-          </span>
+          <div
+            className={`grid h-8 w-8 place-items-center rounded-full ${ICON_BG[item.label]}`}
+          >
+            {item.icon}
+          </div>
+          <b className="text-b24 text-gray100">{item.count}</b>
+          <span className="text-r14 text-[12px] text-gray50">{item.label}</span>
         </div>
       ))}
     </div>
