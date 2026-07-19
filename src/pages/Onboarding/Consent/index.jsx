@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
+import { saveConsent } from "@/api/users";
 import ProgressDots from "../components/ProgressDot";
 import PageBackground from "@/components/layouts/PageBackground";
 import AllCheckedBoxIcon from "@/assets/ic_all_checked_box.svg";
@@ -26,6 +27,8 @@ function Consent() {
   const navigate = useNavigate();
   const [checked, setChecked] = useState({});
   const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(false);
 
   const requiredItems = REQUIRED_ITEMS.filter((item) => item.required);
   const allRequiredChecked = requiredItems.every((item) => checked[item.id]);
@@ -42,9 +45,24 @@ function Consent() {
     setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const goToNextStep = () => {
-    // TODO: 동의 상태를 서버에 저장하는 API 호출 필요 시 여기에 추가
-    navigate(ROUTES.ONBOARDING_ACCOUNT_COMPLETE);
+  // notificationAgreed를 인자로 받는 이유: 모달에서 setChecked 직후 곧바로 호출되므로,
+  // 클로저의 checked.notification은 아직 반영 전(stale)이라 값을 직접 넘겨야 함
+  const goToNextStep = async (notificationAgreed) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setError(false);
+
+    try {
+      await saveConsent({
+        requiredTermsAgreed: true,
+        notificationAgreed,
+        marketingAgreed: !!checked.marketing,
+      });
+      navigate(ROUTES.ONBOARDING_ACCOUNT_COMPLETE);
+    } catch {
+      setIsSubmitting(false);
+      setError(true);
+    }
   };
 
   const handleAgreeClick = () => {
@@ -56,20 +74,20 @@ function Consent() {
       return;
     }
 
-    goToNextStep();
+    goToNextStep(true);
   };
 
   const handleModalAgree = () => {
     // 모달에서 "동의하고 계속하기" - 알림 동의 체크를 켜고 진행
     setChecked((prev) => ({ ...prev, notification: true }));
     setShowNotificationModal(false);
-    goToNextStep();
+    goToNextStep(true);
   };
 
   const handleModalDismiss = () => {
     // "동의하지 않고 계속하기" - 알림 동의는 그대로 미체크 상태로 진행
     setShowNotificationModal(false);
-    goToNextStep();
+    goToNextStep(false);
   };
 
   return (
@@ -116,14 +134,20 @@ function Consent() {
               ))}
             </div>
           </div>
+
+          {error && (
+            <p className="text-xs font-bold text-danger50">
+              저장에 실패했어요. 다시 시도해주세요.
+            </p>
+          )}
         </div>
         <ActionButton
           bgColor="var(--color-main100)"
           textColor="var(--color-white)"
           onClick={handleAgreeClick}
-          disabled={!allRequiredChecked}
+          disabled={!allRequiredChecked || isSubmitting}
         >
-          동의하고 시작하기
+          {isSubmitting ? "저장 중..." : "동의하고 시작하기"}
         </ActionButton>
       </div>
 
