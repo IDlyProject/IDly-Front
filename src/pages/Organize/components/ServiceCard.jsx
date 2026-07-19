@@ -5,11 +5,11 @@ import ServiceIcon from "@/components/ui/ServiceIcon";
 import ChevronBottomIcon from "@/assets/ic_chevron_bottom_18.svg";
 import ChevronTopIcon from "@/assets/ic_chevron_top_18.svg";
 
-// summary API의 action.status는 pending | done만 존재
+// summary API의 action.status는 pending | done만 존재 (pending = 아직 하지 않음)
 const BADGE_STYLE = {
   pending: {
-    label: "진행중",
-    className: "text-[#FFB200]",
+    label: "대기중",
+    className: "text-gray50",
   },
 };
 
@@ -79,7 +79,7 @@ function ServiceCard({
               <span className="flex-1 text-sb16 text-[13px] text-gray100">
                 {task.title}
               </span>
-              {task.timeAgo && (
+              {task.status === "done" && task.timeAgo && (
                 <span className="text-m14 text-[10px] text-gray50">
                   {task.timeAgo}
                 </span>

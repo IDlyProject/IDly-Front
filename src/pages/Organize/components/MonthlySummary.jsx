@@ -1,8 +1,9 @@
 import FinishedIcon from "@/assets/ic_finished.svg";
-import LoadingIcon from "@/assets/ic_loading.svg";
+import WaitingIcon from "@/assets/ic_waiting.svg";
 
 // summary API의 progress가 { done, pending } 2종류만 반환 (skipped 상태는 없어짐)
-function MonthlySummary({ label, completedCount, inProgressCount, isSafe }) {
+// pending = 아직 처리하지 않음("대기") — "진행중"이 아님
+function MonthlySummary({ label, completedCount, pendingCount, isSafe }) {
   return (
     <div
       className="rounded-[20px] p-5 text-white"
@@ -20,9 +21,9 @@ function MonthlySummary({ label, completedCount, inProgressCount, isSafe }) {
           <span className="text-m14 text-[11px] text-white/66">완료</span>
         </div>
         <div className="flex flex-col items-center gap-1 rounded-[14px] bg-white/8 py-3.5">
-          <img src={LoadingIcon} className="w-5 h-5" />
-          <b className="text-[22px] font-bold">{inProgressCount}</b>
-          <span className="text-m14 text-[11px] text-white/66">진행중</span>
+          <img src={WaitingIcon} className="w-5 h-5" />
+          <b className="text-[22px] font-bold">{pendingCount}</b>
+          <span className="text-m14 text-[11px] text-white/66">대기중</span>
         </div>
       </div>
     </div>

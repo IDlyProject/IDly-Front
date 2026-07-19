@@ -120,7 +120,7 @@ function Organize() {
         <MonthlySummary
           label={formatMonthLabel(summary.month)}
           completedCount={summary.progress.done}
-          inProgressCount={summary.progress.pending}
+          pendingCount={summary.progress.pending}
           isSafe={isSafe}
         />
 

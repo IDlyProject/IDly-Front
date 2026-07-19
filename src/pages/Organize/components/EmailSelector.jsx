@@ -7,7 +7,7 @@ import CheckIcon from "@/assets/ic_check.svg";
 function EmailSelector({ emails, selectedId, onSelect, onAddAccount }) {
   const [open, setOpen] = useState(false);
 
-  if (emails.length <= 2) return null;
+  if (emails.length === 0) return null;
 
   const selected = emails.find((e) => e.id === selectedId) ?? emails[0];
   const primaryLabel = selected.id === "all" ? "전체 계정" : selected.label;

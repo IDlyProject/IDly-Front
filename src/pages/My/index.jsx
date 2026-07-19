@@ -62,7 +62,7 @@ function My() {
               : "linear-gradient(135deg, #E43939 0%, #08257E 100%)",
           }}
         >
-          <div className="grid h-13 w-13 shrink-0 place-items-center rounded-full bg-white/20 text-[20px] font-bold">
+          <div className="grid h-13 w-13 shrink-0 place-items-center rounded-full bg-white/20 text-[20px] text-white font-bold">
             {user?.name?.[0] ?? "?"}
           </div>
           <div>
