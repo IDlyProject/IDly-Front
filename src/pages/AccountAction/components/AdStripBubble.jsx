@@ -1,8 +1,8 @@
 // src/pages/AccountAction/components/AdStripBubble.jsx
 import OwlAvatar from "./OwlAvatar";
 
-// news: { id, emoji, title, url } (Home의 cardNews와 동일한 모양)
-function AdStripBubble({ news }) {
+// news: { emoji, title, url }
+function AdStripBubble({ news, badge = "카드뉴스" }) {
   const handleClick = () =>
     news.url && window.open(news.url, "_blank", "noopener,noreferrer");
 
@@ -18,7 +18,7 @@ function AdStripBubble({ news }) {
           {news.title}
         </p>
         <span className="flex-shrink-0 whitespace-nowrap text-[11px] font-bold text-[#1a6fdb]">
-          카드뉴스 ↗
+          {badge} ↗
         </span>
       </button>
     </div>

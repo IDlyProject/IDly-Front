@@ -29,7 +29,7 @@ function ChatMessage({ message, session, isLatest, onSelectAction, onDone, onFai
       const actionIds = message.metadata?.actionList?.actionIds;
       const items = actionIds
         ? actionIds
-            .map((id) => session?.recommendedActions?.find((a) => a.id === id))
+            .map((id) => session?.recommendedActionsById?.[id])
             .filter(Boolean)
         : (session?.recommendedActions ?? []);
       return (
@@ -42,13 +42,23 @@ function ChatMessage({ message, session, isLatest, onSelectAction, onDone, onFai
     }
 
     case "official_link": {
-      const card = message.metadata?.officialLink;
+      // metadata엔 링크 정보가 없고, 메시지가 온 시점의 활성 조치(externalCard)에 들어있음
+      const activeAction = session?.recommendedActionsById?.[message._actionItemId];
+      const card = message.metadata?.officialLink ?? activeAction?.externalCard;
       return card ? <LinkCardBubble card={card} /> : <TextBubble text={message.text} />;
     }
 
     case "card_news": {
-      const news = message.metadata?.cardNews;
-      return news ? <AdStripBubble news={news} /> : <TextBubble text={message.text} />;
+      const cardNews = message.metadata?.cardNews;
+      // 헤드라인은 metadata가 아니라 메시지 자체의 text에 들어있음
+      return cardNews ? (
+        <AdStripBubble
+          news={{ emoji: cardNews.emoji, title: message.text, url: cardNews.url }}
+          badge={cardNews.badge}
+        />
+      ) : (
+        <TextBubble text={message.text} />
+      );
     }
 
     case "tip":
