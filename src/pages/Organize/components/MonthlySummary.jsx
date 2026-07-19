@@ -6,7 +6,7 @@ function MonthlySummary({
   label,
   completedCount,
   inProgressCount,
-  waitingCount,
+  skippedCount,
   isSafe,
 }) {
   return (
@@ -32,8 +32,8 @@ function MonthlySummary({
         </div>
         <div className="flex flex-col items-center gap-1 rounded-[14px] bg-white/8 py-3.5">
           <img src={WaitiingIcon} className="w-5 h-5" />
-          <b className="text-[22px] font-bold">{waitingCount}</b>
-          <span className="text-m14 text-[11px] text-white/66">대기</span>
+          <b className="text-[22px] font-bold">{skippedCount}</b>
+          <span className="text-m14 text-[11px] text-white/66">건너뜀</span>
         </div>
       </div>
     </div>

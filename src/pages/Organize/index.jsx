@@ -1,35 +1,108 @@
 // src/pages/Organize/index.jsx
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import EmailSelector from "./components/EmailSelector";
 import RecommendCard from "@/pages/Home/components/RecommendCard";
 import MonthlySummary from "./components/MonthlySummary";
 import ServiceCard from "./components/ServiceCard";
-import { MOCK_ORGANIZE } from "./mockOrganizeData";
-import { MOCK_EMAILS } from "@/pages/Home/mockData";
+import { useSummary } from "@/hooks/useSummary";
+import { useHomeData } from "@/hooks/useHomeData";
+import { AVATAR_GRADIENTS } from "@/utils/mailAccount";
+import { getServiceIconGradient } from "@/utils/serviceIcon";
+import { formatTimeAgo } from "@/utils/time";
 import { ROUTES } from "@/constants/routes";
+
+function formatMonthLabel(month) {
+  if (!month) return "이번 달 보안 조치";
+  const [year, m] = month.split("-");
+  return `${year}년 ${Number(m)}월 보안 조치`;
+}
 
 function Organize() {
   const navigate = useNavigate();
+  const { summary, status } = useSummary();
+  // 카드뉴스는 summary 응답엔 없고 home 응답에만 있어서, 그 부분만 재사용
+  const { data: homeData } = useHomeData();
   const [selectedEmailId, setSelectedEmailId] = useState("all");
-  const data = MOCK_ORGANIZE;
 
-  const isSafe = data.waitingCount === 0;
+  const emails = useMemo(() => {
+    if (!summary) return [];
+    return [
+      { id: "all", label: "전체", count: summary.services.length },
+      ...summary.mailAccounts.map((account, idx) => ({
+        id: account.id,
+        label: account.email,
+        count: summary.services.filter(
+          (s) => s.sourceMailAccount?.id === account.id,
+        ).length,
+        avatarBg: AVATAR_GRADIENTS[idx % AVATAR_GRADIENTS.length],
+        avatarLabel: account.email[0]?.toUpperCase() ?? "?",
+      })),
+    ];
+  }, [summary]);
+
+  const services = useMemo(() => {
+    if (!summary) return [];
+    const filtered =
+      selectedEmailId === "all"
+        ? summary.services
+        : summary.services.filter(
+            (s) => s.sourceMailAccount?.id === selectedEmailId,
+          );
+
+    return filtered.map((s) => ({
+      id: s.id,
+      name: s.serviceName,
+      iconUrl: s.iconUrl,
+      iconBg: getServiceIconGradient(s.serviceName),
+      iconText: s.iconLabel,
+      actionCount: s.actions.length,
+      tasks: s.actions.map((a) => ({
+        id: a.id,
+        title: a.title,
+        status: a.status, // pending | done | skipped
+        timeAgo: formatTimeAgo(a.updatedAt),
+      })),
+    }));
+  }, [summary, selectedEmailId]);
 
   const handleSelectService = (serviceId) => {
-    // TODO: 실제로는 serviceId를 함께 넘겨서 어떤 서비스에 대한 문의인지 챗봇이 알아야 함
-    navigate(ROUTES.SECURITY_ASSISTANT);
+    navigate(ROUTES.ACCOUNT_DETAIL(serviceId));
   };
 
-  const handleSelectTask = (serviceId, taskId) => {
-    // TODO: 조치 챗봇 창으로 이동, 실제 라우트/파라미터 확정되면 교체
-    navigate(ROUTES.SECURITY_ASSISTANT);
+  const handleSelectTask = (serviceId) => {
+    navigate(ROUTES.ACCOUNT_ACTION(serviceId));
   };
 
   const handleAddAccount = () => {
     navigate(ROUTES.ONBOARDING_ADD_ACCOUNT);
   };
+
+  if (status === "loading") {
+    return (
+      <PageBackground variant="frost">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  if (status === "error" || !summary) {
+    return (
+      <PageBackground variant="frost">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">
+            정리 정보를 불러오지 못했어요.
+          </p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  const isSafe = summary.progress.pending === 0;
+  const cardNews = homeData?.cardNews?.[0];
 
   return (
     <PageBackground variant="frost">
@@ -37,7 +110,7 @@ function Organize() {
         <div className="my-5 mx-1 flex items-center justify-between">
           <h1 className="text-b24 text-[22px] text-gray100">정리</h1>
           <EmailSelector
-            emails={MOCK_EMAILS}
+            emails={emails}
             selectedId={selectedEmailId}
             onSelect={setSelectedEmailId}
             onAddAccount={handleAddAccount}
@@ -45,25 +118,32 @@ function Organize() {
         </div>
 
         <MonthlySummary
-          label={data.monthLabel}
-          completedCount={data.completedCount}
-          inProgressCount={data.inProgressCount}
-          waitingCount={data.waitingCount}
+          label={formatMonthLabel(summary.month)}
+          completedCount={summary.progress.done}
+          inProgressCount={summary.progress.pending}
+          skippedCount={summary.progress.skipped}
           isSafe={isSafe}
         />
 
         <div className="h-3.5" />
 
-        <RecommendCard url="https://idly-apt.tistory.com/2" />
+        {cardNews ? (
+          <RecommendCard
+            url={cardNews.url}
+            emoji={cardNews.emoji}
+            title={cardNews.title}
+          />
+        ) : (
+          <RecommendCard url="https://idly-apt.tistory.com/2" />
+        )}
 
         <div className="mt-3.5">
-          {data.services.map((service) => (
+          {services.map((service) => (
             <ServiceCard
               key={service.id}
               service={service}
               onSelectService={handleSelectService}
               onSelectTask={handleSelectTask}
-              defaultOpen={service.expanded}
             />
           ))}
         </div>

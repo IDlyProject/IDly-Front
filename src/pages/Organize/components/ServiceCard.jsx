@@ -1,6 +1,7 @@
 // src/pages/Organize/components/ServiceCard.jsx
 import { useState } from "react";
 import TaskStatusIcon from "./TaskStatusIcon";
+import ServiceIcon from "@/components/ui/ServiceIcon";
 import ChevronBottomIcon from "@/assets/ic_chevron_bottom_18.svg";
 import ChevronTopIcon from "@/assets/ic_chevron_top_18.svg";
 
@@ -11,6 +12,10 @@ const BADGE_STYLE = {
   },
   waiting: {
     label: "대기중",
+    className: "text-[#B0B1B4]",
+  },
+  skipped: {
+    label: "건너뜀",
     className: "text-[#B0B1B4]",
   },
 };
@@ -38,12 +43,12 @@ function ServiceCard({
         onClick={handleCardClick}
         className="flex w-full items-center gap-3 px-4 py-3.5 text-left"
       >
-        <div
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] text-[16px] font-bold text-white"
-          style={{ background: service.iconBg }}
-        >
-          {service.iconText}
-        </div>
+        <ServiceIcon
+          iconUrl={service.iconUrl}
+          iconBg={service.iconBg}
+          iconText={service.iconText}
+          className="h-9 w-9 shrink-0 rounded-[10px] text-[16px]"
+        />
         <div className="flex-1">
           <b className="block text-b24 text-[15px] text-gray100">
             {service.name}

@@ -24,7 +24,7 @@ function EmailSelector({ emails, selectedId, onSelect, onAddAccount }) {
         className="flex items-center gap-1 px-3 py-1.5 bg-white rounded-[20px] shadow-[0_1px_3px_rgba(16,24,46,0.03)]"
       >
         <span className="text-sb16 text-[12px] text-gray60">
-          {primaryLabel}
+          {primaryLabel} · {countLabel}
         </span>
         <img src={ChevronBottomIcon} />
       </button>

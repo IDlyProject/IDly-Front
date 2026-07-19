@@ -6,6 +6,7 @@ import SummaryBadges from "./components/SummaryBadges";
 import RecommendationList from "./components/RecommendationList";
 import RiskItemList from "./components/RiskItemList";
 import { useSecurityReport } from "@/hooks/useSecurityReport";
+import { formatTimeAgo } from "@/utils/time";
 import { ROUTES } from "@/constants/routes";
 
 const GRADE_COLOR = {
@@ -22,15 +23,6 @@ function formatBaseDate(isoString) {
     day: "numeric",
   });
   return `${date} 기준`;
-}
-
-function formatTimeAgo(isoString) {
-  if (!isoString) return "";
-  const diffMs = Date.now() - new Date(isoString).getTime();
-  const diffHours = Math.floor(diffMs / (60 * 60 * 1000));
-  if (diffHours < 1) return "방금 전";
-  if (diffHours < 24) return `${diffHours}시간 전`;
-  return `${Math.floor(diffHours / 24)}일 전`;
 }
 
 // riskType은 자유 문자열(예: "new_device_login")이라, 기존 아이콘/색상 4종류 중

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
+import ServiceIcon from "@/components/ui/ServiceIcon";
 import AccountQuickMenu from "./AccountQuickMenu";
 import useLongPress from "../hooks/useLongPress";
 
@@ -12,10 +13,8 @@ const DOT_COLOR = {
 function AptCard({ account, onHide, onOrganize }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [iconLoadFailed, setIconLoadFailed] = useState(false);
   const buttonRef = useRef(null);
   const isRisk = account.status === "risk";
-  const showImage = account.iconUrl && !iconLoadFailed;
 
   const longPress = useLongPress(() => setMenuOpen(true));
 
@@ -45,21 +44,12 @@ function AptCard({ account, onHide, onOrganize }) {
           } ${isRisk ? DOT_COLOR.risk : DOT_COLOR.safe}`}
         />
 
-        {showImage ? (
-          <img
-            src={account.iconUrl}
-            alt=""
-            onError={() => setIconLoadFailed(true)}
-            className="h-10.5 w-10.5 rounded-[13px] object-cover"
-          />
-        ) : (
-          <div
-            className="grid h-10.5 w-10.5 place-items-center rounded-[13px] text-[14px] font-bold text-white"
-            style={{ background: account.iconBg }}
-          >
-            {account.iconText}
-          </div>
-        )}
+        <ServiceIcon
+          iconUrl={account.iconUrl}
+          iconBg={account.iconBg}
+          iconText={account.iconText}
+          className="h-10.5 w-10.5 rounded-[13px] text-[14px]"
+        />
         <span
           className={`max-w-full truncate text-[11px] font-bold ${isRisk ? "text-[#EE4E4E]" : "text-gray60"}`}
         >
