@@ -1,51 +1,79 @@
 // src/pages/DormantAccounts/index.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
+import ServiceIcon from "@/components/ui/ServiceIcon";
+import { getDormantAccounts, restoreAllDormant } from "@/api/dormantAccounts";
+import { restoreServiceAccountDormant } from "@/api/serviceAccounts";
+import { getServiceIconGradient } from "@/utils/serviceIcon";
 import BackIcon from "@/assets/ic_back.svg";
 import InfoIcon from "@/assets/ic_information.svg";
 
-// TODO: 실제로는 /accounts?status=dormant API로 대체
-const MOCK_DORMANT = [
-  {
-    id: "d1",
-    name: "Tumblr",
-    email: "minsu@gmail.com",
-    dormantAgo: "휴면 3개월",
-    iconBg: "#3f5670",
-    iconText: "T",
-  },
-  {
-    id: "d2",
-    name: "LinkedIn",
-    email: "minsu@gmail.com",
-    dormantAgo: "휴면 6개월",
-    iconBg: "#0a66c2",
-    iconText: "Li",
-  },
-  {
-    id: "d3",
-    name: "Dropbox",
-    email: "minsu@gmail.com",
-    dormantAgo: "휴면 1년",
-    iconBg: "#0061ff",
-    iconText: "Db",
-  },
-];
-
 function DormantAccounts() {
   const navigate = useNavigate();
-  const [accounts, setAccounts] = useState(MOCK_DORMANT);
+  const [accounts, setAccounts] = useState([]);
+  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [restoringAll, setRestoringAll] = useState(false);
 
-  const handleRestore = (id) => {
-    // TODO: 실제 복원 API 호출 필요
-    setAccounts((prev) => prev.filter((a) => a.id !== id));
+  useEffect(() => {
+    let cancelled = false;
+    getDormantAccounts()
+      .then((data) => {
+        if (cancelled) return;
+        setAccounts(data);
+        setStatus("ready");
+      })
+      .catch((err) => {
+        console.error("dormant accounts load failed:", err);
+        if (!cancelled) setStatus("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleRestore = async (id) => {
+    try {
+      await restoreServiceAccountDormant(id);
+      setAccounts((prev) => prev.filter((a) => a.id !== id));
+    } catch (err) {
+      console.error("restore dormant account failed:", err);
+    }
   };
 
-  const handleRestoreAll = () => {
-    // TODO: 실제 전체 복원 API 호출 필요
-    setAccounts([]);
+  const handleRestoreAll = async () => {
+    setRestoringAll(true);
+    try {
+      await restoreAllDormant();
+      setAccounts([]);
+    } catch (err) {
+      console.error("restore all dormant accounts failed:", err);
+    } finally {
+      setRestoringAll(false);
+    }
   };
+
+  if (status === "loading") {
+    return (
+      <PageBackground variant="frost">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <PageBackground variant="frost">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">
+            휴면 계정을 불러오지 못했어요.
+          </p>
+        </div>
+      </PageBackground>
+    );
+  }
 
   return (
     <PageBackground variant="frost">
@@ -75,18 +103,18 @@ function DormantAccounts() {
               key={account.id}
               className="flex items-center gap-3.5 rounded-2xl bg-white px-4 py-3.5 shadow-[0_1px_3px_rgba(16,24,46,0.04)]"
             >
-              <div
-                className="grid h-10.5 w-10.5 shrink-0 place-items-center rounded-[13px] text-[14px] font-bold text-white"
-                style={{ background: account.iconBg }}
-              >
-                {account.iconText}
-              </div>
+              <ServiceIcon
+                iconUrl={account.iconUrl}
+                iconBg={getServiceIconGradient(account.serviceName)}
+                iconText={account.iconLabel}
+                className="h-10.5 w-10.5 shrink-0 rounded-[13px] text-[14px]"
+              />
               <div className="flex-1">
                 <b className="block text-sb16 text-[15px] text-gray100">
-                  {account.name}
+                  {account.displayName}
                 </b>
                 <small className="mt-0.75 block text-r14 text-[12px] text-gray50">
-                  {account.email} · {account.dormantAgo}
+                  {account.email} · 휴면 {account.dormantDuration}
                 </small>
               </div>
               <button
@@ -106,9 +134,10 @@ function DormantAccounts() {
             </p>
             <button
               onClick={handleRestoreAll}
-              className="w-full text-center text-sb16 text-[14px] text-main100"
+              disabled={restoringAll}
+              className="w-full text-center text-sb16 text-[14px] text-main100 disabled:opacity-40"
             >
-              모두 복원하기
+              {restoringAll ? "복원 중..." : "모두 복원하기"}
             </button>
           </div>
         )}

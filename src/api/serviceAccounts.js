@@ -20,3 +20,13 @@ export async function setServiceAccountDormant(serviceAccountId) {
   if (!res.ok) throw new Error(`set dormant failed: ${res.status}`);
   return res.json(); // { serviceAccountId, status }
 }
+
+// 휴면 계정을 개별로 능동 모니터링에 복원
+export async function restoreServiceAccountDormant(serviceAccountId) {
+  const res = await apiFetch(`/api/service-accounts/${serviceAccountId}/restore`, {
+    method: "PATCH",
+  });
+
+  if (!res.ok) throw new Error(`restore dormant failed: ${res.status}`);
+  return res.json();
+}
