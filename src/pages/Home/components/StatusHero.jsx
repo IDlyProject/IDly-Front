@@ -23,7 +23,7 @@ function StatusHero({ userName, totalCount, isSafe, riskCount, score, title }) {
           <img src={AptIcon} className=" w-3 h-auto" />
           {userName} 님의 계정아파트
         </div>
-        <span className="rounded-full bg-[#FFD36C] px-2.25 py-1 text-[11px] font-semibold text-gray100">
+        <span className="ml-2 rounded-full bg-[#FFD36C] px-2.25 py-1 text-[11px] font-semibold text-gray100">
           {totalCount}개의 계정
         </span>
       </div>
