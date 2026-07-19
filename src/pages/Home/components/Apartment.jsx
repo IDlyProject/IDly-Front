@@ -12,8 +12,10 @@ const DOT_COLOR = {
 function AptCard({ account, onHide, onOrganize }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [iconLoadFailed, setIconLoadFailed] = useState(false);
   const buttonRef = useRef(null);
   const isRisk = account.status === "risk";
+  const showImage = account.iconUrl && !iconLoadFailed;
 
   const longPress = useLongPress(() => setMenuOpen(true));
 
@@ -43,10 +45,11 @@ function AptCard({ account, onHide, onOrganize }) {
           } ${isRisk ? DOT_COLOR.risk : DOT_COLOR.safe}`}
         />
 
-        {account.iconUrl ? (
+        {showImage ? (
           <img
             src={account.iconUrl}
             alt=""
+            onError={() => setIconLoadFailed(true)}
             className="h-10.5 w-10.5 rounded-[13px] object-cover"
           />
         ) : (

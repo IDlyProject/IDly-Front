@@ -52,7 +52,7 @@ function Home() {
         status: !isDormant && sa.status === "action_required" ? "risk" : "safe",
         iconUrl: sa.iconUrl,
         iconBg: getServiceIconGradient(sa.serviceName),
-        iconText: sa.iconLabel,
+        iconText: sa.iconLabel || sa.displayName?.[0]?.toUpperCase() || "?",
       };
     });
   }, [homeData, dormantOverrideIds]);
