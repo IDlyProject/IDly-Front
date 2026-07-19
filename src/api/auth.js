@@ -15,6 +15,11 @@ export async function refreshSession() {
   return refreshAccessToken();
 }
 
+// 액세스 토큰이 만료된 상태에서도 idly_refresh 쿠키만으로 동작 (서버가 refresh 토큰 폐기 + 쿠키 삭제)
+export async function logout() {
+  await apiFetch("/api/auth/logout", { method: "POST" });
+}
+
 export function getPrimaryGmailAccount(user) {
   if (!user?.gmailAccounts?.length) return null;
   return (

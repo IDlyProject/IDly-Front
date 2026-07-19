@@ -1,8 +1,10 @@
 // src/pages/My/index.jsx
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { logout } from "@/api/auth";
 import SettingIcon from "@/assets/ic_setting.svg";
 import AccountManageIcon from "@/assets/ic_account_manage.svg";
 import HeadphoneIcon from "@/assets/ic_headphone.svg";
@@ -29,10 +31,16 @@ function My() {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const isSafe = false;
+  const [loggingOut, setLoggingOut] = useState(false);
 
-  const handleLogout = () => {
-    // TODO: 실제 로그아웃 API 호출 필요 (쿠키/토큰 삭제)
-    navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
+  const handleLogout = async () => {
+    if (loggingOut) return;
+    setLoggingOut(true);
+    try {
+      await logout();
+    } finally {
+      navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
+    }
   };
 
   return (
@@ -109,10 +117,11 @@ function My() {
 
         <button
           onClick={handleLogout}
-          className="mb-2 flex h-12.5 w-full items-center justify-center gap-2 rounded-[18px] bg-white text-sm font-bold text-[#EE4E4E]"
+          disabled={loggingOut}
+          className="mb-2 flex h-12.5 w-full items-center justify-center gap-2 rounded-[18px] bg-white text-sm font-bold text-[#EE4E4E] disabled:opacity-60"
         >
           <img src={LogoutIcon} className="h-4 w-4" />
-          <div>로그아웃</div>
+          <div>{loggingOut ? "로그아웃 중..." : "로그아웃"}</div>
         </button>
 
         <p className="text-left text-r14 text-[12px] text-gray50">
