@@ -1,5 +1,5 @@
 // src/utils/mailAccount.js
-const AVATAR_GRADIENTS = [
+export const AVATAR_GRADIENTS = [
   "linear-gradient(135deg,#3b6cff,#5b7dff)",
   "linear-gradient(135deg,#16b886,#0da87c)",
   "linear-gradient(135deg,#ff9f43,#ffb976)",

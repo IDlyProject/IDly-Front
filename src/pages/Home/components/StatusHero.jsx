@@ -2,7 +2,13 @@ import AptIcon from "@/assets/ic_apt.svg";
 import SafeIcon from "@/assets/ic_status_safe.svg";
 import DangerIcon from "@/assets/ic_status_danger.svg";
 
-function StatusHero({ userName, totalCount, isSafe, riskCount, score }) {
+function StatusHero({ userName, totalCount, isSafe, riskCount, score, title }) {
+  const headline =
+    title ??
+    (isSafe
+      ? "모든 계정이 양호합니다"
+      : `${riskCount}개의 계정에 조치가 필요합니다`);
+
   return (
     <div
       className="rounded-[20px] text-white p-5"
@@ -22,11 +28,7 @@ function StatusHero({ userName, totalCount, isSafe, riskCount, score }) {
         </span>
       </div>
       <div className="mx-1">
-        <h2 className="mb-2 text-b24 text-[22px]">
-          {isSafe
-            ? "모든 계정이 양호합니다"
-            : `${riskCount}개의 계정에 조치가 필요합니다`}
-        </h2>
+        <h2 className="mb-2 text-b24 text-[22px]">{headline}</h2>
 
         <div className="flex items-center gap-2 text-sb16 text-[14px]">
           <img

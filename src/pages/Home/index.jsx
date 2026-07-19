@@ -8,36 +8,79 @@ import StatusHero from "./components/StatusHero";
 import EmailSelector from "./components/EmailSelector";
 import RecommendCard from "./components/RecommendCard";
 import Apartment from "./components/Apartment";
-import { MOCK_EMAILS, MOCK_ACCOUNTS } from "./mockData";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useHomeData } from "@/hooks/useHomeData";
+import { AVATAR_GRADIENTS } from "@/utils/mailAccount";
 import { triggerAnalysisRun, waitForAnalysisCompletion } from "@/api/analysis";
 import { ROUTES } from "@/constants/routes";
 
+// 서비스별 고정 색상이 없으므로 이름을 해시해 팔레트에서 안정적으로 하나 고른다
+const SERVICE_ICON_GRADIENTS = [
+  "linear-gradient(160deg,#3b6cff,#5b7dff)",
+  "linear-gradient(160deg,#16b886,#0da87c)",
+  "linear-gradient(160deg,#ff9f43,#ffb976)",
+  "linear-gradient(160deg,#a06cff,#c48bff)",
+  "linear-gradient(160deg,#ff6040,#e04e39)",
+  "linear-gradient(160deg,#0e72ed,#2d8cff)",
+];
+
+function hashString(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
 function Home() {
   const navigate = useNavigate();
-  const { user } = useCurrentUser();
   const [selectedEmailId, setSelectedEmailId] = useState("all");
-  const [accounts, setAccounts] = useState(MOCK_ACCOUNTS);
+  const mailAccountId = selectedEmailId === "all" ? undefined : selectedEmailId;
+  const { data: homeData, status: homeStatus, reload } = useHomeData(mailAccountId);
+  // 휴면 처리 API가 아직 없어서, "숨기기"는 화면에서만 낙관적으로 위험 표시를 해제한다
+  const [dormantOverrideIds, setDormantOverrideIds] = useState(new Set());
 
-  const filteredAccounts = useMemo(() => {
-    if (selectedEmailId === "all") return accounts;
-    return accounts.filter((a) => a.emailGroup === selectedEmailId);
-  }, [selectedEmailId, accounts]);
+  const emails = useMemo(() => {
+    if (!homeData) return [];
+    const primaryFirst = [...homeData.mailAccounts].sort(
+      (a, b) => (b.role === "primary") - (a.role === "primary"),
+    );
+    return [
+      { id: "all", label: "전체", count: homeData.metrics.totalServiceAccounts },
+      ...primaryFirst.map((account, idx) => ({
+        id: account.id,
+        label: account.email,
+        count: account.serviceAccountCount,
+        avatarBg:
+          account.role === "primary"
+            ? AVATAR_GRADIENTS[0]
+            : AVATAR_GRADIENTS[(idx % (AVATAR_GRADIENTS.length - 1)) + 1],
+        avatarLabel: account.email[0]?.toUpperCase() ?? "?",
+      })),
+    ];
+  }, [homeData]);
 
-  const allRiskAccounts = useMemo(
-    () => accounts.filter((a) => a.status === "risk"),
-    [accounts],
-  );
-
-  const overallRiskCount = allRiskAccounts.length;
-  const overallIsSafe = overallRiskCount === 0;
-  const overallScore = overallIsSafe ? 92 : 17;
+  const accounts = useMemo(() => {
+    if (!homeData) return [];
+    return homeData.serviceAccounts.map((sa) => {
+      const isDormant = dormantOverrideIds.has(sa.id);
+      return {
+        id: sa.id,
+        name: sa.displayName,
+        status: !isDormant && sa.status === "action_required" ? "risk" : "safe",
+        iconUrl: sa.iconUrl,
+        iconBg:
+          SERVICE_ICON_GRADIENTS[
+            hashString(sa.serviceName) % SERVICE_ICON_GRADIENTS.length
+          ],
+        iconText: sa.iconLabel,
+      };
+    });
+  }, [homeData, dormantOverrideIds]);
 
   const handleHideAccount = (accountId) => {
     // TODO: 실제로는 서버에 휴면 처리 API 호출 필요
-    setAccounts((prev) =>
-      prev.map((a) => (a.id === accountId ? { ...a, status: "dormant" } : a)),
-    );
+    setDormantOverrideIds((prev) => new Set(prev).add(accountId));
   };
 
   const handleOrganizeAccount = () => {
@@ -52,11 +95,35 @@ function Home() {
     try {
       const { analysisId } = await triggerAnalysisRun();
       await waitForAnalysisCompletion(analysisId);
-      // TODO: GET /api/home 연동 후 여기서 accounts를 서버 최신 데이터로 갱신
+      await reload();
     } catch {
       // TODO: 재분석 실패를 사용자에게 알릴 방법 필요 (토스트 등)
     }
   };
+
+  if (homeStatus === "loading" && !homeData) {
+    return (
+      <PageBackground variant="frost">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  if (homeStatus === "error" && !homeData) {
+    return (
+      <PageBackground variant="frost">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">
+            홈 정보를 불러오지 못했어요.
+          </p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  const cardNews = homeData.cardNews?.[0];
 
   return (
     <PageBackground variant="frost">
@@ -68,22 +135,29 @@ function Home() {
             className="w-full text-left"
           >
             <StatusHero
-              userName={user?.name ?? "회원"}
-              totalCount={accounts.length}
-              isSafe={overallIsSafe}
-              riskCount={overallRiskCount}
-              score={overallScore}
+              userName={homeData.userName ?? "회원"}
+              totalCount={homeData.metrics.totalServiceAccounts}
+              isSafe={homeData.riskSummary.state === "safe"}
+              riskCount={homeData.metrics.actionRequiredCount}
+              score={homeData.metrics.securityScore}
+              title={homeData.riskSummary.title}
             />
           </button>
 
           <div className="h-3.5" />
 
-          <RecommendCard url="https://idly-apt.tistory.com/2" />
+          {cardNews && (
+            <RecommendCard
+              url={cardNews.url}
+              emoji={cardNews.emoji}
+              title={cardNews.title}
+            />
+          )}
 
           <div className="h-3.25" />
 
           <EmailSelector
-            emails={MOCK_EMAILS}
+            emails={emails}
             selectedId={selectedEmailId}
             onSelect={setSelectedEmailId}
             onAddAccount={handleAddAccount}
@@ -92,7 +166,7 @@ function Home() {
           <div className="h-3.25" />
 
           <Apartment
-            accounts={filteredAccounts}
+            accounts={accounts}
             onHideAccount={handleHideAccount}
             onOrganizeAccount={handleOrganizeAccount}
           />

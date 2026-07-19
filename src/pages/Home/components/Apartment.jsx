@@ -43,12 +43,20 @@ function AptCard({ account, onHide, onOrganize }) {
           } ${isRisk ? DOT_COLOR.risk : DOT_COLOR.safe}`}
         />
 
-        <div
-          className="grid h-10.5 w-10.5 place-items-center rounded-[13px] text-[14px] font-bold text-white"
-          style={{ background: account.iconBg }}
-        >
-          {account.iconText}
-        </div>
+        {account.iconUrl ? (
+          <img
+            src={account.iconUrl}
+            alt=""
+            className="h-10.5 w-10.5 rounded-[13px] object-cover"
+          />
+        ) : (
+          <div
+            className="grid h-10.5 w-10.5 place-items-center rounded-[13px] text-[14px] font-bold text-white"
+            style={{ background: account.iconBg }}
+          >
+            {account.iconText}
+          </div>
+        )}
         <span
           className={`max-w-full truncate text-[11px] font-bold ${isRisk ? "text-[#EE4E4E]" : "text-gray60"}`}
         >
