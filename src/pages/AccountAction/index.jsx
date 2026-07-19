@@ -51,7 +51,7 @@ function AccountAction() {
 
   return (
     <PageBackground variant="frost">
-      <div className="flex min-h-dvh flex-col">
+      <div className="flex h-dvh flex-col">
         <div className="pt-[max(8px,env(safe-area-inset-top))]">
           <ChatHeader
             title={session.title ?? "지금 바로 조치하기"}

@@ -133,7 +133,7 @@ function SecurityAssistant() {
 
   return (
     <PageBackground variant="frost">
-      <div className="flex min-h-dvh flex-col">
+      <div className="flex h-dvh flex-col">
         <div className="pt-[max(12px,env(safe-area-inset-top))]">
           <ChatHeader
             title="보안 도우미에게 문의하기"
