@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
+import { ROUTES } from "@/constants/routes";
 import ChatHeader from "@/pages/AccountAction/components/ChatHeader";
 import ChatInputBar from "@/pages/AccountAction/components/ChatInputBar";
 import OwlAvatar from "@/pages/AccountAction/components/OwlAvatar";
@@ -9,6 +10,7 @@ import UserBubble from "@/pages/AccountAction/components/UserBubble";
 import TextBubble from "@/pages/AccountAction/components/TextBubble";
 import LinkCardBubble from "@/pages/AccountAction/components/LinkCardBubble";
 import AdStripBubble from "@/pages/AccountAction/components/AdStripBubble";
+import ActionListBubble from "@/pages/AccountAction/components/ActionListBubble";
 import TypingIndicator from "@/pages/AccountAction/components/TypingIndicator";
 import {
   resolveOfficialLinkCard,
@@ -22,6 +24,8 @@ function normalizeMessages(raw) {
 }
 
 function ChatMessageBubble({ message }) {
+  const navigate = useNavigate();
+
   if (message.role === "user") return <UserBubble text={message.text} />;
 
   switch (message.type) {
@@ -32,6 +36,29 @@ function ChatMessageBubble({ message }) {
     case "card_news": {
       const news = resolveCardNews(message);
       return news ? <AdStripBubble news={news} /> : <TextBubble text={message.text} />;
+    }
+    case "action_list": {
+      // 이 채팅엔 "선택" API가 따로 없어서, 항목을 누르면 해당 서비스의
+      // 조치 챗봇(AccountAction)으로 바로 이동시킨다
+      const items = (message.metadata?.actionList?.items ?? []).map((item) => ({
+        id: item.id,
+        title: item.actionTitle,
+        subtitle: item.serviceName ?? item.displayName,
+        status: item.status,
+        serviceAccountId: item.serviceAccountId,
+      }));
+      return (
+        <ActionListBubble
+          title={message.text || "조치가 필요한 항목"}
+          actions={items}
+          onSelect={(id) => {
+            const target = items.find((item) => item.id === id);
+            if (target?.serviceAccountId) {
+              navigate(ROUTES.ACCOUNT_ACTION(target.serviceAccountId));
+            }
+          }}
+        />
+      );
     }
     case "text":
     default:
