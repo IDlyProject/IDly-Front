@@ -1,4 +1,3 @@
-// src/pages/NotificationSettings/index.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
@@ -62,10 +61,7 @@ function NotificationSettings() {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const { settings: fetchedSettings, status } = useNotificationSettings();
-  // 토글 하나에도 낙관적 업데이트+실패 시 롤백이 필요해서, 불러온 값을 로컬
-  // 편집 상태로 한 번 더 복사해둔다 (재조회 없이 즉시 반영/되돌리기 위함).
-  // effect로 동기화하지 않고, React 문서가 권장하는 "렌더링 중 상태 조정" 패턴으로
-  // fetchedSettings가 바뀐 시점에만 로컬 상태를 초기화한다.
+
   const [settings, setSettings] = useState(null);
   const [syncedFrom, setSyncedFrom] = useState(null);
   if (fetchedSettings && fetchedSettings !== syncedFrom) {
@@ -84,9 +80,6 @@ function NotificationSettings() {
     }
   };
 
-  // settings는 fetchedSettings가 useEffect로 한 프레임 늦게 동기화되므로,
-  // status가 ready여도 아직 settings가 비어있는 순간은 loading으로 취급해야
-  // 잘못된 에러 화면이 한 프레임 스치지 않는다.
   if (status === "loading" || (status === "ready" && !settings)) {
     return <LoadingScreen />;
   }
@@ -94,7 +87,6 @@ function NotificationSettings() {
     return <ErrorScreen text="알림 설정을 불러오지 못했어요." />;
   }
 
-  // 마케팅 토글은 켜져 있어도 상위 마케팅 정보 수신 동의가 없으면 실제로 발송되지 않음
   const marketingAgreed = !!user?.marketingAgreed;
 
   return (

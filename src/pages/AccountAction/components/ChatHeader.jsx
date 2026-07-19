@@ -1,7 +1,7 @@
 import { ChevronLeftIcon } from "../icons";
 
 function ChatHeader({ title, doneCount, totalActions, label, onBack }) {
-  const showPill = doneCount > 0;
+  const showPill = doneCount > 0 || !!label;
   const allDone = doneCount === totalActions;
   const pillText =
     label ?? (allDone ? "모두 완료" : `${doneCount}/${totalActions} 완료`);

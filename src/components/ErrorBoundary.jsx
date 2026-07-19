@@ -1,11 +1,7 @@
-// src/components/ErrorBoundary.jsx
 import { Component } from "react";
 import PageBackground from "@/components/layouts/PageBackground";
 import ActionButton from "@/components/ui/ActionButton";
 
-// 렌더링 중 예외가 나면 흰 화면 대신 폴백 UI를 보여준다.
-// 클래스 컴포넌트만 getDerivedStateFromError/componentDidCatch를 지원하므로
-// (아직 훅으로는 에러 바운더리를 만들 수 없음) 이 컴포넌트만 예외적으로 클래스로 작성.
 class ErrorBoundary extends Component {
   state = { hasError: false };
 
@@ -14,7 +10,7 @@ class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, info) {
-    // TODO: 실제 에러 모니터링 서비스(Sentry 등) 연동 시 여기서 전송
+
     console.error("Unhandled render error:", error, info);
   }
 

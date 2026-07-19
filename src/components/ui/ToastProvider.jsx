@@ -1,6 +1,3 @@
-// src/components/ui/ToastProvider.jsx
-// Context Provider + 짝을 이루는 useToast 훅을 한 파일에 두는 건 흔한 관례라
-// (React 공식 문서 예제도 동일 패턴) Fast Refresh 오탐만 끈다.
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useState } from "react";
 
@@ -9,9 +6,6 @@ const TOAST_DURATION_MS = 2600;
 
 let idCounter = 0;
 
-// 여러 화면이 "// TODO: 사용자에게 알릴 방법 필요 (토스트 등)"로 남겨뒀던 자리를
-// 채우는 공용 토스트. App 최상단에서 ToastProvider로 감싸고, 각 화면에서는
-// const showToast = useToast(); showToast("문구"); 로 호출한다.
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 

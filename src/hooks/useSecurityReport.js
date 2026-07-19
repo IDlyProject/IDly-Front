@@ -1,4 +1,3 @@
-// src/hooks/useSecurityReport.js
 import { useAsync } from "./useAsync";
 import { getSecurityReport } from "@/api/securityReport";
 

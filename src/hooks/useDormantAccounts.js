@@ -1,4 +1,3 @@
-// src/hooks/useDormantAccounts.js
 import { useAsync } from "./useAsync";
 import { getDormantAccounts } from "@/api/dormantAccounts";
 

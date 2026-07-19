@@ -1,4 +1,3 @@
-// src/hooks/useNotificationSettings.js
 import { useAsync } from "./useAsync";
 import { getNotificationSettings } from "@/api/notificationSettings";
 

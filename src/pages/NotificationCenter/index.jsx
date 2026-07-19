@@ -1,10 +1,9 @@
-// src/pages/NotificationCenter/index.jsx
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import BellOffIcon from "@/assets/ic_bell_off_gray.svg";
 import BackIcon from "@/assets/ic_back.svg";
 
-// TODO: 실제로는 알림 목록 API에서 받아온 데이터로 교체
+
 const MOCK_NOTIFICATIONS = [];
 
 function EmptyState() {
@@ -45,7 +44,7 @@ function NotificationCenter() {
           <EmptyState />
         ) : (
           <div className="flex-1 space-y-2.5">
-            {/* TODO: NotificationRow 컴포넌트로 실제 알림 목록 렌더링 */}
+            {}
           </div>
         )}
       </div>

@@ -1,4 +1,3 @@
-// src/pages/Home/index.jsx
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
@@ -87,7 +86,6 @@ function Home() {
     }
   };
 
-  // 이미 데이터가 있으면(재요청 중) 전체 화면을 덮지 않고 기존 화면을 유지한다
   if (homeStatus === "loading" && !homeData) return <LoadingScreen />;
   if (homeStatus === "error" && !homeData) {
     return <ErrorScreen text="홈 정보를 불러오지 못했어요." />;

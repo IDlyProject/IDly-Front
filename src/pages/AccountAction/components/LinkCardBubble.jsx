@@ -1,8 +1,7 @@
-// src/pages/AccountAction/components/LinkCardBubble.jsx
 import { LockIcon, ExternalIcon } from "../icons";
 import OwlAvatar from "./OwlAvatar";
 
-// card: metadata.externalCard { label, title, subtitle, url, domain, trustLabel, ctaLabel }
+
 function LinkCardBubble({ card }) {
   const handleGo = () =>
     window.open(card.url, "_blank", "noopener,noreferrer");

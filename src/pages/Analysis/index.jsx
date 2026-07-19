@@ -1,4 +1,3 @@
-// src/pages/Analysis/index.jsx
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";

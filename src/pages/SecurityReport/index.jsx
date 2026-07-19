@@ -1,4 +1,3 @@
-// src/pages/SecurityReport/index.jsx
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import ActionButton from "@/components/ui/ActionButton";
@@ -27,9 +26,7 @@ function formatBaseDate(isoString) {
   return `${date} 기준`;
 }
 
-// riskType은 자유 문자열(예: "new_device_login")이라, 기존 아이콘/색상 4종류 중
-// 가장 그럴듯한 걸로 매핑한다. 못 맞추면 로그인류(빨강)로 기본 처리 — 이 리스트는
-// 항상 실제 위험 이벤트라 "안전(초록)"으로 기본값을 두면 안 됨.
+
 function classifyRiskType(riskType = "") {
   const t = riskType.toLowerCase();
   if (t.includes("leak") || t.includes("breach")) return "leak";
@@ -65,7 +62,7 @@ function SecurityReport() {
     return <ErrorScreen text="보안 리포트를 불러오지 못했어요." />;
   }
 
-  // StatusHero(홈)와 동일한 기준: 완전히 양호할 때만 safe 색상
+
   const isSafe = report.grade === "양호";
 
   const recommendations = (report.services ?? [])
@@ -85,8 +82,7 @@ function SecurityReport() {
     timeAgo: formatTimeAgo(e.receivedAt),
   }));
 
-  // getDetail API가 아직 iconUrl을 못 줄 때를 대비해 리포트 화면에서 이미 받은
-  // 아이콘을 navigation state로 같이 넘긴다
+
   const handleSelectRecommendation = (serviceId) => {
     const service = report.services?.find((s) => s.id === serviceId);
     navigate(ROUTES.ACCOUNT_DETAIL(serviceId), {

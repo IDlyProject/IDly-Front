@@ -1,4 +1,3 @@
-// src/components/ui/ErrorScreen.jsx
 import PageBackground from "@/components/layouts/PageBackground";
 
 function ErrorScreen({ variant = "frost", text = "정보를 불러오지 못했어요." }) {

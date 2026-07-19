@@ -1,10 +1,8 @@
-// src/utils/mailAccount.js
 import {
   PALETTE_GRADIENTS,
   getGradientByIndexReservingPrimary,
 } from "./palette";
 
-// gmailAccounts[] (UserDto) 를 화면에 뿌릴 형태로 변환
 export function toMailAccount(gmailAccount, index) {
   return {
     id: gmailAccount.id,

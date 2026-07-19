@@ -1,4 +1,3 @@
-// src/pages/Withdraw/components/WithdrawConfirmModal.jsx
 function WithdrawConfirmModal({ onConfirm, onCancel, confirming = false }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-8.75">

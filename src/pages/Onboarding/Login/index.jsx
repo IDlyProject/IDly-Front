@@ -1,4 +1,3 @@
-// src/pages/Onboarding/Login/index.jsx
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ActionButton from "@/components/ui/ActionButton";
@@ -7,7 +6,7 @@ import logo from "@/assets/ic_logo.svg";
 import googleIcon from "@/assets/ic_google.svg";
 import PageBackground from "@/components/layouts/PageBackground";
 
-// AuthCallback이 붙여주는 error 쿼리파라미터 → 사용자 메시지
+
 const OAUTH_ERROR_MESSAGES = {
   gmail_already_linked: "이미 다른 계정에 연동되어 있는 Gmail이에요.",
   refresh_token_missing: "로그인 정보가 만료됐어요. 다시 로그인해 주세요.",

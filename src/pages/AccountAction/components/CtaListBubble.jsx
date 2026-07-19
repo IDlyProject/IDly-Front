@@ -13,8 +13,6 @@ const HREF_TO_ROUTE = {
   "/report": ROUTES.SECURITY_REPORT,
 };
 
-// ctas: metadata.exitCtas [{ id, href, label, style, enabled }]
-// nextServiceAccountId: 있으면 "다음 계정 보안 조치 하기" 버튼을 추가로 보여준다
 function CtaListBubble({ ctas = [], nextServiceAccountId }) {
   const navigate = useNavigate();
 

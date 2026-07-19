@@ -27,7 +27,7 @@ function EmailSelector({ emails, selectedId, onSelect, onAddAccount }) {
 
       {open && (
         <div className="absolute right-0 z-20 w-89.5 min-w-60 mt-3 overflow-hidden rounded-[18px] bg-white p-2 shadow-[0_12px_40px_rgba(0,0,0,0.125)]">
-          {/* 전체 계정 */}
+          {}
           <button
             onClick={() => {
               onSelect("all");
@@ -58,7 +58,7 @@ function EmailSelector({ emails, selectedId, onSelect, onAddAccount }) {
 
           <div className="mx-3.5 my-0.5 h-px bg-[#F0F1F4]" />
 
-          {/* 개별 이메일 */}
+          {}
           {emails
             .filter((e) => e.id !== "all")
             .map((email, idx, arr) => (

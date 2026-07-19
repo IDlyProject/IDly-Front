@@ -1,4 +1,3 @@
-// src/routes/ProtectedRoute.jsx
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
@@ -6,11 +5,11 @@ import { fetchCurrentUser } from "@/api/auth";
 
 function ProtectedRoute({ children }) {
   const location = useLocation();
-  const [status, setStatus] = useState("checking"); // checking | authed | guest
+  const [status, setStatus] = useState("checking");
 
   useEffect(() => {
     let cancelled = false;
-    // fetchCurrentUser → 401 시 /auth/refresh 후 재시도 (api client)
+
     fetchCurrentUser().then((user) => {
       if (!cancelled) setStatus(user ? "authed" : "guest");
     });

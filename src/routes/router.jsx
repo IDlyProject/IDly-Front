@@ -1,6 +1,3 @@
-// src/routes/router.jsx
-// 라우트 설정 파일이라 컴포넌트 전용 파일이 아님 — Fast Refresh 경계 검사가
-// 이 파일엔 의미가 없어 lazy() 컴포넌트 참조에 대한 오탐을 끈다.
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
@@ -8,13 +5,10 @@ import { ROUTES } from "@/constants/routes";
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "@/components/layouts/MainLayout";
 
-// Splash/Login/AuthCallback은 콜드 스타트 시 가장 먼저 보이는 화면이라
-// lazy 처리하면 오히려 왕복이 하나 더 생겨 손해라 즉시 로드한다.
 import Splash from "@/pages/Splash";
 import Login from "@/pages/Onboarding/Login";
 import AuthCallback from "@/pages/AuthCallback";
 
-// 나머지 페이지는 라우트 단위로 code splitting — 방문한 화면의 코드만 받는다.
 const Consent = lazy(() => import("@/pages/Onboarding/Consent"));
 const AccountConfirm = lazy(() => import("@/pages/Onboarding/AccountConfirm"));
 const AccountComplete = lazy(

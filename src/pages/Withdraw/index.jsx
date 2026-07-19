@@ -1,4 +1,3 @@
-// src/pages/Withdraw/index.jsx
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import { ROUTES } from "@/constants/routes";

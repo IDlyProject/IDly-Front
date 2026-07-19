@@ -1,4 +1,3 @@
-// src/pages/AccountAction/components/TextBubble.jsx
 import OwlAvatar from "./OwlAvatar";
 
 function TextBubble({ text }) {

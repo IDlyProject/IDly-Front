@@ -1,4 +1,3 @@
-// src/pages/NotFound/index.jsx
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import ActionButton from "@/components/ui/ActionButton";

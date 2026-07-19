@@ -1,4 +1,3 @@
-// src/pages/Onboarding/AddAccount/index.jsx
 import { useNavigate } from "react-router-dom";
 import ProgressDots from "../components/ProgressDot";
 import ActionButton from "@/components/ui/ActionButton";
@@ -16,7 +15,7 @@ function AddAccount() {
   const { accounts, status } = useGmailAccounts();
 
   const handleStartConnect = () => {
-    // 로그인 쿠키(httpOnly)가 자동으로 실려가므로 별도 토큰 전달 불필요
+
     window.location.href = `${API_BASE_URL}/api/auth/google`;
   };
 

@@ -1,8 +1,7 @@
 import FinishedIcon from "@/assets/ic_finished.svg";
 import WaitingIcon from "@/assets/ic_waiting.svg";
 
-// summary API의 progress가 { done, pending } 2종류만 반환 (skipped 상태는 없어짐)
-// pending = 아직 처리하지 않음("대기") — "진행중"이 아님
+
 function MonthlySummary({ label, completedCount, pendingCount, isSafe }) {
   return (
     <div

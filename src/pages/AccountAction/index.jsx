@@ -1,4 +1,3 @@
-// src/pages/AccountAction/index.jsx
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";

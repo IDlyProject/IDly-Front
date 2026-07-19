@@ -1,4 +1,3 @@
-// src/pages/Splash/index.jsx
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
@@ -22,14 +21,14 @@ function Splash() {
       }, remaining);
     };
 
-    // access 만료 시 refresh 후 복구 — 로그인된 유저는 홈으로
+
     fetchCurrentUser()
       .then((user) => {
         if (!user) {
           goTo(ROUTES.ONBOARDING_LOGIN);
           return;
         }
-        // 약관 미동의면 온보딩 계속, 동의 완료면 홈
+
         if (user.requiredTermsAgreed === false || user.requiredTermsAgreed == null) {
           goTo(ROUTES.ONBOARDING_CONSENT);
           return;

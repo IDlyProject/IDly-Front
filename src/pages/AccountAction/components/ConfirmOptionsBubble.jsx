@@ -1,4 +1,3 @@
-// src/pages/AccountAction/components/ConfirmOptionsBubble.jsx
 function ConfirmOptionsBubble({ onDone, onFail, disabled }) {
   return (
     <div className="flex justify-end">

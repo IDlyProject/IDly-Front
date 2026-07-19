@@ -1,11 +1,10 @@
-// src/api/dormantAccounts.js
 import { apiFetch } from "@/api/client";
 
 export async function getDormantAccounts() {
   const res = await apiFetch("/api/users/me/dormant-accounts");
 
   if (!res.ok) throw new Error(`get dormant accounts failed: ${res.status}`);
-  return res.json(); // DormantAccountDto[]
+  return res.json();
 }
 
 export async function restoreAllDormant() {
@@ -14,5 +13,5 @@ export async function restoreAllDormant() {
   });
 
   if (!res.ok) throw new Error(`restore all dormant failed: ${res.status}`);
-  return res.json(); // { restoredCount }
+  return res.json();
 }

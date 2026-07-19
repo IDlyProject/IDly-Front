@@ -1,4 +1,3 @@
-// src/pages/AccountDetail/index.jsx
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import LoadingScreen from "@/components/ui/LoadingScreen";
@@ -32,11 +31,9 @@ function formatEventTime(isoString) {
   return `${diffDays}일 전 ${timeStr}`;
 }
 
-// 백엔드 응답을 화면 컴포넌트(DetailHero/RiskCard/EventsList)가 기대하는 형태로 변환.
-// navState: 목록 화면(홈/정리/리포트)에서 이미 받아둔 아이콘 — getDetail API 자체가
-// 아직 iconUrl을 못 줄 때의 폴백이며, API 값이 있으면 그쪽을 우선한다.
 function toViewDetail(raw, navState) {
-  const latestEvent = raw.recentEvents[0];
+  const recentEvents = raw.recentEvents ?? [];
+  const latestEvent = recentEvents[0];
 
   return {
     name: raw.displayName,
@@ -56,7 +53,7 @@ function toViewDetail(raw, navState) {
       ? `${latestEvent.sender} · ${formatEventTime(latestEvent.receivedAt)} 수신`
       : "",
     ctaLabel: raw.primaryCta?.label ?? "지금 바로 조치하기",
-    events: raw.recentEvents.map((event) => ({
+    events: recentEvents.map((event) => ({
       id: event.id,
       type: event.riskType,
       name: event.subject,
@@ -100,10 +97,12 @@ function AccountDetail() {
 
         <DetailHero detail={detail} />
 
-        <RiskCard
-          detail={detail}
-          onActionClick={() => navigate(ROUTES.ACCOUNT_ACTION(accountId))}
-        />
+        {detail.isRisk && (
+          <RiskCard
+            detail={detail}
+            onActionClick={() => navigate(ROUTES.ACCOUNT_ACTION(accountId))}
+          />
+        )}
 
         <EventsList events={detail.events} />
       </div>

@@ -1,11 +1,10 @@
-// src/pages/Organize/components/ServiceCard.jsx
 import { useState } from "react";
 import TaskStatusIcon from "./TaskStatusIcon";
 import ServiceIcon from "@/components/ui/ServiceIcon";
 import ChevronBottomIcon from "@/assets/ic_chevron_bottom_18.svg";
 import ChevronTopIcon from "@/assets/ic_chevron_top_18.svg";
 
-// summary API의 action.status는 pending | done만 존재 (pending = 아직 하지 않음)
+
 const BADGE_STYLE = {
   pending: {
     label: "대기중",
@@ -22,7 +21,7 @@ function ServiceCard({
   const [open, setOpen] = useState(defaultOpen);
 
   const handleToggleChevron = (e) => {
-    e.stopPropagation(); // 카드 전체 클릭 이벤트로 전파되지 않도록 차단
+    e.stopPropagation();
     setOpen((v) => !v);
   };
 
@@ -33,8 +32,7 @@ function ServiceCard({
   return (
     <div className="mb-6 overflow-hidden rounded-[18px] bg-white shadow-[0_1px_3px_rgba(16,24,46,0.03)]">
       <div className="flex w-full items-center gap-3 px-4 py-3.5">
-        {/* button 안에 button을 중첩할 수 없어 "서비스 선택"과 "펼치기/접기"를
-            형제 버튼 두 개로 분리했다 (이전엔 span role="button"으로 우회했었음) */}
+        {}
         <button
           onClick={handleCardClick}
           className="flex flex-1 items-center gap-3 text-left"

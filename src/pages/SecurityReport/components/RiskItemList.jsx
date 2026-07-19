@@ -1,5 +1,3 @@
-// src/pages/SecurityReport/components/RiskItemList.jsx
-// 위험도별 톤: leak/login → red, password/device → orange, 그 외(안전) → green
 const TONE_BY_TYPE = {
   leak: "red",
   login: "red",
@@ -14,7 +12,7 @@ const TONE_STYLE = {
 };
 
 function RiskIcon({ type }) {
-  const tone = TONE_BY_TYPE[type] || "green"; // 매칭되는 타입이 없으면 안전(초록) 처리
+  const tone = TONE_BY_TYPE[type] || "green";
   const { stroke } = TONE_STYLE[tone];
 
   const commonProps = {

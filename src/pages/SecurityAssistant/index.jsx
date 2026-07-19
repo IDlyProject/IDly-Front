@@ -1,4 +1,3 @@
-// src/pages/SecurityAssistant/index.jsx
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
@@ -18,7 +17,6 @@ import {
 } from "@/pages/AccountAction/utils/messageContent";
 import { getSecurityChat, sendSecurityChatMessage } from "@/api/securityChat";
 
-// 실제 응답: { chatId, messages: [{ id, role, type, text, metadata, createdAt }] }
 function normalizeMessages(raw) {
   return Array.isArray(raw) ? raw : (raw?.messages ?? []);
 }
@@ -38,8 +36,7 @@ function ChatMessageBubble({ message }) {
       return news ? <AdStripBubble news={news} /> : <TextBubble text={message.text} />;
     }
     case "action_list": {
-      // 이 채팅엔 "선택" API가 따로 없어서, 항목을 누르면 해당 서비스의
-      // 조치 챗봇(AccountAction)으로 바로 이동시킨다
+
       const items = (message.metadata?.actionList?.items ?? []).map((item) => ({
         id: item.id,
         title: item.actionTitle,
@@ -106,7 +103,7 @@ function SecurityAssistant() {
 
     setInput("");
     setError("");
-    // sendMessage 응답 모양도 불확실해서, 보낸 후엔 getChat으로 다시 받아와 히스토리를 맞춘다
+
     setMessages((prev) => [
       ...prev,
       { id: `local-${Date.now()}`, role: "user", type: "text", text },

@@ -1,4 +1,3 @@
-// src/pages/Onboarding/Consent/index.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
@@ -45,8 +44,7 @@ function Consent() {
     setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // notificationAgreed를 인자로 받는 이유: 모달에서 setChecked 직후 곧바로 호출되므로,
-  // 클로저의 checked.notification은 아직 반영 전(stale)이라 값을 직접 넘겨야 함
+
   const goToNextStep = async (notificationAgreed) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -68,7 +66,7 @@ function Consent() {
   const handleAgreeClick = () => {
     if (!allRequiredChecked) return;
 
-    // 필수 항목은 통과했지만, 알림 동의를 안 했다면 한 번 더 확인
+
     if (!notificationChecked) {
       setShowNotificationModal(true);
       return;
@@ -78,14 +76,14 @@ function Consent() {
   };
 
   const handleModalAgree = () => {
-    // 모달에서 "동의하고 계속하기" - 알림 동의 체크를 켜고 진행
+
     setChecked((prev) => ({ ...prev, notification: true }));
     setShowNotificationModal(false);
     goToNextStep(true);
   };
 
   const handleModalDismiss = () => {
-    // "동의하지 않고 계속하기" - 알림 동의는 그대로 미체크 상태로 진행
+
     setShowNotificationModal(false);
     goToNextStep(false);
   };

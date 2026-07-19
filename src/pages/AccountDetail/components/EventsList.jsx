@@ -1,4 +1,3 @@
-// src/pages/AccountDetail/components/EventsList.jsx
 import SuspiciousLoginIcon from "@/assets/ic_danger.svg";
 import NewDeviceIcon from "@/assets/ic_bell_16.svg";
 import PasswordChangeIcon from "@/assets/ic_info_16.svg";

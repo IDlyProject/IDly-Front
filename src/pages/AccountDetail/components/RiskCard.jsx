@@ -1,4 +1,3 @@
-// src/pages/AccountDetail/components/RiskCard.jsx
 import WarningTriangleIcon from "@/assets/ic_danger.svg";
 import MailIcon from "@/assets/ic_message_mini.svg";
 

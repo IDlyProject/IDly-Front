@@ -1,4 +1,3 @@
-// src/pages/Organize/index.jsx
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
@@ -24,7 +23,7 @@ function formatMonthLabel(month) {
 function Organize() {
   const navigate = useNavigate();
   const { summary, status } = useSummary();
-  // 카드뉴스는 summary 응답엔 없고 home 응답에만 있어서, 그 부분만 재사용
+
   const { data: homeData } = useHomeData();
   const [selectedEmailId, setSelectedEmailId] = useState("all");
 
@@ -63,15 +62,14 @@ function Organize() {
       tasks: s.actions.map((a) => ({
         id: a.id,
         title: a.title,
-        status: a.status, // pending | done
+        status: a.status,
         timeAgo: formatTimeAgo(a.updatedAt),
       })),
     }));
   }, [summary, selectedEmailId]);
 
   const handleSelectService = (serviceId) => {
-    // getDetail API가 아직 iconUrl을 못 줄 때를 대비해 정리 화면에서 이미 받은
-    // 아이콘을 navigation state로 같이 넘긴다
+
     const service = services.find((s) => s.id === serviceId);
     navigate(ROUTES.ACCOUNT_DETAIL(serviceId), {
       state: { iconUrl: service?.iconUrl, iconLabel: service?.iconText },

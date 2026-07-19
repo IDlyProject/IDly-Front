@@ -1,4 +1,3 @@
-// src/pages/WithdrawReason/index.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
@@ -10,7 +9,7 @@ import ChevronLeftIcon from "@/assets/ic_chevron_left.svg";
 import UncheckIcon from "@/assets/ic_withdraw_uncheck.svg";
 import CheckIcon from "@/assets/ic_withdraw_check.svg";
 
-// id는 백엔드 DeleteReason enum 값과 동일하게 맞춤
+
 const REASONS = [
   { id: "not_frequent", label: "자주 이용하지 않아요" },
   { id: "frequent_errors", label: "오류가 자주 발생해요" },
@@ -49,8 +48,7 @@ function WithdrawReason() {
         reasonDetail: selectedReason === "other" ? otherText.trim() : undefined,
       });
       try {
-        // 탈퇴된 유저의 idly_token 쿠키가 남아있으면 다음 로그인 시도가
-        // "기존 유저에 서브계정 추가"로 잘못 처리될 수 있어 명시적으로 정리
+
         await logout();
       } catch (logoutErr) {
         console.error("post-withdraw logout failed:", logoutErr);

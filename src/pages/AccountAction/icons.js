@@ -1,4 +1,3 @@
-// src/pages/AccountAction/icons.js
 export { default as OwlIcon } from "@/assets/ic_character.png";
 export { default as WarnWhiteIcon } from "@/assets/ic_warning_white.svg";
 export { default as LockIcon } from "@/assets/ic_lock.svg";

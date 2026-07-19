@@ -1,4 +1,3 @@
-// src/pages/AuthCallback/index.jsx
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
@@ -11,14 +10,14 @@ function AuthCallback() {
   useEffect(() => {
     const error = searchParams.get("error");
     if (error) {
-      // oauth_failed | refresh_token_missing | invalid_oauth_state | gmail_already_linked 등
+
       navigate(`${ROUTES.ONBOARDING_LOGIN}?error=${encodeURIComponent(error)}`, {
         replace: true,
       });
       return;
     }
 
-    // JWT는 httpOnly 쿠키로 내려오므로 me 호출로 세션 확인
+
     const mode = searchParams.get("mode");
 
     fetchCurrentUser().then((user) => {

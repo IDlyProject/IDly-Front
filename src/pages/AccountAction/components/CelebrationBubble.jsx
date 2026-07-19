@@ -1,6 +1,5 @@
 import OwlAvatar from "./OwlAvatar";
 
-// metadata.celebration { emoji, title, subtitle } 그대로 사용
 function CelebrationBubble({ emoji = "🎉", title, subtitle }) {
   return (
     <div className="flex items-start gap-2.5">

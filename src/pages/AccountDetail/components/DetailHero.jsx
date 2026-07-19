@@ -1,4 +1,3 @@
-// src/pages/AccountDetail/components/DetailHero.jsx
 import ServiceIcon from "@/components/ui/ServiceIcon";
 
 function DetailHero({ detail }) {

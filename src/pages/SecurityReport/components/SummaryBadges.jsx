@@ -1,4 +1,3 @@
-// src/pages/SecurityReport/components/SummaryBadges.jsx
 function WarningIcon() {
   return (
     <svg
@@ -18,7 +17,7 @@ function WarningIcon() {
   );
 }
 
-// "주의" 배지용 시계 아이콘 (기존 ActionIcon 대체)
+
 function CautionIcon() {
   return (
     <svg
@@ -55,7 +54,7 @@ function SafeIcon() {
   );
 }
 
-// 아이콘 종류별 배경색 (RiskItemList.jsx의 TONE_STYLE과 동일한 톤)
+
 const ICON_BG = {
   위험: "bg-[#fef2f2]",
   주의: "bg-[#fff8e1]",

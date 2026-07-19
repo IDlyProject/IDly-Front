@@ -1,4 +1,3 @@
-// src/utils/time.js
 export function formatTimeAgo(isoString) {
   if (!isoString) return "";
   const diffMs = Date.now() - new Date(isoString).getTime();

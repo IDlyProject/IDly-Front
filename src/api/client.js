@@ -1,13 +1,8 @@
-// src/api/client.js
-// 공통 fetch: credentials 포함 + access 만료 시 refresh 1회 재시도
 import { API_BASE_URL } from "@/constants/api";
 
 let refreshPromise = null;
 
-/**
- * POST /api/auth/refresh — idly_refresh 쿠키로 access 재발급
- * 동시 401 시 한 번만 refresh 하도록 promise 공유
- */
+
 export async function refreshAccessToken() {
   if (!refreshPromise) {
     refreshPromise = (async () => {
@@ -29,11 +24,7 @@ export async function refreshAccessToken() {
   return refreshPromise;
 }
 
-/**
- * @param {string} path - `/api/...` 또는 전체 URL
- * @param {RequestInit} [options]
- * @param {{ retry?: boolean }} [opts]
- */
+
 export async function apiFetch(path, options = {}, opts = {}) {
   const { retry = true } = opts;
   const url = path.startsWith("http") ? path : `${API_BASE_URL}${path}`;
@@ -47,7 +38,7 @@ export async function apiFetch(path, options = {}, opts = {}) {
     },
   });
 
-  // access 만료 → refresh 후 1회 재시도 (auth 엔드포인트 제외)
+
   if (res.status === 401 && retry && !path.includes("/api/auth/")) {
     const refreshed = await refreshAccessToken();
     if (refreshed) {

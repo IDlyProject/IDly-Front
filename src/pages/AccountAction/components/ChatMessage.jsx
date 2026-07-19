@@ -1,4 +1,3 @@
-// src/pages/AccountAction/components/ChatMessage.jsx
 import TypingIndicator from "./TypingIndicator";
 import UserBubble from "./UserBubble";
 import WarningIntroBubble from "./WarningIntroBubble";
@@ -12,7 +11,6 @@ import CelebrationBubble from "./CelebrationBubble";
 import CtaListBubble from "./CtaListBubble";
 import { resolveOfficialLinkCard, resolveCardNews } from "../utils/messageContent";
 
-// session.messages[] 항목(role/type/text/metadata)을 화면 버블로 변환.
 function ChatMessage({ message, session, isLatest, onSelectAction, onDone, onFail }) {
   if (message.type === "typing") return <TypingIndicator />;
   if (message.role === "user") return <UserBubble text={message.text} />;
@@ -43,8 +41,7 @@ function ChatMessage({ message, session, isLatest, onSelectAction, onDone, onFai
     }
 
     case "official_link": {
-      // metadata.externalCard가 비어있는 경우(관찰됨)를 대비해, 메시지가 온 시점의
-      // 활성 조치(externalCard)로 폴백
+
       const activeAction = session?.recommendedActionsById?.[message._actionItemId];
       const card = resolveOfficialLinkCard(message) ?? activeAction?.externalCard;
       return card ? <LinkCardBubble card={card} /> : <TextBubble text={message.text} />;
@@ -72,7 +69,7 @@ function ChatMessage({ message, session, isLatest, onSelectAction, onDone, onFai
     case "exit_cta":
       return (
         <CtaListBubble
-          ctas={message.metadata?.exitCtas}
+          ctas={message.metadata?.exitCtas ?? []}
           nextServiceAccountId={session?.completion?.nextServiceAccountId}
         />
       );

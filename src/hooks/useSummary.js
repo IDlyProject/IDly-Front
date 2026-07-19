@@ -1,4 +1,3 @@
-// src/hooks/useSummary.js
 import { useAsync } from "./useAsync";
 import { getSummary } from "@/api/summary";
 
