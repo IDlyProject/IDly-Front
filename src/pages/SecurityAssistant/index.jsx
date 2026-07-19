@@ -7,17 +7,36 @@ import ChatInputBar from "@/pages/AccountAction/components/ChatInputBar";
 import OwlAvatar from "@/pages/AccountAction/components/OwlAvatar";
 import UserBubble from "@/pages/AccountAction/components/UserBubble";
 import TextBubble from "@/pages/AccountAction/components/TextBubble";
+import LinkCardBubble from "@/pages/AccountAction/components/LinkCardBubble";
+import AdStripBubble from "@/pages/AccountAction/components/AdStripBubble";
 import TypingIndicator from "@/pages/AccountAction/components/TypingIndicator";
+import {
+  resolveOfficialLinkCard,
+  resolveCardNews,
+} from "@/pages/AccountAction/utils/messageContent";
 import { getSecurityChat, sendSecurityChatMessage } from "@/api/securityChat";
 
-// getChat 응답 모양이 문서화되어 있지 않아 배열/{messages}/{history} 등 흔한 형태를 모두 시도
+// 실제 응답: { chatId, messages: [{ id, role, type, text, metadata, createdAt }] }
 function normalizeMessages(raw) {
-  const list = Array.isArray(raw) ? raw : (raw?.messages ?? raw?.history ?? []);
-  return list.map((m, idx) => ({
-    id: m.id ?? `h${idx}`,
-    role: m.role ?? (m.isUser ? "user" : "assistant"),
-    text: m.text ?? m.message ?? m.content ?? "",
-  }));
+  return Array.isArray(raw) ? raw : (raw?.messages ?? []);
+}
+
+function ChatMessageBubble({ message }) {
+  if (message.role === "user") return <UserBubble text={message.text} />;
+
+  switch (message.type) {
+    case "official_link": {
+      const card = resolveOfficialLinkCard(message);
+      return card ? <LinkCardBubble card={card} /> : <TextBubble text={message.text} />;
+    }
+    case "card_news": {
+      const news = resolveCardNews(message);
+      return news ? <AdStripBubble news={news} /> : <TextBubble text={message.text} />;
+    }
+    case "text":
+    default:
+      return <TextBubble text={message.text} />;
+  }
 }
 
 function SecurityAssistant() {
@@ -63,7 +82,7 @@ function SecurityAssistant() {
     // sendMessage 응답 모양도 불확실해서, 보낸 후엔 getChat으로 다시 받아와 히스토리를 맞춘다
     setMessages((prev) => [
       ...prev,
-      { id: `local-${Date.now()}`, role: "user", text },
+      { id: `local-${Date.now()}`, role: "user", type: "text", text },
     ]);
     setSending(true);
 
@@ -114,13 +133,9 @@ function SecurityAssistant() {
 
           {loading && <TypingIndicator />}
 
-          {messages.map((message) =>
-            message.role === "user" ? (
-              <UserBubble key={message.id} text={message.text} />
-            ) : (
-              <TextBubble key={message.id} text={message.text} />
-            ),
-          )}
+          {messages.map((message) => (
+            <ChatMessageBubble key={message.id} message={message} />
+          ))}
 
           {sending && <TypingIndicator />}
 

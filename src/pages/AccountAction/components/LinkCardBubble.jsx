@@ -2,7 +2,7 @@
 import { LockIcon, ExternalIcon } from "../icons";
 import OwlAvatar from "./OwlAvatar";
 
-// card: recommendedActions[].externalCard { label, title, url, domain, trustLabel, ctaLabel }
+// card: metadata.externalCard { label, title, subtitle, url, domain, trustLabel, ctaLabel }
 function LinkCardBubble({ card }) {
   const handleGo = () =>
     window.open(card.url, "_blank", "noopener,noreferrer");
@@ -24,6 +24,11 @@ function LinkCardBubble({ card }) {
           <p className="mb-1.25 text-sm font-bold text-[#212125]">
             {card.title}
           </p>
+          {card.subtitle && (
+            <p className="mb-1.5 text-[11px] leading-relaxed text-[#70737a]">
+              {card.subtitle}
+            </p>
+          )}
           <p className="mb-3 text-[11px] text-[#8c8f96]">{card.domain}</p>
           <button
             onClick={handleGo}
