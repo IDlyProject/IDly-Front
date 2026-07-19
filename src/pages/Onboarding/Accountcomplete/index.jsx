@@ -9,7 +9,6 @@ function AccountComplete() {
   const navigate = useNavigate();
 
   const handleAddAccount = () => {
-    // TODO: /auth/google/start?purpose=connect 로 이동
     navigate(ROUTES.ONBOARDING_ADD_ACCOUNT);
   };
 
