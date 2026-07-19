@@ -7,10 +7,14 @@ export async function getActionSession(serviceAccountId) {
     `/api/service-accounts/${serviceAccountId}/action-session`,
   );
 
-  // 문서상 "세션 없음"은 200 + null 이지만, 혹시 404로 내려와도 같은 의미로 처리
+  // 문서상 "세션 없음"은 200 + null 이지만, 실제로는 바디가 완전히 빈 채로 오기도 함.
+  // 404로 내려오는 경우까지 포함해서 전부 "세션 없음"으로 처리.
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`get action session failed: ${res.status}`);
-  return res.json(); // ActionSessionDto | null
+
+  const text = await res.text();
+  if (!text) return null;
+  return JSON.parse(text); // ActionSessionDto | null
 }
 
 // active 세션이 있으면 idempotent하게 반환, 없으면 새로 시작
