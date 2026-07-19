@@ -10,3 +10,13 @@ export async function getServiceAccountDetail(serviceAccountId) {
   }
   return res.json(); // ServiceAccountDetailDto
 }
+
+// 홈 화면 능동 모니터링에서 제외하고 휴면 계정으로 전환
+export async function setServiceAccountDormant(serviceAccountId) {
+  const res = await apiFetch(`/api/service-accounts/${serviceAccountId}/dormant`, {
+    method: "PATCH",
+  });
+
+  if (!res.ok) throw new Error(`set dormant failed: ${res.status}`);
+  return res.json(); // { serviceAccountId, status }
+}

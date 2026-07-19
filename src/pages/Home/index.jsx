@@ -12,6 +12,7 @@ import { useHomeData } from "@/hooks/useHomeData";
 import { AVATAR_GRADIENTS } from "@/utils/mailAccount";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
 import { triggerAnalysisRun, waitForAnalysisCompletion } from "@/api/analysis";
+import { setServiceAccountDormant } from "@/api/serviceAccounts";
 import { ROUTES } from "@/constants/routes";
 
 function Home() {
@@ -19,8 +20,6 @@ function Home() {
   const [selectedEmailId, setSelectedEmailId] = useState("all");
   const mailAccountId = selectedEmailId === "all" ? undefined : selectedEmailId;
   const { data: homeData, status: homeStatus, reload } = useHomeData(mailAccountId);
-  // 휴면 처리 API가 아직 없어서, "숨기기"는 화면에서만 낙관적으로 위험 표시를 해제한다
-  const [dormantOverrideIds, setDormantOverrideIds] = useState(new Set());
 
   const emails = useMemo(() => {
     if (!homeData) return [];
@@ -44,22 +43,23 @@ function Home() {
 
   const accounts = useMemo(() => {
     if (!homeData) return [];
-    return homeData.serviceAccounts.map((sa) => {
-      const isDormant = dormantOverrideIds.has(sa.id);
-      return {
-        id: sa.id,
-        name: sa.displayName,
-        status: !isDormant && sa.status === "action_required" ? "risk" : "safe",
-        iconUrl: sa.iconUrl,
-        iconBg: getServiceIconGradient(sa.serviceName),
-        iconText: sa.iconLabel || sa.displayName?.[0]?.toUpperCase() || "?",
-      };
-    });
-  }, [homeData, dormantOverrideIds]);
+    return homeData.serviceAccounts.map((sa) => ({
+      id: sa.id,
+      name: sa.displayName,
+      status: sa.status === "action_required" ? "risk" : "safe",
+      iconUrl: sa.iconUrl,
+      iconBg: getServiceIconGradient(sa.serviceName),
+      iconText: sa.iconLabel || sa.displayName?.[0]?.toUpperCase() || "?",
+    }));
+  }, [homeData]);
 
-  const handleHideAccount = (accountId) => {
-    // TODO: 실제로는 서버에 휴면 처리 API 호출 필요
-    setDormantOverrideIds((prev) => new Set(prev).add(accountId));
+  const handleHideAccount = async (accountId) => {
+    try {
+      await setServiceAccountDormant(accountId);
+      await reload();
+    } catch {
+      // TODO: 휴면 처리 실패를 사용자에게 알릴 방법 필요 (토스트 등)
+    }
   };
 
   const handleOrganizeAccount = () => {
