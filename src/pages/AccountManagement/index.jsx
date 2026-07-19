@@ -6,6 +6,7 @@ import UnlinkConfirmModal from "./components/UnlinkConfirmModal";
 import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useGmailAccounts } from "@/hooks/useGmailAccounts";
+import { disconnectAccount } from "@/api/users";
 import BackIcon from "@/assets/ic_back.svg";
 import PencilIcon from "@/assets/ic_pencil.svg";
 import CancelIcon from "@/assets/ic_cancel.svg";
@@ -23,10 +24,10 @@ function AccountManagement() {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const { accounts } = useGmailAccounts();
-  // 실제 해지 API(DELETE /api/users/me/accounts/{id})가 아직 없어서, 연동 해제는
-  // 서버 목록에서 낙관적으로 숨기는 것까지만 처리한다.
   const [removedIds, setRemovedIds] = useState(new Set());
   const [unlinkTarget, setUnlinkTarget] = useState(null);
+  const [unlinking, setUnlinking] = useState(false);
+  const [unlinkError, setUnlinkError] = useState("");
 
   const linkedAccounts = accounts.filter((a) => !removedIds.has(a.id));
   const additionalAccountCount = linkedAccounts.filter(
@@ -35,10 +36,23 @@ function AccountManagement() {
   const primaryEmail =
     accounts.find((a) => a.isPrimary)?.email ?? accounts[0]?.email;
 
-  const handleUnlinkConfirm = () => {
-    // TODO: 실제 연동 해지 API 호출 필요 (DELETE /api/users/me/accounts/{accountId})
-    setRemovedIds((prev) => new Set(prev).add(unlinkTarget.id));
-    setUnlinkTarget(null);
+  const handleUnlinkConfirm = async () => {
+    setUnlinking(true);
+    setUnlinkError("");
+    try {
+      await disconnectAccount(unlinkTarget.id);
+      setRemovedIds((prev) => new Set(prev).add(unlinkTarget.id));
+      setUnlinkTarget(null);
+    } catch (err) {
+      console.error("disconnect account failed:", err);
+      setUnlinkError(
+        err.status === 400
+          ? "대표 계정은 연동 해지할 수 없어요."
+          : "연동 해지에 실패했어요. 다시 시도해주세요.",
+      );
+    } finally {
+      setUnlinking(false);
+    }
   };
 
   return (
@@ -97,12 +111,20 @@ function AccountManagement() {
                   Gmail
                 </small>
               </div>
-              <button onClick={() => setUnlinkTarget(account)}>
-                <img src={CancelIcon} alt="" className="h-5 w-5" />
-              </button>
+              {!account.isPrimary && (
+                <button onClick={() => setUnlinkTarget(account)}>
+                  <img src={CancelIcon} alt="" className="h-5 w-5" />
+                </button>
+              )}
             </div>
           ))}
         </div>
+
+        {unlinkError && (
+          <p className="mb-5 text-center text-xs font-bold text-danger50">
+            {unlinkError}
+          </p>
+        )}
 
         <h3 className="mb-6 text-[16px] font-bold text-gray100">계정 정보</h3>
         <div className="mb-6 overflow-hidden rounded-[18px] bg-white shadow-[0_1px_3px_rgba(16,24,46,0.03)]">
@@ -139,6 +161,7 @@ function AccountManagement() {
           email={unlinkTarget.email}
           onConfirm={handleUnlinkConfirm}
           onCancel={() => setUnlinkTarget(null)}
+          confirming={unlinking}
         />
       )}
     </PageBackground>

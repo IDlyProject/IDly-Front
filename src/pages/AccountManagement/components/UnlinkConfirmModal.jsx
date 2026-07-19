@@ -1,5 +1,5 @@
 // src/pages/AccountManagement/components/UnlinkConfirmModal.jsx
-function UnlinkConfirmModal({ email, onConfirm, onCancel }) {
+function UnlinkConfirmModal({ email, onConfirm, onCancel, confirming = false }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-8.75">
       <div className="w-full max-w-sm rounded-3xl bg-white p-6 pt-8 text-center">
@@ -13,13 +13,15 @@ function UnlinkConfirmModal({ email, onConfirm, onCancel }) {
         </p>
         <button
           onClick={onConfirm}
-          className="mt-5 h-12 w-full rounded-[14px] bg-main100 text-sb16 text-[15px] text-white"
+          disabled={confirming}
+          className="mt-5 h-12 w-full rounded-[14px] bg-main100 text-sb16 text-[15px] text-white disabled:opacity-60"
         >
-          계속하기
+          {confirming ? "해지 중..." : "계속하기"}
         </button>
         <button
           onClick={onCancel}
-          className="mt-5 h-12 w-full rounded-[14px] bg-white text-sb16 text-[15px] text-gray50"
+          disabled={confirming}
+          className="mt-5 h-12 w-full rounded-[14px] bg-white text-sb16 text-[15px] text-gray50 disabled:opacity-60"
         >
           취소
         </button>

@@ -27,3 +27,17 @@ export async function getAccounts() {
   if (!res.ok) throw new Error(`get accounts failed: ${res.status}`);
   return res.json(); // GmailAccountDto[]
 }
+
+// 400: 대표 계정은 해제 불가, 404: 본인 소유가 아닌 계정
+export async function disconnectAccount(accountId) {
+  const res = await apiFetch(`/api/users/me/accounts/${accountId}`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) {
+    const err = new Error(`disconnect account failed: ${res.status}`);
+    err.status = res.status;
+    throw err;
+  }
+  return res.json(); // { disconnectedAccountId, connectedAccountCount }
+}
