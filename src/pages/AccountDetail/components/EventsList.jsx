@@ -12,6 +12,7 @@ const EVENT_ICON = {
   location_change: LocationChangeIcon,
   recovery_email: RecoveryEmailIcon,
 };
+const DEFAULT_EVENT_ICON = SuspiciousLoginIcon;
 
 function EventsList({ events }) {
   return (
@@ -26,7 +27,7 @@ function EventsList({ events }) {
             }`}
           >
             <img
-              src={EVENT_ICON[event.type]}
+              src={EVENT_ICON[event.type] ?? DEFAULT_EVENT_ICON}
               alt=""
               className="h-4 w-4 flex-shrink-0"
             />

@@ -10,27 +10,9 @@ import RecommendCard from "./components/RecommendCard";
 import Apartment from "./components/Apartment";
 import { useHomeData } from "@/hooks/useHomeData";
 import { AVATAR_GRADIENTS } from "@/utils/mailAccount";
+import { getServiceIconGradient } from "@/utils/serviceIcon";
 import { triggerAnalysisRun, waitForAnalysisCompletion } from "@/api/analysis";
 import { ROUTES } from "@/constants/routes";
-
-// 서비스별 고정 색상이 없으므로 이름을 해시해 팔레트에서 안정적으로 하나 고른다
-const SERVICE_ICON_GRADIENTS = [
-  "linear-gradient(160deg,#3b6cff,#5b7dff)",
-  "linear-gradient(160deg,#16b886,#0da87c)",
-  "linear-gradient(160deg,#ff9f43,#ffb976)",
-  "linear-gradient(160deg,#a06cff,#c48bff)",
-  "linear-gradient(160deg,#ff6040,#e04e39)",
-  "linear-gradient(160deg,#0e72ed,#2d8cff)",
-];
-
-function hashString(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) - hash + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-}
 
 function Home() {
   const navigate = useNavigate();
@@ -69,10 +51,7 @@ function Home() {
         name: sa.displayName,
         status: !isDormant && sa.status === "action_required" ? "risk" : "safe",
         iconUrl: sa.iconUrl,
-        iconBg:
-          SERVICE_ICON_GRADIENTS[
-            hashString(sa.serviceName) % SERVICE_ICON_GRADIENTS.length
-          ],
+        iconBg: getServiceIconGradient(sa.serviceName),
         iconText: sa.iconLabel,
       };
     });
