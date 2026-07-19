@@ -110,14 +110,14 @@ function SecurityReport() {
     .map((s) => ({
       id: s.id,
       level: s.riskLevel,
-      title: s.headline,
+      title: `${s.serviceName} · ${s.headline}`,
       desc: s.reason,
     }));
 
   const riskItems = (report.riskEvents ?? []).map((e) => ({
     id: e.id,
     type: classifyRiskType(e.riskType),
-    title: e.title,
+    title: `${e.serviceName} · ${e.title}`,
     desc: e.description,
     timeAgo: formatTimeAgo(e.receivedAt),
   }));
