@@ -150,11 +150,14 @@ function SecurityReport() {
             )}
           </div>
 
-          <div className="w-40 h-40 bg-white/10 rounded-full">
-            <div className="w-22.5 h-22.5 bg-white/8 rounded-full">
-              <div className="text-[40px] text-bold text-white">
+          <div className="mx-auto flex h-40 w-40 items-center justify-center rounded-full bg-white/10">
+            <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full bg-white/15">
+              <span className="text-[40px] font-bold leading-none text-white">
                 {report.securityScore}
-              </div>
+              </span>
+              <span className="mt-1 text-[11px] font-bold text-white/60">
+                /100
+              </span>
             </div>
           </div>
 
