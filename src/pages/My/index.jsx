@@ -49,8 +49,11 @@ function My() {
       <div className="min-h-dvh px-4 pb-1.5">
         <div className="my-5 mx-1 flex items-center justify-between">
           <h1 className="text-b24 text-[22px] text-gray100">마이</h1>
-          <button className="grid h-9 w-9 place-items-center rounded-full bg-white shadow-[0_1px_3px_rgba(16,24,46,0.03)]">
-            <img src={SettingIcon} className="h-4.5 w-4.5" />
+          <button
+            aria-label="설정"
+            className="grid h-9 w-9 place-items-center rounded-full bg-white shadow-[0_1px_3px_rgba(16,24,46,0.03)]"
+          >
+            <img src={SettingIcon} alt="" className="h-4.5 w-4.5" />
           </button>
         </div>
 

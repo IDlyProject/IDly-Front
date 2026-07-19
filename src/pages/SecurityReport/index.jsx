@@ -2,6 +2,8 @@
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import ActionButton from "@/components/ui/ActionButton";
+import LoadingScreen from "@/components/ui/LoadingScreen";
+import ErrorScreen from "@/components/ui/ErrorScreen";
 import SummaryBadges from "./components/SummaryBadges";
 import RecommendationList from "./components/RecommendationList";
 import RiskItemList from "./components/RiskItemList";
@@ -58,26 +60,9 @@ function SecurityReport() {
   const navigate = useNavigate();
   const { report, status } = useSecurityReport();
 
-  if (status === "loading") {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
-        </div>
-      </PageBackground>
-    );
-  }
-
+  if (status === "loading") return <LoadingScreen />;
   if (status === "error" || !report) {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">
-            보안 리포트를 불러오지 못했어요.
-          </p>
-        </div>
-      </PageBackground>
-    );
+    return <ErrorScreen text="보안 리포트를 불러오지 못했어요." />;
   }
 
   // StatusHero(홈)와 동일한 기준: 완전히 양호할 때만 safe 색상
@@ -118,6 +103,7 @@ function SecurityReport() {
         <div className="my-1.5 flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
+            aria-label="뒤로가기"
             className="w-9 h-9 bg-white rounded-full grid place-items-center"
           >
             <ArrowLeftIcon />

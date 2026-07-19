@@ -1,31 +1,11 @@
-import { useEffect, useState } from "react";
+import { useAsync } from "./useAsync";
 import { fetchCurrentUser } from "@/api/auth";
 
 export function useCurrentUser() {
-  const [user, setUser] = useState(null);
-  const [status, setStatus] = useState("loading");
+  const { data: user, status: asyncStatus } = useAsync(fetchCurrentUser);
 
-  useEffect(() => {
-    let cancelled = false;
+  // fetchCurrentUser는 비로그인 상태면 null을 반환한다 (throw가 아님) — error로 취급
+  const status = asyncStatus === "ready" && !user ? "error" : asyncStatus;
 
-    fetchCurrentUser()
-      .then((data) => {
-        if (cancelled) return;
-        if (!data) {
-          setStatus("error");
-          return;
-        }
-        setUser(data);
-        setStatus("ready");
-      })
-      .catch(() => {
-        if (!cancelled) setStatus("error");
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return { user, status };
+  return { user, status }; // status: loading | ready | error
 }

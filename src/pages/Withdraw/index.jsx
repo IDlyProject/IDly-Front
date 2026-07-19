@@ -17,9 +17,10 @@ function Withdraw() {
       <div className="flex min-h-dvh flex-col px-5">
         <button
           onClick={() => navigate(-1)}
+          aria-label="뒤로가기"
           className="my-1.5 h-9 w-9 bg-white rounded-full grid place-items-center"
         >
-          <img src={BackIcon} />
+          <img src={BackIcon} alt="" />
         </button>
 
         <h1 className="mt-5 mb-2 text-b24 text-gray100">

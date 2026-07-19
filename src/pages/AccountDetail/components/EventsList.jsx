@@ -19,7 +19,7 @@ function EventsList({ events }) {
     <>
       <h3 className="mb-8 text-sb16 font-bold text-gray100">최근 이벤트</h3>
       <div className="overflow-hidden rounded-[18px] bg-white shadow-[0_2px_7px_rgba(16,24,46,0.08)]">
-        {events.map((event, idx) => (
+        {events.map((event) => (
           <div key={event.id} className="flex items-center gap-3 px-4 py-3">
             <img
               src={EVENT_ICON[event.type] ?? DEFAULT_EVENT_ICON}

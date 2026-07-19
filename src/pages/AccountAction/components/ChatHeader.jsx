@@ -10,6 +10,7 @@ function ChatHeader({ title, doneCount, totalActions, label, onBack }) {
     <div className="flex items-center gap-3 px-5 py-1.5">
       <button
         onClick={onBack}
+        aria-label="뒤로가기"
         className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.1)]"
       >
         <img src={ChevronLeftIcon} alt="" className="h-5 w-5" />

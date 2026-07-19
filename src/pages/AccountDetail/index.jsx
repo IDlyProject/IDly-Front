@@ -1,6 +1,8 @@
 // src/pages/AccountDetail/index.jsx
 import { useNavigate, useParams } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
+import LoadingScreen from "@/components/ui/LoadingScreen";
+import ErrorScreen from "@/components/ui/ErrorScreen";
 import DetailHero from "./components/DetailHero";
 import RiskCard from "./components/RiskCard";
 import EventsList from "./components/EventsList";
@@ -61,15 +63,7 @@ function AccountDetail() {
   const navigate = useNavigate();
   const { detail: raw, status } = useServiceAccountDetail(accountId);
 
-  if (status === "loading") {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
-        </div>
-      </PageBackground>
-    );
-  }
+  if (status === "loading") return <LoadingScreen />;
 
   if (status === "not_found") {
     navigate(ROUTES.HOME, { replace: true });
@@ -77,15 +71,7 @@ function AccountDetail() {
   }
 
   if (status === "error") {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">
-            계정 정보를 불러오지 못했어요.
-          </p>
-        </div>
-      </PageBackground>
-    );
+    return <ErrorScreen text="계정 정보를 불러오지 못했어요." />;
   }
 
   const detail = toViewDetail(raw);
@@ -96,6 +82,7 @@ function AccountDetail() {
         <div className="my-1.5 flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
+            aria-label="뒤로가기"
             className="grid h-9 w-9 place-items-center rounded-full bg-white"
           >
             <img src={ChevronLeftIcon} alt="" className="h-5 w-5" />

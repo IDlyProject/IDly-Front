@@ -1,33 +1,18 @@
-import { useEffect, useState } from "react";
+// src/hooks/useServiceAccountDetail.js
+import { useCallback } from "react";
+import { useAsync } from "./useAsync";
 import { getServiceAccountDetail } from "@/api/serviceAccounts";
 
 export function useServiceAccountDetail(serviceAccountId) {
-  const [detail, setDetail] = useState(null);
-  const [status, setStatus] = useState("loading");
+  const fetcher = useCallback(
+    () => getServiceAccountDetail(serviceAccountId),
+    [serviceAccountId],
+  );
+  const { data: detail, status: asyncStatus } = useAsync(fetcher);
 
-  useEffect(() => {
-    let cancelled = false;
+  // API가 "찾을 수 없음"을 200 + null로 반환하므로, ready인데 데이터가 없으면 not_found로 구분
+  const status =
+    asyncStatus === "ready" && !detail ? "not_found" : asyncStatus;
 
-    (async () => {
-      setStatus("loading");
-      try {
-        const data = await getServiceAccountDetail(serviceAccountId);
-        if (cancelled) return;
-        if (!data) {
-          setStatus("not_found");
-          return;
-        }
-        setDetail(data);
-        setStatus("ready");
-      } catch {
-        if (!cancelled) setStatus("error");
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [serviceAccountId]);
-
-  return { detail, status };
+  return { detail, status }; // status: loading | ready | not_found | error
 }

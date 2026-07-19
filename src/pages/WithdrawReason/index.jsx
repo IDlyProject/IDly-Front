@@ -70,6 +70,7 @@ function WithdrawReason() {
       <div className="flex min-h-dvh flex-col px-5 pb-24">
         <button
           onClick={() => navigate(-1)}
+          aria-label="뒤로가기"
           className="my-1.5 grid h-9 w-9 place-items-center rounded-full bg-white"
         >
           <img src={ChevronLeftIcon} alt="" className="h-5 w-5" />

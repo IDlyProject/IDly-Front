@@ -1,27 +1,10 @@
-import { useEffect, useState } from "react";
+// src/hooks/useGmailAccounts.js
+import { useAsync } from "./useAsync";
 import { getAccounts } from "@/api/users";
 
 export function useGmailAccounts() {
-  const [accounts, setAccounts] = useState([]);
-  const [status, setStatus] = useState("loading");
-
-  useEffect(() => {
-    let cancelled = false;
-
-    getAccounts()
-      .then((data) => {
-        if (cancelled) return;
-        setAccounts(data);
-        setStatus("ready");
-      })
-      .catch(() => {
-        if (!cancelled) setStatus("error");
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
+  // AccountManagement가 로딩 상태를 가드하지 않고 바로 accounts.filter(...)를 쓰므로
+  // 초기값을 []로 둬서 깨지지 않게 한다.
+  const { data: accounts, status } = useAsync(getAccounts, []);
   return { accounts, status };
 }

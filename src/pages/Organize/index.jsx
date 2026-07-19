@@ -6,9 +6,11 @@ import EmailSelector from "./components/EmailSelector";
 import RecommendCard from "@/pages/Home/components/RecommendCard";
 import MonthlySummary from "./components/MonthlySummary";
 import ServiceCard from "./components/ServiceCard";
+import LoadingScreen from "@/components/ui/LoadingScreen";
+import ErrorScreen from "@/components/ui/ErrorScreen";
 import { useSummary } from "@/hooks/useSummary";
 import { useHomeData } from "@/hooks/useHomeData";
-import { AVATAR_GRADIENTS } from "@/utils/mailAccount";
+import { getGradientByIndex } from "@/utils/palette";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
 import { formatTimeAgo } from "@/utils/time";
 import { ROUTES } from "@/constants/routes";
@@ -36,7 +38,7 @@ function Organize() {
         count: summary.services.filter(
           (s) => s.sourceMailAccount?.id === account.id,
         ).length,
-        avatarBg: AVATAR_GRADIENTS[idx % AVATAR_GRADIENTS.length],
+        avatarBg: getGradientByIndex(idx),
         avatarLabel: account.email[0]?.toUpperCase() ?? "?",
       })),
     ];
@@ -79,26 +81,9 @@ function Organize() {
     navigate(ROUTES.ONBOARDING_ADD_ACCOUNT);
   };
 
-  if (status === "loading") {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
-        </div>
-      </PageBackground>
-    );
-  }
-
+  if (status === "loading") return <LoadingScreen />;
   if (status === "error" || !summary) {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">
-            정리 정보를 불러오지 못했어요.
-          </p>
-        </div>
-      </PageBackground>
-    );
+    return <ErrorScreen text="정리 정보를 불러오지 못했어요." />;
   }
 
   const isSafe = summary.progress.pending === 0;

@@ -10,9 +10,10 @@ function AppHeader() {
       <img src={logo} alt="IDly" className="h-13.5 w-auto" />
       <button
         onClick={() => navigate(ROUTES.NOTIFICATION)}
+        aria-label="알림"
         className="relative grid h-9 w-9 place-items-center rounded-full bg-white"
       >
-        <img src={BellIcon} className="h-4.5 w-4.5" />
+        <img src={BellIcon} alt="" className="h-4.5 w-4.5" />
       </button>
     </div>
   );

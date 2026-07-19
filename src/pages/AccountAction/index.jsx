@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
+import LoadingScreen from "@/components/ui/LoadingScreen";
 import { ROUTES } from "@/constants/routes";
 import useActionSession from "./hooks/useActionSession";
 import ChatHeader from "./components/ChatHeader";
@@ -19,6 +20,7 @@ function AccountAction() {
     messages,
     status,
     sending,
+    sendError,
     selectAction,
     confirmDone,
     confirmFail,
@@ -35,16 +37,7 @@ function AccountAction() {
     });
   }, [messages, sending]);
 
-  if (status === "loading") {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
-        </div>
-      </PageBackground>
-    );
-  }
-
+  if (status === "loading") return <LoadingScreen />;
   if (status === "error" || !session) {
     navigate(ROUTES.HOME, { replace: true });
     return null;
@@ -88,6 +81,12 @@ function AccountAction() {
           ))}
 
           {sending && <TypingIndicator />}
+
+          {sendError && (
+            <p className="text-center text-xs font-bold text-danger50">
+              {sendError}
+            </p>
+          )}
 
           {session.completion && (
             <>

@@ -61,6 +61,7 @@ function AccountManagement() {
         <div className="mb-4 flex items-center gap-3 px-1 py-1.5">
           <button
             onClick={() => navigate(-1)}
+            aria-label="뒤로가기"
             className="grid h-9 w-9 place-items-center rounded-full bg-white"
           >
             <img src={BackIcon} alt="" className="h-5 w-5" />
@@ -80,8 +81,8 @@ function AccountManagement() {
               {primaryEmail ?? "이메일 없음"}
             </span>
           </div>
-          <button>
-            <img src={PencilIcon} className="w-5 h-5" />
+          <button aria-label="이름 수정">
+            <img src={PencilIcon} alt="" className="w-5 h-5" />
           </button>
         </div>
 
@@ -112,7 +113,10 @@ function AccountManagement() {
                 </small>
               </div>
               {!account.isPrimary && (
-                <button onClick={() => setUnlinkTarget(account)}>
+                <button
+                  onClick={() => setUnlinkTarget(account)}
+                  aria-label={`${account.email} 연동 해지`}
+                >
                   <img src={CancelIcon} alt="" className="h-5 w-5" />
                 </button>
               )}

@@ -1,9 +1,12 @@
 // src/pages/DormantAccounts/index.jsx
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import ServiceIcon from "@/components/ui/ServiceIcon";
-import { getDormantAccounts, restoreAllDormant } from "@/api/dormantAccounts";
+import LoadingScreen from "@/components/ui/LoadingScreen";
+import ErrorScreen from "@/components/ui/ErrorScreen";
+import { useDormantAccounts } from "@/hooks/useDormantAccounts";
+import { restoreAllDormant } from "@/api/dormantAccounts";
 import { restoreServiceAccountDormant } from "@/api/serviceAccounts";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
 import BackIcon from "@/assets/ic_back.svg";
@@ -11,31 +14,13 @@ import InfoIcon from "@/assets/ic_information.svg";
 
 function DormantAccounts() {
   const navigate = useNavigate();
-  const [accounts, setAccounts] = useState([]);
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const { accounts, status, reload } = useDormantAccounts();
   const [restoringAll, setRestoringAll] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    getDormantAccounts()
-      .then((data) => {
-        if (cancelled) return;
-        setAccounts(data);
-        setStatus("ready");
-      })
-      .catch((err) => {
-        console.error("dormant accounts load failed:", err);
-        if (!cancelled) setStatus("error");
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const handleRestore = async (id) => {
     try {
       await restoreServiceAccountDormant(id);
-      setAccounts((prev) => prev.filter((a) => a.id !== id));
+      await reload();
     } catch (err) {
       console.error("restore dormant account failed:", err);
     }
@@ -45,7 +30,7 @@ function DormantAccounts() {
     setRestoringAll(true);
     try {
       await restoreAllDormant();
-      setAccounts([]);
+      await reload();
     } catch (err) {
       console.error("restore all dormant accounts failed:", err);
     } finally {
@@ -53,27 +38,8 @@ function DormantAccounts() {
     }
   };
 
-  if (status === "loading") {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
-        </div>
-      </PageBackground>
-    );
-  }
-
-  if (status === "error") {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">
-            휴면 계정을 불러오지 못했어요.
-          </p>
-        </div>
-      </PageBackground>
-    );
-  }
+  if (status === "loading") return <LoadingScreen />;
+  if (status === "error") return <ErrorScreen text="휴면 계정을 불러오지 못했어요." />;
 
   return (
     <PageBackground variant="frost">
@@ -81,9 +47,10 @@ function DormantAccounts() {
         <div className="flex items-center gap-3 my-1.5">
           <button
             onClick={() => navigate(-1)}
+            aria-label="뒤로가기"
             className="grid w-9 h-9 place-items-center bg-white  rounded-full"
           >
-            <img src={BackIcon} className="w-5 h-5" />
+            <img src={BackIcon} alt="" className="w-5 h-5" />
           </button>
           <h1 className="text-b24 text-[18px] text-gray100">휴면 계정</h1>
         </div>

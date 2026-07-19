@@ -31,6 +31,7 @@ function useActionSession(serviceAccountId) {
   const [messages, setMessages] = useState([]);
   const [status, setStatus] = useState("loading"); // loading | ready | error
   const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -92,17 +93,21 @@ function useActionSession(serviceAccountId) {
     async (payload) => {
       if (!session?.sessionId || sending) return;
       setSending(true);
+      setSendError("");
       try {
         const update = await sendActionSessionMessage(serviceAccountId, {
           sessionId: session.sessionId,
           ...payload,
         });
         applyUpdate(update);
+      } catch (err) {
+        console.error("action-session send failed:", err);
+        setSendError("메시지 전송에 실패했어요. 다시 시도해주세요.");
       } finally {
         setSending(false);
       }
     },
-    [serviceAccountId, session?.sessionId, sending, applyUpdate],
+    [serviceAccountId, session, sending, applyUpdate],
   );
 
   const selectAction = useCallback(
@@ -127,6 +132,7 @@ function useActionSession(serviceAccountId) {
     messages,
     status,
     sending,
+    sendError,
     selectAction,
     confirmDone,
     confirmFail,

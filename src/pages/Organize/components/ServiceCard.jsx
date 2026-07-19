@@ -32,27 +32,30 @@ function ServiceCard({
 
   return (
     <div className="mb-6 overflow-hidden rounded-[18px] bg-white shadow-[0_1px_3px_rgba(16,24,46,0.03)]">
-      <button
-        onClick={handleCardClick}
-        className="flex w-full items-center gap-3 px-4 py-3.5 text-left"
-      >
-        <ServiceIcon
-          iconUrl={service.iconUrl}
-          iconBg={service.iconBg}
-          iconText={service.iconText}
-          className="h-9 w-9 shrink-0 rounded-[10px] text-[16px]"
-        />
-        <div className="flex-1">
-          <b className="block text-b24 text-[15px] text-gray100">
-            {service.name}
-          </b>
-          <small className="mt-0.5 block text-m14 text-[11px] text-gray50">
-            조치 {service.actionCount}건
-          </small>
-        </div>
-        <span
+      <div className="flex w-full items-center gap-3 px-4 py-3.5">
+        {/* button 안에 button을 중첩할 수 없어 "서비스 선택"과 "펼치기/접기"를
+            형제 버튼 두 개로 분리했다 (이전엔 span role="button"으로 우회했었음) */}
+        <button
+          onClick={handleCardClick}
+          className="flex flex-1 items-center gap-3 text-left"
+        >
+          <ServiceIcon
+            iconUrl={service.iconUrl}
+            iconBg={service.iconBg}
+            iconText={service.iconText}
+            className="h-9 w-9 shrink-0 rounded-[10px] text-[16px]"
+          />
+          <div className="flex-1">
+            <b className="block text-b24 text-[15px] text-gray100">
+              {service.name}
+            </b>
+            <small className="mt-0.5 block text-m14 text-[11px] text-gray50">
+              조치 {service.actionCount}건
+            </small>
+          </div>
+        </button>
+        <button
           onClick={handleToggleChevron}
-          role="button"
           aria-label={open ? "접기" : "펼치기"}
           className="-m-2 grid h-9 w-9 shrink-0 place-items-center"
         >
@@ -61,8 +64,8 @@ function ServiceCard({
             alt=""
             className="h-4.5 w-4.5"
           />
-        </span>
-      </button>
+        </button>
+      </div>
 
       {open && (
         <div className="border-t-[0.76px] border-[#E5E7EB]">

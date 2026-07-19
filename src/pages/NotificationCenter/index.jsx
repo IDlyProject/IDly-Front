@@ -33,9 +33,10 @@ function NotificationCenter() {
         <div className="my-2 flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
+            aria-label="뒤로가기"
             className="grid w-9 h-9 place-items-center rounded-full bg-white "
           >
-            <img src={BackIcon} className="h-5 w-5" />
+            <img src={BackIcon} alt="" className="h-5 w-5" />
           </button>
           <h1 className="text-b24 text-[18px] text-gray100">알림</h1>
         </div>

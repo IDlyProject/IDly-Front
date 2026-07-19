@@ -2,6 +2,9 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
+import LoadingScreen from "@/components/ui/LoadingScreen";
+import ErrorScreen from "@/components/ui/ErrorScreen";
+import { useToast } from "@/components/ui/ToastProvider";
 import HomeHeader from "./components/HomeHeader";
 import PullToRefresh from "./components/PullToRefresh";
 import StatusHero from "./components/StatusHero";
@@ -9,7 +12,10 @@ import EmailSelector from "./components/EmailSelector";
 import RecommendCard from "./components/RecommendCard";
 import Apartment from "./components/Apartment";
 import { useHomeData } from "@/hooks/useHomeData";
-import { AVATAR_GRADIENTS } from "@/utils/mailAccount";
+import {
+  PALETTE_GRADIENTS,
+  getGradientByIndexReservingPrimary,
+} from "@/utils/palette";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
 import { triggerAnalysisRun, waitForAnalysisCompletion } from "@/api/analysis";
 import { setServiceAccountDormant } from "@/api/serviceAccounts";
@@ -17,6 +23,7 @@ import { ROUTES } from "@/constants/routes";
 
 function Home() {
   const navigate = useNavigate();
+  const showToast = useToast();
   const [selectedEmailId, setSelectedEmailId] = useState("all");
   const mailAccountId = selectedEmailId === "all" ? undefined : selectedEmailId;
   const { data: homeData, status: homeStatus, reload } = useHomeData(mailAccountId);
@@ -34,8 +41,8 @@ function Home() {
         count: account.serviceAccountCount,
         avatarBg:
           account.role === "primary"
-            ? AVATAR_GRADIENTS[0]
-            : AVATAR_GRADIENTS[(idx % (AVATAR_GRADIENTS.length - 1)) + 1],
+            ? PALETTE_GRADIENTS[0]
+            : getGradientByIndexReservingPrimary(idx),
         avatarLabel: account.email[0]?.toUpperCase() ?? "?",
       })),
     ];
@@ -58,7 +65,7 @@ function Home() {
       await setServiceAccountDormant(accountId);
       await reload();
     } catch {
-      // TODO: 휴면 처리 실패를 사용자에게 알릴 방법 필요 (토스트 등)
+      showToast("휴면 처리에 실패했어요. 다시 시도해주세요.");
     }
   };
 
@@ -76,30 +83,14 @@ function Home() {
       await waitForAnalysisCompletion(analysisId);
       await reload();
     } catch {
-      // TODO: 재분석 실패를 사용자에게 알릴 방법 필요 (토스트 등)
+      showToast("재분석에 실패했어요. 다시 시도해주세요.");
     }
   };
 
-  if (homeStatus === "loading" && !homeData) {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
-        </div>
-      </PageBackground>
-    );
-  }
-
+  // 이미 데이터가 있으면(재요청 중) 전체 화면을 덮지 않고 기존 화면을 유지한다
+  if (homeStatus === "loading" && !homeData) return <LoadingScreen />;
   if (homeStatus === "error" && !homeData) {
-    return (
-      <PageBackground variant="frost">
-        <div className="flex min-h-dvh items-center justify-center">
-          <p className="text-sm font-bold text-[#6b7684]">
-            홈 정보를 불러오지 못했어요.
-          </p>
-        </div>
-      </PageBackground>
-    );
+    return <ErrorScreen text="홈 정보를 불러오지 못했어요." />;
   }
 
   const cardNews = homeData.cardNews?.[0];
