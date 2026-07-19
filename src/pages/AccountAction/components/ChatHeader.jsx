@@ -1,9 +1,10 @@
 // src/pages/AccountAction/components/ChatHeader.jsx
 import { ChevronLeftIcon } from "../icons";
 
-function ChatHeader({ title, doneCount, totalActions, onBack }) {
+function ChatHeader({ title, doneCount, totalActions, label, onBack }) {
   const showPill = doneCount > 0;
   const allDone = doneCount === totalActions;
+  const pillText = label ?? (allDone ? "모두 완료" : `${doneCount}/${totalActions} 완료`);
 
   return (
     <div className="flex items-center gap-3 px-5 py-1.5">
@@ -20,7 +21,7 @@ function ChatHeader({ title, doneCount, totalActions, onBack }) {
         <span
           className={`flex-shrink-0 rounded-full px-2.25 py-0.75 text-[10.5px] font-bold ${allDone ? "bg-[#43a047]/18" : "bg-[#43a047]/12"} text-[#43a047]`}
         >
-          {allDone ? "모두 완료" : `${doneCount}/${totalActions} 완료`}
+          {pillText}
         </span>
       )}
     </div>

@@ -1,10 +1,15 @@
 // src/pages/AccountAction/components/ConfirmOptionsBubble.jsx
-function ConfirmOptionsBubble({ onDone, onFail }) {
+function ConfirmOptionsBubble({ onDone, onFail, disabled }) {
   return (
     <div className="flex justify-end">
-      <div className="min-w-[190px] overflow-hidden rounded-[18px_4px_18px_18px] bg-[#08257e] shadow-[0_2px_3px_rgba(8,37,126,0.1)]">
+      <div
+        className={`min-w-[190px] overflow-hidden rounded-[18px_4px_18px_18px] bg-[#08257e] shadow-[0_2px_3px_rgba(8,37,126,0.1)] ${
+          disabled ? "opacity-50" : ""
+        }`}
+      >
         <button
           onClick={onDone}
+          disabled={disabled}
           className="flex w-full items-center gap-2.5 px-4 py-3 text-left text-sm font-semibold text-white"
         >
           <span className="grid h-5.5 w-5.5 flex-shrink-0 place-items-center rounded-full bg-[#43a047]/85">
@@ -24,6 +29,7 @@ function ConfirmOptionsBubble({ onDone, onFail }) {
         </button>
         <button
           onClick={onFail}
+          disabled={disabled}
           className="flex w-full items-center gap-2.5 border-t border-white/20 px-4 py-3 text-left text-sm font-semibold text-white"
         >
           <span className="grid h-5.5 w-5.5 flex-shrink-0 place-items-center rounded-full bg-[#ee4e4e]/85">

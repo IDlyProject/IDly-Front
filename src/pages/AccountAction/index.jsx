@@ -3,28 +3,27 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import { ROUTES } from "@/constants/routes";
-import { getDetailByAccountId } from "@/pages/AccountDetail/mockDetailData";
-import useChatFlow from "./hooks/useChatFlow";
+import useActionSession from "./hooks/useActionSession";
 import ChatHeader from "./components/ChatHeader";
 import ChatMessage from "./components/ChatMessage";
 import ChatInputBar from "./components/ChatInputBar";
+import TypingIndicator from "./components/TypingIndicator";
+import CelebrationBubble from "./components/CelebrationBubble";
+import CtaListBubble from "./components/CtaListBubble";
 
 function AccountAction() {
   const { accountId } = useParams();
   const navigate = useNavigate();
-  const detail = getDetailByAccountId(accountId);
-
   const {
+    session,
     messages,
-    doneIds,
-    inputEnabled,
+    status,
+    sending,
     selectAction,
     confirmDone,
     confirmFail,
-    sendMessage,
-    totalActions,
-    doneCount,
-  } = useChatFlow(detail ?? { actions: [], chatBadge: "", chatIntro: "" });
+    sendFailureReason,
+  } = useActionSession(accountId);
 
   const [inputValue, setInputValue] = useState("");
   const scrollRef = useRef(null);
@@ -34,26 +33,40 @@ function AccountAction() {
       top: scrollRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [messages]);
+  }, [messages, sending]);
 
-  if (!detail) {
+  if (status === "loading") {
+    return (
+      <PageBackground variant="frost">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  if (status === "error" || !session) {
     navigate(ROUTES.HOME, { replace: true });
     return null;
   }
 
   const handleSend = () => {
-    sendMessage(inputValue);
+    if (!inputValue.trim() || !session.composerEnabled) return;
+    sendFailureReason(inputValue.trim());
     setInputValue("");
   };
+
+  const lastMessageId = messages[messages.length - 1]?.id;
 
   return (
     <PageBackground variant="frost">
       <div className="flex min-h-dvh flex-col">
         <div className="pt-[max(8px,env(safe-area-inset-top))]">
           <ChatHeader
-            title="지금 바로 조치하기"
-            doneCount={doneCount}
-            totalActions={totalActions}
+            title={session.title ?? "지금 바로 조치하기"}
+            doneCount={session.progress?.doneCount}
+            totalActions={session.progress?.totalRequired}
+            label={session.progress?.label}
             onBack={() => navigate(-1)}
           />
         </div>
@@ -66,23 +79,39 @@ function AccountAction() {
             <ChatMessage
               key={message.id}
               message={message}
-              doneIds={doneIds}
+              session={session}
+              isLatest={message.id === lastMessageId}
               onSelectAction={selectAction}
               onDone={confirmDone}
               onFail={confirmFail}
-              serviceName={detail.name}
-              onHome={() => navigate(ROUTES.HOME)}
-              onNextAccount={() => navigate(ROUTES.HOME)}
-              onReport={() => navigate(ROUTES.SECURITY_REPORT)}
             />
           ))}
+
+          {sending && <TypingIndicator />}
+
+          {session.completion && (
+            <>
+              <CelebrationBubble
+                message={
+                  session.completion.celebrationMessage ??
+                  "모든 보안 조치를 완료했어요!"
+                }
+              />
+              <CtaListBubble
+                onHome={() => navigate(ROUTES.HOME)}
+                onNextAccount={() => navigate(ROUTES.HOME)}
+                onReport={() => navigate(ROUTES.SECURITY_REPORT)}
+              />
+            </>
+          )}
         </div>
 
         <ChatInputBar
           value={inputValue}
           onChange={setInputValue}
           onSend={handleSend}
-          disabled={!inputEnabled}
+          disabled={!session.composerEnabled || sending}
+          placeholder={session.composerPlaceholder ?? undefined}
         />
       </div>
     </PageBackground>

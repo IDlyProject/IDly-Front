@@ -1,8 +1,8 @@
 // src/pages/AccountAction/components/ActionListBubble.jsx
 import OwlAvatar from "./OwlAvatar";
 
-// 추천 조치 목록 / 남은 조치 목록 / 전체 완료 목록 3가지를 한 컴포넌트로 처리
-function ActionListBubble({ title, titleColor, actions, doneIds, onSelect }) {
+// 서버 세션의 recommendedActions[]를 그대로 렌더링 (status: pending|done|skipped)
+function ActionListBubble({ title, titleColor, actions, onSelect }) {
   return (
     <div className="flex items-start gap-2.5">
       <OwlAvatar />
@@ -15,28 +15,30 @@ function ActionListBubble({ title, titleColor, actions, doneIds, onSelect }) {
         </b>
         <div className="space-y-2">
           {actions.map((action) => {
-            const isDone = doneIds?.has(action.id);
-            const clickable = onSelect && !isDone;
+            const isDone = action.status === "done";
+            const isSkipped = action.status === "skipped";
+            const clickable =
+              onSelect && action.status === "pending" && action.selectable !== false;
             return (
               <div
                 key={action.id}
                 onClick={clickable ? () => onSelect(action.id) : undefined}
-                className={`flex items-center gap-2.5 rounded-xl bg-[#ecf1f9] p-2.5 ${isDone ? "opacity-45" : ""} ${
-                  clickable ? "cursor-pointer" : ""
-                }`}
+                className={`flex items-center gap-2.5 rounded-xl bg-[#ecf1f9] p-2.5 ${
+                  isDone || isSkipped ? "opacity-45" : ""
+                } ${clickable ? "cursor-pointer" : ""}`}
               >
                 <div
-                  className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-lg"
-                  style={{ background: isDone ? "#43a047" : action.color }}
+                  className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-lg text-xs font-bold text-white"
+                  style={{ background: isDone ? "#43a047" : "#08257e" }}
                 >
-                  <img src={action.icon} alt="" className="h-3.75 w-3.75" />
+                  {isDone ? "✓" : action.required ? "!" : ""}
                 </div>
                 <div className="flex-1">
                   <p className="text-[13px] font-semibold text-[#212125]">
-                    {action.name}
+                    {action.title}
                   </p>
                   <small className="mt-0.5 block text-[11px] text-[#8c8f96]">
-                    {isDone ? "완료됨" : action.sub}
+                    {isDone ? "완료됨" : isSkipped ? "건너뜀" : action.subtitle}
                   </small>
                 </div>
                 {isDone ? (
