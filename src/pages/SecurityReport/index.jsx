@@ -5,8 +5,44 @@ import ScoreRing from "./components/ScoreRing";
 import SummaryBadges from "./components/SummaryBadges";
 import RecommendationList from "./components/RecommendationList";
 import RiskItemList from "./components/RiskItemList";
-import { MOCK_REPORT } from "./mockReportData";
+import { useSecurityReport } from "@/hooks/useSecurityReport";
 import { ROUTES } from "@/constants/routes";
+
+const GRADE_COLOR = {
+  양호: "#8ff5c9",
+  주의: "#ffd200",
+  위험: "#ff6b6b",
+};
+
+function formatBaseDate(isoString) {
+  if (!isoString) return "";
+  const date = new Date(isoString).toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  return `${date} 기준`;
+}
+
+function formatTimeAgo(isoString) {
+  if (!isoString) return "";
+  const diffMs = Date.now() - new Date(isoString).getTime();
+  const diffHours = Math.floor(diffMs / (60 * 60 * 1000));
+  if (diffHours < 1) return "방금 전";
+  if (diffHours < 24) return `${diffHours}시간 전`;
+  return `${Math.floor(diffHours / 24)}일 전`;
+}
+
+// riskType은 자유 문자열(예: "new_device_login")이라, 기존 아이콘/색상 4종류 중
+// 가장 그럴듯한 걸로 매핑한다. 못 맞추면 로그인류(빨강)로 기본 처리 — 이 리스트는
+// 항상 실제 위험 이벤트라 "안전(초록)"으로 기본값을 두면 안 됨.
+function classifyRiskType(riskType = "") {
+  const t = riskType.toLowerCase();
+  if (t.includes("leak") || t.includes("breach")) return "leak";
+  if (t.includes("password")) return "password";
+  if (t.includes("device") && !t.includes("login")) return "device";
+  return "login";
+}
 
 function ArrowLeftIcon() {
   return (
@@ -45,16 +81,57 @@ function ChatIcon() {
 
 function SecurityReport() {
   const navigate = useNavigate();
-  const report = MOCK_REPORT;
+  const { report, status } = useSecurityReport();
 
-  const handleSelectRecommendation = (id) => {
-    // TODO: 권장 사항 상세/조치 화면으로 이동
-    console.log("recommendation:", id);
+  if (status === "loading") {
+    return (
+      <PageBackground variant="frost">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">불러오는 중...</p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  if (status === "error" || !report) {
+    return (
+      <PageBackground variant="frost">
+        <div className="flex min-h-dvh items-center justify-center">
+          <p className="text-sm font-bold text-[#6b7684]">
+            보안 리포트를 불러오지 못했어요.
+          </p>
+        </div>
+      </PageBackground>
+    );
+  }
+
+  const recommendations = (report.services ?? [])
+    .filter((s) => s.riskLevel !== "safe")
+    .map((s) => ({
+      id: s.id,
+      level: s.riskLevel,
+      title: s.headline,
+      desc: s.reason,
+    }));
+
+  const riskItems = (report.riskEvents ?? []).map((e) => ({
+    id: e.id,
+    type: classifyRiskType(e.riskType),
+    title: e.title,
+    desc: e.description,
+    timeAgo: formatTimeAgo(e.receivedAt),
+  }));
+
+  const handleSelectRecommendation = (serviceId) => {
+    navigate(ROUTES.ACCOUNT_DETAIL(serviceId));
   };
 
-  const handleSelectRiskItem = (id) => {
-    // TODO: 위험 항목 상세 화면으로 이동
-    console.log("risk item:", id);
+  const handleSelectRiskItem = (eventId) => {
+    const event = report.riskEvents?.find((e) => e.id === eventId);
+    const service = report.services?.find(
+      (s) => s.serviceName === event?.serviceName,
+    );
+    if (service) navigate(ROUTES.ACCOUNT_DETAIL(service.id));
   };
 
   return (
@@ -74,42 +151,39 @@ function SecurityReport() {
           }}
         >
           <div className="mb-3 flex items-center justify-between text-[11px] font-bold text-white/70">
-            <span>{report.baseDate}</span>
-            <span className="rounded-full bg-white/20 px-2.5 py-1">
-              ✨ AI 분석
-            </span>
+            <span>{formatBaseDate(report.analyzedAt)}</span>
+            {report.hasAiSnapshot && (
+              <span className="rounded-full bg-white/20 px-2.5 py-1">
+                ✨ AI 분석
+              </span>
+            )}
           </div>
 
-          <ScoreRing score={report.score} />
+          <ScoreRing score={report.securityScore} />
 
-          {/* isSafe 여부와 상관없이 같은 문구를 보여주던 버그를 제거하고,
-              등급별로 라벨/색을 분리했습니다. */}
           <p
             className="mt-3 text-sm font-bold"
-            style={{ color: report.isSafe ? "#8ff5c9" : "#ffd200" }}
+            style={{ color: GRADE_COLOR[report.grade] ?? "#ffd200" }}
           >
-            {report.isSafe ? "우수" : "양호"}
+            {report.grade}
           </p>
           <p className="mt-1 text-[11px] font-bold text-white/70">
-            일부 계정에 보안 조치가 필요합니다
+            {report.scoreDescription}
           </p>
         </div>
 
         <SummaryBadges
-          riskCount={report.riskCount}
-          actionCount={report.actionCount}
-          safeCount={report.safeCount}
+          riskCount={report.summaryCounts?.danger ?? 0}
+          actionCount={report.summaryCounts?.caution ?? 0}
+          safeCount={report.summaryCounts?.safe ?? 0}
         />
 
         <RecommendationList
-          items={report.recommendations}
+          items={recommendations}
           onSelect={handleSelectRecommendation}
         />
 
-        <RiskItemList
-          items={report.riskItems}
-          onSelect={handleSelectRiskItem}
-        />
+        <RiskItemList items={riskItems} onSelect={handleSelectRiskItem} />
 
         <button
           onClick={() => navigate(ROUTES.SECURITY_ASSISTANT)}
