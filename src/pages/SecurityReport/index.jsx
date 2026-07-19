@@ -96,6 +96,9 @@ function SecurityReport() {
     );
   }
 
+  // StatusHero(홈)와 동일한 기준: 완전히 양호할 때만 safe 색상
+  const isSafe = report.grade === "양호";
+
   const recommendations = (report.services ?? [])
     .filter((s) => s.riskLevel !== "safe")
     .map((s) => ({
@@ -138,7 +141,9 @@ function SecurityReport() {
         <div
           className="mb-5 rounded-3xl p-5 text-center text-white shadow-lg"
           style={{
-            background: "linear-gradient(135deg, #1c3fae 0%, #3b6cff 100%)",
+            background: isSafe
+              ? "linear-gradient(135deg, #3B6CFF 0%, #08257E 100%)"
+              : "linear-gradient(135deg, #E43939 0%, #08257E 100%)",
           }}
         >
           <div className="mb-3 flex items-center justify-between text-[11px] font-bold text-white/70">
