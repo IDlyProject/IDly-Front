@@ -70,7 +70,12 @@ function Organize() {
   }, [summary, selectedEmailId]);
 
   const handleSelectService = (serviceId) => {
-    navigate(ROUTES.ACCOUNT_DETAIL(serviceId));
+    // getDetail API가 아직 iconUrl을 못 줄 때를 대비해 정리 화면에서 이미 받은
+    // 아이콘을 navigation state로 같이 넘긴다
+    const service = services.find((s) => s.id === serviceId);
+    navigate(ROUTES.ACCOUNT_DETAIL(serviceId), {
+      state: { iconUrl: service?.iconUrl, iconLabel: service?.iconText },
+    });
   };
 
   const handleSelectTask = (serviceId) => {

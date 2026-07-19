@@ -85,8 +85,13 @@ function SecurityReport() {
     timeAgo: formatTimeAgo(e.receivedAt),
   }));
 
+  // getDetail API가 아직 iconUrl을 못 줄 때를 대비해 리포트 화면에서 이미 받은
+  // 아이콘을 navigation state로 같이 넘긴다
   const handleSelectRecommendation = (serviceId) => {
-    navigate(ROUTES.ACCOUNT_DETAIL(serviceId));
+    const service = report.services?.find((s) => s.id === serviceId);
+    navigate(ROUTES.ACCOUNT_DETAIL(serviceId), {
+      state: { iconUrl: service?.iconUrl, iconLabel: service?.iconLabel },
+    });
   };
 
   const handleSelectRiskItem = (eventId) => {
@@ -94,7 +99,11 @@ function SecurityReport() {
     const service = report.services?.find(
       (s) => s.serviceName === event?.serviceName,
     );
-    if (service) navigate(ROUTES.ACCOUNT_DETAIL(service.id));
+    if (service) {
+      navigate(ROUTES.ACCOUNT_DETAIL(service.id), {
+        state: { iconUrl: service.iconUrl, iconLabel: service.iconLabel },
+      });
+    }
   };
 
   return (

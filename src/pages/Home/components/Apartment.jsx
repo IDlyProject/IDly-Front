@@ -22,7 +22,11 @@ function AptCard({ account, onHide, onOrganize }) {
     if (longPress.wasLongPress()) return;
 
     if (isRisk) {
-      navigate(ROUTES.ACCOUNT_DETAIL(account.id));
+      // getDetail API가 아직 iconUrl을 못 줄 때를 대비해 홈에서 이미 받은 아이콘을
+      // navigation state로 같이 넘긴다 (상세 화면에서 API 값이 있으면 그걸 우선함)
+      navigate(ROUTES.ACCOUNT_DETAIL(account.id), {
+        state: { iconUrl: account.iconUrl, iconLabel: account.iconText },
+      });
     }
   };
 

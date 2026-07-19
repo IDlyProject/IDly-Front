@@ -1,5 +1,5 @@
 // src/pages/AccountDetail/index.jsx
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import ErrorScreen from "@/components/ui/ErrorScreen";
@@ -32,15 +32,21 @@ function formatEventTime(isoString) {
   return `${diffDays}일 전 ${timeStr}`;
 }
 
-// 백엔드 응답을 화면 컴포넌트(DetailHero/RiskCard/EventsList)가 기대하는 형태로 변환
-function toViewDetail(raw) {
+// 백엔드 응답을 화면 컴포넌트(DetailHero/RiskCard/EventsList)가 기대하는 형태로 변환.
+// navState: 목록 화면(홈/정리/리포트)에서 이미 받아둔 아이콘 — getDetail API 자체가
+// 아직 iconUrl을 못 줄 때의 폴백이며, API 값이 있으면 그쪽을 우선한다.
+function toViewDetail(raw, navState) {
   const latestEvent = raw.recentEvents[0];
 
   return {
     name: raw.displayName,
-    iconUrl: raw.iconUrl,
+    iconUrl: raw.iconUrl ?? navState?.iconUrl ?? null,
     iconBg: getServiceIconGradient(raw.serviceName),
-    iconText: raw.iconLabel || raw.displayName?.[0]?.toUpperCase() || "?",
+    iconText:
+      raw.iconLabel ||
+      navState?.iconLabel ||
+      raw.displayName?.[0]?.toUpperCase() ||
+      "?",
     isRisk: raw.status === "action_required",
     riskBadgeLabel: raw.riskBadgeText,
     riskTitle: raw.headline,
@@ -62,6 +68,7 @@ function toViewDetail(raw) {
 function AccountDetail() {
   const { accountId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { detail: raw, status } = useServiceAccountDetail(accountId);
 
   if (status === "loading") return <LoadingScreen />;
@@ -75,7 +82,7 @@ function AccountDetail() {
     return <ErrorScreen text="계정 정보를 불러오지 못했어요." />;
   }
 
-  const detail = toViewDetail(raw);
+  const detail = toViewDetail(raw, location.state);
 
   return (
     <PageBackground variant="frost">
