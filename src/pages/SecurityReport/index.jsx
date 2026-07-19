@@ -1,7 +1,6 @@
 // src/pages/SecurityReport/index.jsx
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
-import ScoreRing from "./components/ScoreRing";
 import SummaryBadges from "./components/SummaryBadges";
 import RecommendationList from "./components/RecommendationList";
 import RiskItemList from "./components/RiskItemList";
@@ -151,7 +150,13 @@ function SecurityReport() {
             )}
           </div>
 
-          <ScoreRing score={report.securityScore} />
+          <div className="w-40 h-40 bg-white/10 rounded-full">
+            <div className="w-22.5 h-22.5 bg-white/8 rounded-full">
+              <div className="text-[40px] text-bold text-white">
+                {report.securityScore}
+              </div>
+            </div>
+          </div>
 
           <p
             className="mt-3 text-sm font-bold"
