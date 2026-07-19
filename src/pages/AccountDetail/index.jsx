@@ -38,8 +38,9 @@ function toViewDetail(raw) {
 
   return {
     name: raw.displayName,
+    iconUrl: raw.iconUrl,
     iconBg: getServiceIconGradient(raw.serviceName),
-    iconText: raw.displayName?.[0]?.toUpperCase() ?? "?",
+    iconText: raw.iconLabel || raw.displayName?.[0]?.toUpperCase() || "?",
     isRisk: raw.status === "action_required",
     riskBadgeLabel: raw.riskBadgeText,
     riskTitle: raw.headline,

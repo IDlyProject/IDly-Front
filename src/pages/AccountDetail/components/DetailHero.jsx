@@ -1,13 +1,15 @@
 // src/pages/AccountDetail/components/DetailHero.jsx
+import ServiceIcon from "@/components/ui/ServiceIcon";
+
 function DetailHero({ detail }) {
   return (
     <div className="py-1.5 mt-3 mb-6 flex items-center gap-4">
-      <div
-        className="grid h-16.5 w-16.5 shrink-0 place-items-center rounded-[18px] text-[26px] font-bold text-white shadow-[0_8px_19px_rgba(16,24,46,0.18)]"
-        style={{ background: detail.iconBg }}
-      >
-        {detail.iconText}
-      </div>
+      <ServiceIcon
+        iconUrl={detail.iconUrl}
+        iconBg={detail.iconBg}
+        iconText={detail.iconText}
+        className="h-16.5 w-16.5 shrink-0 rounded-[18px] text-[26px] shadow-[0_8px_19px_rgba(16,24,46,0.18)]"
+      />
       <div className="flex flex-1 items-center justify-between">
         <h2 className="text-[22px] font-bold tracking-[-0.5px] text-gray100">
           {detail.name}
