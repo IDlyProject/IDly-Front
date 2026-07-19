@@ -1,11 +1,9 @@
 // src/api/users.js
-import { API_BASE_URL } from "@/constants/api";
+import { apiFetch } from "@/api/client";
 
 export async function updateProfile(payload) {
-  const res = await fetch(`${API_BASE_URL}/api/users/me`, {
+  const res = await apiFetch("/api/users/me", {
     method: "PATCH",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
 

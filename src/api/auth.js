@@ -1,15 +1,18 @@
 // src/api/auth.js
-import { API_BASE_URL } from "@/constants/api";
+import { apiFetch, refreshAccessToken } from "@/api/client";
 
 // httpOnly 쿠키는 JS에서 직접 읽을 수 없으므로,
 // /api/users/me 호출 성공 여부로 로그인 상태를 판단한다.
+// access 만료 시 client가 refresh 후 재시도한다.
 export async function fetchCurrentUser() {
-  const res = await fetch(`${API_BASE_URL}/api/users/me`, {
-    credentials: "include",
-  });
+  const res = await apiFetch("/api/users/me");
 
   if (!res.ok) return null;
   return res.json();
+}
+
+export async function refreshSession() {
+  return refreshAccessToken();
 }
 
 export function getPrimaryGmailAccount(user) {
