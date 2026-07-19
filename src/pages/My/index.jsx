@@ -109,7 +109,7 @@ function My() {
               휴면계정
             </span>
             <small className="mt-px block text-r14 text-[12px] text-gray50">
-              숨긴 계정 3개
+              숨긴 계정 {user?.dormantAccountCount ?? 0}개
             </small>
           </div>
           <img src={ChevronRightIcon} className="h-4 w-4" />

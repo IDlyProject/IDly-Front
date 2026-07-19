@@ -9,6 +9,15 @@ import BackIcon from "@/assets/ic_back.svg";
 import PencilIcon from "@/assets/ic_pencil.svg";
 import CancelIcon from "@/assets/ic_cancel.svg";
 
+function formatDate(isoString) {
+  if (!isoString) return "-";
+  return new Date(isoString).toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
 // TODO: 실제로는 /accounts/linked API에서 교체
 const MOCK_LINKED = [
   {
@@ -114,13 +123,13 @@ function AccountManagement() {
           <div className="flex items-center justify-between border-b-[1.33px] border-[#E5E7EB] px-5 py-4">
             <span className="text-r14 text-gray60">가입일</span>
             <span className="text-sb16 text-[14px] text-gray100">
-              2024년 3월 15일
+              {formatDate(user?.createdAt)}
             </span>
           </div>
           <div className="flex items-center justify-between border-b-[1.33px] border-[#E5E7EB] px-5 py-4">
             <span className="text-r14 text-gray60">마지막 로그인</span>
             <span className="text-sb16 text-[14px] text-gray100">
-              2026년 7월 16일
+              {formatDate(user?.lastLoginAt)}
             </span>
           </div>
           <div className="flex items-center justify-between border-b-[1.33px] border-[#E5E7EB] px-5 py-4">
