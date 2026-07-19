@@ -10,6 +10,7 @@ import RecommendCard from "./components/RecommendCard";
 import Apartment from "./components/Apartment";
 import { MOCK_EMAILS, MOCK_ACCOUNTS } from "./mockData";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { triggerAnalysisRun, waitForAnalysisCompletion } from "@/api/analysis";
 import { ROUTES } from "@/constants/routes";
 
 function Home() {
@@ -48,8 +49,13 @@ function Home() {
   };
 
   const handleRefresh = async () => {
-    // TODO: 실제 API 재조회 로직으로 교체
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const { analysisId } = await triggerAnalysisRun();
+      await waitForAnalysisCompletion(analysisId);
+      // TODO: GET /api/home 연동 후 여기서 accounts를 서버 최신 데이터로 갱신
+    } catch {
+      // TODO: 재분석 실패를 사용자에게 알릴 방법 필요 (토스트 등)
+    }
   };
 
   return (

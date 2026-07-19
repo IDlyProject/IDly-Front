@@ -1,55 +1,82 @@
 // src/pages/Analysis/index.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
+import ActionButton from "@/components/ui/ActionButton";
 import { ROUTES } from "@/constants/routes";
+import { triggerAnalysisRun, fetchRunStatus } from "@/api/analysis";
 import AnalysisMark from "@/assets/ic_analysis_mark.svg";
 
-const SCANNING_MESSAGES = [
-  "보안 상태를 분석하고 있어요",
-  "계정 알림을 정리하고 있어요",
-  "홈 화면을 준비하고 있어요",
-];
-const STATUS_PROGRESS = {
-  queued: 15,
-  scanning: 60,
-  completed: 100,
-  failed: 60,
-};
+const POLL_INTERVAL_MS = 1200;
 
 function Analysis() {
   const navigate = useNavigate();
-  const [status, setStatus] = useState("queued");
-  const [messageIndex, setMessageIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [message, setMessage] = useState("분석을 준비하고 있어요.");
+  const [failed, setFailed] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [retryKey, setRetryKey] = useState(0);
+  const pollTimerRef = useRef(null);
 
-  // TODO: 실제 API 연동 시 이 useEffect를 triggerAnalysisRun + fetchRunStatus 폴링 로직으로 교체
   useEffect(() => {
-    const timers = [];
+    let cancelled = false;
 
-    timers.push(setTimeout(() => setStatus("scanning"), 800));
-    timers.push(
-      setTimeout(() => {
-        setStatus("completed");
+    const poll = async (analysisId) => {
+      let statusRes;
+      try {
+        statusRes = await fetchRunStatus(analysisId);
+      } catch {
+        if (!cancelled) {
+          setFailed(true);
+          setErrorMessage("분석 진행 상태를 불러오지 못했어요.");
+        }
+        return;
+      }
+      if (cancelled) return;
+
+      setProgress(statusRes.progress);
+      setMessage(statusRes.displayMessage);
+
+      if (statusRes.status === "completed") {
         navigate(ROUTES.HOME, { replace: true });
-      }, 3200),
-    );
+        return;
+      }
+      if (statusRes.status === "failed") {
+        setFailed(true);
+        setErrorMessage(statusRes.errorMessage || "분석에 실패했어요.");
+        return;
+      }
+      pollTimerRef.current = setTimeout(
+        () => poll(analysisId),
+        POLL_INTERVAL_MS,
+      );
+    };
 
-    return () => timers.forEach(clearTimeout);
-  }, [navigate]);
+    triggerAnalysisRun()
+      .then((startRes) => {
+        if (cancelled) return;
+        setMessage(startRes.message);
+        poll(startRes.analysisId);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setFailed(true);
+        setErrorMessage("분석을 시작하지 못했어요.");
+      });
 
-  useEffect(() => {
-    if (status !== "scanning") return;
-    const rotate = setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % SCANNING_MESSAGES.length);
-    }, 1000);
-    return () => clearInterval(rotate);
-  }, [status]);
+    return () => {
+      cancelled = true;
+      clearTimeout(pollTimerRef.current);
+    };
+  }, [navigate, retryKey]);
 
-  const progress = STATUS_PROGRESS[status] ?? 15;
-  const statusLabel =
-    status === "queued"
-      ? "보안 상태를 분석하고 있어요"
-      : SCANNING_MESSAGES[messageIndex];
+  const handleRetry = () => {
+    setFailed(false);
+    setErrorMessage("");
+    setProgress(0);
+    setMessage("분석을 준비하고 있어요.");
+    setRetryKey((key) => key + 1);
+  };
 
   return (
     <PageBackground variant="frost">
@@ -62,7 +89,7 @@ function Analysis() {
         />
 
         <h1 className="mt-8 text-b24 text-[22px] text-gray100">
-          {statusLabel}
+          {failed ? "분석에 실패했어요" : message}
         </h1>
 
         <div className="mt-6.5 h-1.5 w-full overflow-hidden rounded-[3px] bg-[#E8EEFF]">
@@ -72,9 +99,23 @@ function Analysis() {
           />
         </div>
 
-        <p className="mt-3 text-r14 text-[11px] text-gray50">
-          완료되면 자동으로 결과 화면으로 이동합니다
-        </p>
+        {failed ? (
+          <>
+            <p className="mt-3 text-r14 text-[11px] text-danger50">
+              {errorMessage}
+            </p>
+            <ActionButton
+              onClick={handleRetry}
+              className="mt-5 max-w-50"
+            >
+              다시 시도
+            </ActionButton>
+          </>
+        ) : (
+          <p className="mt-3 text-r14 text-[11px] text-gray50">
+            완료되면 자동으로 결과 화면으로 이동합니다
+          </p>
+        )}
       </div>
     </PageBackground>
   );
