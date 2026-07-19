@@ -5,18 +5,11 @@ import ServiceIcon from "@/components/ui/ServiceIcon";
 import ChevronBottomIcon from "@/assets/ic_chevron_bottom_18.svg";
 import ChevronTopIcon from "@/assets/ic_chevron_top_18.svg";
 
+// summary API의 action.status는 pending | done만 존재
 const BADGE_STYLE = {
   pending: {
     label: "진행중",
     className: "text-[#FFB200]",
-  },
-  waiting: {
-    label: "대기중",
-    className: "text-[#B0B1B4]",
-  },
-  skipped: {
-    label: "건너뜀",
-    className: "text-[#B0B1B4]",
   },
 };
 

@@ -1,14 +1,8 @@
 import FinishedIcon from "@/assets/ic_finished.svg";
-import WaitiingIcon from "@/assets/ic_waiting.svg";
 import LoadingIcon from "@/assets/ic_loading.svg";
 
-function MonthlySummary({
-  label,
-  completedCount,
-  inProgressCount,
-  skippedCount,
-  isSafe,
-}) {
+// summary API의 progress가 { done, pending } 2종류만 반환 (skipped 상태는 없어짐)
+function MonthlySummary({ label, completedCount, inProgressCount, isSafe }) {
   return (
     <div
       className="rounded-[20px] p-5 text-white"
@@ -19,7 +13,7 @@ function MonthlySummary({
       }}
     >
       <b className="mb-3 block text-sb16 text-[14px]">{label}</b>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col items-center gap-1 rounded-[14px] bg-white/8 py-3.5">
           <img src={FinishedIcon} className="w-5 h-5" />
           <b className="text-[22px] font-bold">{completedCount}</b>
@@ -29,11 +23,6 @@ function MonthlySummary({
           <img src={LoadingIcon} className="w-5 h-5" />
           <b className="text-[22px] font-bold">{inProgressCount}</b>
           <span className="text-m14 text-[11px] text-white/66">진행중</span>
-        </div>
-        <div className="flex flex-col items-center gap-1 rounded-[14px] bg-white/8 py-3.5">
-          <img src={WaitiingIcon} className="w-5 h-5" />
-          <b className="text-[22px] font-bold">{skippedCount}</b>
-          <span className="text-m14 text-[11px] text-white/66">건너뜀</span>
         </div>
       </div>
     </div>

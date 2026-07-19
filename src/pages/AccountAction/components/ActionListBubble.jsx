@@ -1,7 +1,5 @@
-// src/pages/AccountAction/components/ActionListBubble.jsx
 import OwlAvatar from "./OwlAvatar";
 
-// 서버 세션의 recommendedActions[]를 그대로 렌더링 (status: pending|done|skipped)
 function ActionListBubble({ title, titleColor, actions, onSelect }) {
   return (
     <div className="flex items-start gap-2.5">
@@ -18,7 +16,9 @@ function ActionListBubble({ title, titleColor, actions, onSelect }) {
             const isDone = action.status === "done";
             const isSkipped = action.status === "skipped";
             const clickable =
-              onSelect && action.status === "pending" && action.selectable !== false;
+              onSelect &&
+              action.status === "pending" &&
+              action.selectable !== false;
             return (
               <div
                 key={action.id}

@@ -61,7 +61,7 @@ function Organize() {
       tasks: s.actions.map((a) => ({
         id: a.id,
         title: a.title,
-        status: a.status, // pending | done | skipped
+        status: a.status, // pending | done
         timeAgo: formatTimeAgo(a.updatedAt),
       })),
     }));
@@ -121,7 +121,6 @@ function Organize() {
           label={formatMonthLabel(summary.month)}
           completedCount={summary.progress.done}
           inProgressCount={summary.progress.pending}
-          skippedCount={summary.progress.skipped}
           isSafe={isSafe}
         />
 

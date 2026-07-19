@@ -20,7 +20,7 @@ function NotificationConfirmModal({ onAgree, onDismiss }) {
             그래도 괜찮으신가요?
           </p>
         </div>
-        <div className="mb-6 flex items-center gap-2 rounded-xl bg-[#F0F6FF] px-[13px] py-3 text-left">
+        <div className="mb-6 flex items-start gap-2 rounded-xl bg-[#F0F6FF] px-[13px] py-3 text-left">
           <img src={InfoIcon} className="mt-0.75 h-3.5 w-3.5" />
           <p className="text-r14 text-[12px] text-gray60">
             설정에서 수신 여부와 범위는 언제든지 변경하실 수 있어요.
