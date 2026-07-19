@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import WithdrawConfirmModal from "@/pages/Withdraw/components/WithdrawConfirmModal";
 import { deleteAccount } from "@/api/users";
+import { logout } from "@/api/auth";
 import { ROUTES } from "@/constants/routes";
 import ChevronLeftIcon from "@/assets/ic_chevron_left.svg";
 import UncheckIcon from "@/assets/ic_withdraw_uncheck.svg";
@@ -47,6 +48,13 @@ function WithdrawReason() {
         reason: selectedReason,
         reasonDetail: selectedReason === "other" ? otherText.trim() : undefined,
       });
+      try {
+        // 탈퇴된 유저의 idly_token 쿠키가 남아있으면 다음 로그인 시도가
+        // "기존 유저에 서브계정 추가"로 잘못 처리될 수 있어 명시적으로 정리
+        await logout();
+      } catch (logoutErr) {
+        console.error("post-withdraw logout failed:", logoutErr);
+      }
       navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
     } catch (err) {
       console.error("delete account failed:", err);
