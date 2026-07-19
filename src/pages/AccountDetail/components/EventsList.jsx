@@ -17,25 +17,18 @@ const DEFAULT_EVENT_ICON = SuspiciousLoginIcon;
 function EventsList({ events }) {
   return (
     <>
-      <h3 className="mb-3.5 text-base font-bold text-[#212125]">최근 이벤트</h3>
-      <div className="overflow-hidden rounded-[18px] bg-white shadow-[0_2px_3.5px_rgba(16,24,46,0.08)]">
+      <h3 className="mb-8 text-sb16 font-bold text-gray100">최근 이벤트</h3>
+      <div className="overflow-hidden rounded-[18px] bg-white shadow-[0_2px_7px_rgba(16,24,46,0.08)]">
         {events.map((event, idx) => (
-          <div
-            key={event.id}
-            className={`flex items-center gap-3 px-4 py-3.25 ${
-              idx < events.length - 1 ? "border-b border-gray-50" : ""
-            }`}
-          >
+          <div key={event.id} className="flex items-center gap-3 px-4 py-3">
             <img
               src={EVENT_ICON[event.type] ?? DEFAULT_EVENT_ICON}
               alt=""
-              className="h-4 w-4 flex-shrink-0"
+              className="h-4 w-4 shrink-0"
             />
             <div className="flex-1">
-              <p className="text-[12px] font-semibold tracking-[-0.012px] text-[#212125]">
-                {event.name}
-              </p>
-              <small className="mt-0.5 block text-[10px] tracking-[-0.01px] text-[#8c8f96]">
+              <p className="text-sb16 text-[12px] text-gray100">{event.name}</p>
+              <small className="mt-0.5 block text-[10px] text-gray50">
                 {event.time}
               </small>
             </div>

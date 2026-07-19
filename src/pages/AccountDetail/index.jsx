@@ -13,7 +13,8 @@ function formatEventTime(isoString) {
   if (!isoString) return "";
   const date = new Date(isoString);
   const now = new Date();
-  const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const startOfDay = (d) =>
+    new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const diffDays = Math.round(
     (startOfDay(now) - startOfDay(date)) / (24 * 60 * 60 * 1000),
   );
@@ -91,17 +92,15 @@ function AccountDetail() {
 
   return (
     <PageBackground variant="frost">
-      <div className="min-h-dvh px-5 pb-8 pt-[max(12px,env(safe-area-inset-top))]">
-        <div className="mb-4 flex items-center gap-3 py-1.5">
+      <div className="min-h-dvh px-5">
+        <div className="my-1.5 flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
-            className="grid h-9 w-9 place-items-center rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.1)]"
+            className="grid h-9 w-9 place-items-center rounded-full bg-white"
           >
             <img src={ChevronLeftIcon} alt="" className="h-5 w-5" />
           </button>
-          <h1 className="text-[18px] font-bold tracking-[-0.18px] text-[#212125]">
-            계정 상세
-          </h1>
+          <h1 className="text-b24 text-[18px] text-gray100">계정 상세</h1>
         </div>
 
         <DetailHero detail={detail} />

@@ -115,7 +115,7 @@ function SecurityReport() {
   return (
     <PageBackground variant="frost">
       <div className="min-h-dvh px-4">
-        <div className="mt-1.5 flex items-center gap-3">
+        <div className="my-1.5 flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
             className="w-9 h-9 bg-white rounded-full grid place-items-center"
