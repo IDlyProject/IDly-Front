@@ -2,29 +2,47 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
+import { fetchCurrentUser } from "@/api/auth";
 
 function AuthCallback() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // JWT는 httpOnly 쿠키로 내려오므로 여기서는 mode만 읽는다.
+    const error = searchParams.get("error");
+    if (error) {
+      // oauth_failed | refresh_token_missing | invalid_oauth_state | gmail_already_linked 등
+      navigate(`${ROUTES.ONBOARDING_LOGIN}?error=${encodeURIComponent(error)}`, {
+        replace: true,
+      });
+      return;
+    }
+
+    // JWT는 httpOnly 쿠키로 내려오므로 me 호출로 세션 확인
     const mode = searchParams.get("mode");
 
-    if (mode === "add") {
-      // 연결 계정 추가 완료 → 계정 추가 화면으로
-      navigate(ROUTES.ONBOARDING_ADD_ACCOUNT, { replace: true });
-      return;
-    }
+    fetchCurrentUser().then((user) => {
+      if (!user) {
+        navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
+        return;
+      }
 
-    if (mode === "login") {
-      // 신규 로그인 완료 → 온보딩 다음 단계(약관 동의)로
-      navigate(ROUTES.ONBOARDING_ACCOUNT_CONFIRM, { replace: true });
-      return;
-    }
+      if (mode === "add") {
+        navigate(ROUTES.ONBOARDING_ADD_ACCOUNT, { replace: true });
+        return;
+      }
 
-    // mode가 없거나 알 수 없는 값이면 인증 실패로 간주
-    navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
+      if (mode === "login") {
+        if (user.requiredTermsAgreed) {
+          navigate(ROUTES.HOME, { replace: true });
+        } else {
+          navigate(ROUTES.ONBOARDING_CONSENT, { replace: true });
+        }
+        return;
+      }
+
+      navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
+    });
   }, [searchParams, navigate]);
 
   return (

@@ -5,6 +5,7 @@ import { ROUTES } from "@/constants/routes";
 import { fetchCurrentUser } from "@/api/auth";
 import typoLogo from "@/assets/ic_typo_logo_white.svg";
 import PageBackground from "@/components/layouts/PageBackground";
+
 const MIN_DISPLAY_TIME = 1200;
 
 function Splash() {
@@ -21,9 +22,19 @@ function Splash() {
       }, remaining);
     };
 
+    // access 만료 시 refresh 후 복구 — 로그인된 유저는 홈으로
     fetchCurrentUser()
       .then((user) => {
-        goTo(user ? ROUTES.ONBOARDING_LOGIN : ROUTES.ONBOARDING_LOGIN);
+        if (!user) {
+          goTo(ROUTES.ONBOARDING_LOGIN);
+          return;
+        }
+        // 약관 미동의면 온보딩 계속, 동의 완료면 홈
+        if (user.requiredTermsAgreed === false || user.requiredTermsAgreed == null) {
+          goTo(ROUTES.ONBOARDING_CONSENT);
+          return;
+        }
+        goTo(ROUTES.HOME);
       })
       .catch((error) => {
         console.error("Failed to fetch current user:", error);
