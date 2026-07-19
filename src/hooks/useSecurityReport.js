@@ -1,10 +1,9 @@
-// src/hooks/useSecurityReport.js
 import { useEffect, useState } from "react";
 import { getSecurityReport } from "@/api/securityReport";
 
 export function useSecurityReport() {
   const [report, setReport] = useState(null);
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [status, setStatus] = useState("loading");
 
   useEffect(() => {
     let cancelled = false;

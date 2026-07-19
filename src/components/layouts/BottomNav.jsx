@@ -1,4 +1,3 @@
-// src/components/layouts/BottomNav.jsx
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import homeIcon from "@/assets/ic_home.svg";

@@ -1,4 +1,3 @@
-// src/pages/AccountAction/components/ChatInputBar.jsx
 import { SendIcon } from "../icons";
 
 function ChatInputBar({

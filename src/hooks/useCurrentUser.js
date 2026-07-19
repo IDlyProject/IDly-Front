@@ -1,10 +1,9 @@
-// src/hooks/useCurrentUser.js
 import { useEffect, useState } from "react";
 import { fetchCurrentUser } from "@/api/auth";
 
 export function useCurrentUser() {
   const [user, setUser] = useState(null);
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [status, setStatus] = useState("loading");
 
   useEffect(() => {
     let cancelled = false;

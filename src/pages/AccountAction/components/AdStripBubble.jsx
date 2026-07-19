@@ -1,7 +1,5 @@
-// src/pages/AccountAction/components/AdStripBubble.jsx
 import OwlAvatar from "./OwlAvatar";
 
-// news: { emoji, title, url, badge?, ctaLabel? } — resolveCardNews()가 만들어줌
 function AdStripBubble({ news }) {
   const handleClick = () =>
     news.url && window.open(news.url, "_blank", "noopener,noreferrer");

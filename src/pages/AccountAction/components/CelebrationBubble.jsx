@@ -1,4 +1,3 @@
-// src/pages/AccountAction/components/CelebrationBubble.jsx
 import OwlAvatar from "./OwlAvatar";
 
 function CelebrationBubble({ message }) {

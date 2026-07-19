@@ -1,9 +1,7 @@
-// src/components/layouts/PageBackground.jsx
 import { useLayoutEffect } from "react";
 
 const BG_VALUES = {
   splash: "#08257E",
-  sky: "linear-gradient(180deg, #bcdcff 0%, #dcebff 48%, #fdf2e4 100%)",
   default: "#ffffff",
   frost: "linear-gradient(180deg, #F8FBFE 0%, #D5DEED 100%)",
   detail: "linear-gradient(180deg, #D5DEED 0%, #F8FBFE 100%)",
@@ -11,7 +9,6 @@ const BG_VALUES = {
 
 const THEME_COLOR = {
   splash: "#08257E",
-  sky: "#fdf2e4", // 그라데이션 하단 색과 맞춤 (하단 툴바 쪽에 더 가까운 색)
   default: "#ffffff",
   frost: "#D5DEED",
   detail: "#F8FBFE",
@@ -19,7 +16,6 @@ const THEME_COLOR = {
 
 const BG_CLASSES = {
   splash: "bg-[#08257E]",
-  sky: "bg-gradient-to-b from-[#bcdcff] via-[#dcebff] to-[#fdf2e4]",
   default: "bg-white",
   frost: "bg-gradient-to-b from-[#F8FBFE] to-[#D5DEED]",
   detail: "bg-gradient-to-b from-[#D5DEED] to-[#F8FBFE]",

@@ -1,10 +1,9 @@
-// src/hooks/useHomeData.js
 import { useCallback, useEffect, useState } from "react";
 import { getHome } from "@/api/home";
 
 export function useHomeData(mailAccountId) {
   const [data, setData] = useState(null);
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [status, setStatus] = useState("loading");
 
   const reload = useCallback(async () => {
     setStatus("loading");

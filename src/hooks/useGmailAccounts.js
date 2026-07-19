@@ -1,10 +1,9 @@
-// src/hooks/useGmailAccounts.js
 import { useEffect, useState } from "react";
 import { getAccounts } from "@/api/users";
 
 export function useGmailAccounts() {
   const [accounts, setAccounts] = useState([]);
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [status, setStatus] = useState("loading");
 
   useEffect(() => {
     let cancelled = false;

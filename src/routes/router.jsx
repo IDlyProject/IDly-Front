@@ -31,12 +31,54 @@ export const router = createBrowserRouter([
   { path: ROUTES.SPLASH, element: <Splash /> },
   { path: ROUTES.AUTH_CALLBACK, element: <AuthCallback /> },
   { path: ROUTES.ONBOARDING_LOGIN, element: <Login /> },
-  { path: ROUTES.ONBOARDING_CONSENT, element: <Consent /> },
-  { path: ROUTES.ONBOARDING_ACCOUNT_CONFIRM, element: <AccountConfirm /> },
-  { path: ROUTES.ONBOARDING_ACCOUNT_COMPLETE, element: <AccountComplete /> },
-  { path: ROUTES.ONBOARDING_ADD_ACCOUNT, element: <AddAccount /> },
-  { path: ROUTES.ONBOARDING_COMPLETE, element: <RegistrationComplete /> },
-  { path: ROUTES.NOTIFICATION, element: <NotificationCenter /> },
+  {
+    path: ROUTES.ONBOARDING_CONSENT,
+    element: (
+      <ProtectedRoute>
+        <Consent />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.ONBOARDING_ACCOUNT_CONFIRM,
+    element: (
+      <ProtectedRoute>
+        <AccountConfirm />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.ONBOARDING_ACCOUNT_COMPLETE,
+    element: (
+      <ProtectedRoute>
+        <AccountComplete />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.ONBOARDING_ADD_ACCOUNT,
+    element: (
+      <ProtectedRoute>
+        <AddAccount />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.ONBOARDING_COMPLETE,
+    element: (
+      <ProtectedRoute>
+        <RegistrationComplete />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: ROUTES.NOTIFICATION,
+    element: (
+      <ProtectedRoute>
+        <NotificationCenter />
+      </ProtectedRoute>
+    ),
+  },
   {
     path: ROUTES.ACCOUNT_MANAGEMENT,
     element: (

@@ -1,10 +1,9 @@
-// src/hooks/useSummary.js
 import { useEffect, useState } from "react";
 import { getSummary } from "@/api/summary";
 
 export function useSummary() {
   const [summary, setSummary] = useState(null);
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [status, setStatus] = useState("loading");
 
   useEffect(() => {
     let cancelled = false;

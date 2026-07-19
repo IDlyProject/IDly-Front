@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import ProgressDots from "../components/ProgressDot";
 import { ROUTES } from "@/constants/routes";
-import CheckIcon from "@/assets/ic_check.svg";
+import CheckIcon from "@/assets/ic_check_40.svg";
 import ActionButton from "@/components/ui/ActionButton";
 import PageBackground from "@/components/layouts/PageBackground";
 
