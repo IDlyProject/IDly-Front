@@ -73,15 +73,17 @@ function RiskItemList({ items, onSelect }) {
       <h3 className="mb-2.5 text-[13px] font-bold text-[#191f28]">
         주요 위험 항목
       </h3>
-      <div className="space-y-2">
-        {items.map((item) => {
+      <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+        {items.map((item, idx) => {
           const tone = TONE_BY_TYPE[item.type] || "green";
           const { bg } = TONE_STYLE[tone];
           return (
             <button
               key={item.id}
               onClick={() => onSelect(item.id)}
-              className="flex w-full items-center gap-3 rounded-2xl bg-white p-3 text-left shadow-sm"
+              className={`flex w-full items-center gap-3 px-3.5 py-3 text-left ${
+                idx < items.length - 1 ? "border-b border-gray-50" : ""
+              }`}
             >
               <div
                 className={`grid h-9 w-9 flex-shrink-0 place-items-center rounded-xl ${bg}`}
