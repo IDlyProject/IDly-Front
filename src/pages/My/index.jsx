@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { logout } from "@/api/auth";
+import { logout, getPrimaryGmailAccount } from "@/api/auth";
 import SettingIcon from "@/assets/ic_setting.svg";
 import AccountManageIcon from "@/assets/ic_account_manage.svg";
 import HeadphoneIcon from "@/assets/ic_headphone.svg";
@@ -30,6 +30,7 @@ function MenuRow({ icon, label, onClick }) {
 function My() {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
+  const primaryEmail = getPrimaryGmailAccount(user)?.email;
   const isSafe = false;
   const [loggingOut, setLoggingOut] = useState(false);
 
@@ -69,7 +70,7 @@ function My() {
               {user?.name ?? "회원"}
             </b>
             <span className="mt-1 block text-r14 text-[13px] text-white/66">
-              {user?.email ?? "이메일 하드 코딩"}
+              {primaryEmail ?? "이메일 없음"}
             </span>
           </div>
         </div>

@@ -17,7 +17,7 @@ function AccountConfirm() {
   const navigate = useNavigate();
   const { user, status: userStatus } = useCurrentUser();
   const primaryAccount = getPrimaryGmailAccount(user);
-  const primaryEmail = primaryAccount?.email ?? "이메일하드코딩";
+  const primaryEmail = primaryAccount?.email ?? "이메일 없음";
 
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");

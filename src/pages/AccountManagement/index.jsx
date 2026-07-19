@@ -32,6 +32,8 @@ function AccountManagement() {
   const additionalAccountCount = linkedAccounts.filter(
     (a) => !a.isPrimary,
   ).length;
+  const primaryEmail =
+    accounts.find((a) => a.isPrimary)?.email ?? accounts[0]?.email;
 
   const handleUnlinkConfirm = () => {
     // TODO: 실제 연동 해지 API 호출 필요 (DELETE /api/users/me/accounts/{accountId})
@@ -61,7 +63,7 @@ function AccountManagement() {
               {user?.name ?? "회원"}
             </b>
             <span className="mt-1 block text-r14 text-[13px] text-gray60">
-              {user?.email ?? "이메일 하드코딩"}
+              {primaryEmail ?? "이메일 없음"}
             </span>
           </div>
           <button>
