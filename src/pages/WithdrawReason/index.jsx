@@ -3,14 +3,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import WithdrawConfirmModal from "@/pages/Withdraw/components/WithdrawConfirmModal";
+import { deleteAccount } from "@/api/users";
 import { ROUTES } from "@/constants/routes";
 import ChevronLeftIcon from "@/assets/ic_chevron_left.svg";
 import UncheckIcon from "@/assets/ic_withdraw_uncheck.svg";
 import CheckIcon from "@/assets/ic_withdraw_check.svg";
 
+// id는 백엔드 DeleteReason enum 값과 동일하게 맞춤
 const REASONS = [
-  { id: "rare_use", label: "자주 이용하지 않아요" },
-  { id: "frequent_error", label: "오류가 자주 발생해요" },
+  { id: "not_frequent", label: "자주 이용하지 않아요" },
+  { id: "frequent_errors", label: "오류가 자주 발생해요" },
   { id: "inconvenient", label: "기능이 편리하지 않아요" },
   { id: "other", label: "기타" },
 ];
@@ -26,18 +28,33 @@ function WithdrawReason() {
   const [selectedReason, setSelectedReason] = useState(null);
   const [otherText, setOtherText] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [withdrawing, setWithdrawing] = useState(false);
+  const [error, setError] = useState("");
 
   const canSubmit =
     selectedReason && (selectedReason !== "other" || otherText.trim());
 
   const handleWithdrawClick = () => {
     if (!canSubmit) return;
+    setError("");
     setShowConfirmModal(true);
   };
 
-  const handleConfirmWithdraw = () => {
-    // TODO: 실제 회원 탈퇴 API 호출 필요 (reason, otherText 전달)
-    navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
+  const handleConfirmWithdraw = async () => {
+    setWithdrawing(true);
+    try {
+      await deleteAccount({
+        reason: selectedReason,
+        reasonDetail: selectedReason === "other" ? otherText.trim() : undefined,
+      });
+      navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
+    } catch (err) {
+      console.error("delete account failed:", err);
+      setError("탈퇴 처리에 실패했어요. 다시 시도해주세요.");
+      setShowConfirmModal(false);
+    } finally {
+      setWithdrawing(false);
+    }
   };
 
   return (
@@ -77,6 +94,12 @@ function WithdrawReason() {
               className="w-full rounded-[14px] border-[1.33px] border-[#E5E7EB] bg-white p-4 text-r14 outline-none placeholder:text-gray50 focus:border-main100 text-gray100"
             />
           )}
+
+          {error && (
+            <p className="text-center text-xs font-bold text-danger50">
+              {error}
+            </p>
+          )}
         </div>
 
         <button
@@ -94,6 +117,7 @@ function WithdrawReason() {
         <WithdrawConfirmModal
           onConfirm={handleConfirmWithdraw}
           onCancel={() => setShowConfirmModal(false)}
+          confirming={withdrawing}
         />
       )}
     </PageBackground>

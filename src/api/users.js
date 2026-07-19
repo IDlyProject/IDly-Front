@@ -41,3 +41,17 @@ export async function disconnectAccount(accountId) {
   }
   return res.json(); // { disconnectedAccountId, connectedAccountCount }
 }
+
+// reason: "not_frequent"|"frequent_errors"|"inconvenient"|"other"
+// reasonDetail: reason이 "other"일 때만 필수, 최대 500자
+export async function deleteAccount({ reason, reasonDetail }) {
+  const res = await apiFetch("/api/users/me", {
+    method: "DELETE",
+    body: JSON.stringify(
+      reasonDetail ? { reason, reasonDetail } : { reason },
+    ),
+  });
+
+  if (!res.ok) throw new Error(`delete account failed: ${res.status}`);
+  return res.json(); // { deleted: true }
+}
