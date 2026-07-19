@@ -11,7 +11,6 @@ import ProgressDots from "../components/ProgressDot";
 import PersonIcon from "@/assets/ic_person.svg";
 import NicknameIcon from "@/assets/ic_nickname.svg";
 import CallIcon from "@/assets/ic_call.svg";
-import CalendarIcon from "@/assets/ic_calendar.svg";
 const AGE_GROUPS = ["10대", "20대", "30대", "40대", "50대 이상"];
 
 function AccountConfirm() {
@@ -35,7 +34,6 @@ function AccountConfirm() {
 
     try {
       const payload = { name: name.trim() };
-      if (nickname.trim()) payload.nickname = nickname.trim();
       if (phone.trim()) payload.phone = phone.trim();
       if (ageGroup) payload.ageGroup = ageGroup;
 

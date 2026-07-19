@@ -8,5 +8,5 @@ export async function updateProfile(payload) {
   });
 
   if (!res.ok) throw new Error(`profile update failed: ${res.status}`);
-  return res.json(); // UserDto
+  return res.json(); // UserProfileDto
 }
