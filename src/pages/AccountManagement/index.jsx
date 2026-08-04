@@ -6,6 +6,7 @@ import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useGmailAccounts } from "@/hooks/useGmailAccounts";
 import { disconnectAccount } from "@/services/usersService";
+import { getErrorMessage } from "@/lib/api";
 import BackIcon from "@/assets/ic_back.svg";
 import PencilIcon from "@/assets/ic_pencil.svg";
 import CancelIcon from "@/assets/ic_cancel.svg";
@@ -47,7 +48,7 @@ function AccountManagement() {
       setUnlinkError(
         err.status === 400
           ? "대표 계정은 연동 해지할 수 없어요."
-          : "연동 해지에 실패했어요. 다시 시도해주세요.",
+          : getErrorMessage(err, "연동 해지에 실패했어요. 다시 시도해주세요."),
       );
     } finally {
       setUnlinking(false);

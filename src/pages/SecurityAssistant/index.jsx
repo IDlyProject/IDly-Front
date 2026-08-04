@@ -19,6 +19,7 @@ import {
   getSecurityChat,
   sendSecurityChatMessage,
 } from "@/services/securityChatService";
+import { getErrorMessage } from "@/lib/api";
 
 function normalizeMessages(raw) {
   return Array.isArray(raw) ? raw : (raw?.messages ?? []);
@@ -124,7 +125,7 @@ function SecurityAssistant() {
       } else if (err.status === 429) {
         setError("메시지를 너무 빠르게 보내고 있어요. 잠시 후 다시 시도해주세요.");
       } else {
-        setError("메시지 전송에 실패했어요. 다시 시도해주세요.");
+        setError(getErrorMessage(err, "메시지 전송에 실패했어요. 다시 시도해주세요."));
       }
     } finally {
       setSending(false);

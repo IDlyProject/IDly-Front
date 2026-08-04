@@ -4,6 +4,7 @@ import {
   createActionSession,
   sendActionSessionMessage,
 } from "@/services/actionSessionService";
+import { getErrorMessage } from "@/lib/api";
 
 function mergeActionsById(current, actions) {
   if (!actions?.length) return current;
@@ -94,7 +95,7 @@ function useActionSession(serviceAccountId) {
         applyUpdate(update);
       } catch (err) {
         console.error("action-session send failed:", err);
-        setSendError("메시지 전송에 실패했어요. 다시 시도해주세요.");
+        setSendError(getErrorMessage(err, "메시지 전송에 실패했어요. 다시 시도해주세요."));
       } finally {
         setSending(false);
       }

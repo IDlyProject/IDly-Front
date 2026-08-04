@@ -6,6 +6,7 @@ import { updateProfile } from "@/services/usersService";
 import { getPrimaryGmailAccount } from "@/services/authService";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useUserStore } from "@/store/userStore";
+import { getErrorMessage } from "@/lib/api";
 import PageBackground from "@/components/layouts/PageBackground";
 import ProgressDots from "../components/ProgressDot";
 import PersonIcon from "@/assets/ic_person.svg";
@@ -24,13 +25,13 @@ function AccountConfirm() {
   const [phone, setPhone] = useState("");
   const [ageGroup, setAgeGroup] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   const handleConfirm = async () => {
     if (!name.trim() || isSubmitting) return;
 
     setIsSubmitting(true);
-    setError(false);
+    setError("");
 
     try {
       const payload = { name: name.trim() };
@@ -40,9 +41,9 @@ function AccountConfirm() {
       await updateProfile(payload);
       await useUserStore.getState().fetchUser(true);
       navigate(ROUTES.ONBOARDING_CONSENT);
-    } catch {
+    } catch (err) {
       setIsSubmitting(false);
-      setError(true);
+      setError(getErrorMessage(err, "저장에 실패했어요. 다시 시도해주세요."));
     }
   };
 
@@ -150,9 +151,7 @@ function AccountConfirm() {
             </label>
 
             {error && (
-              <p className="text-xs font-bold text-danger50">
-                저장에 실패했어요. 다시 시도해주세요.
-              </p>
+              <p className="text-xs font-bold text-danger50">{error}</p>
             )}
           </div>
         </div>

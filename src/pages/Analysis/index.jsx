@@ -4,6 +4,7 @@ import PageBackground from "@/components/layouts/PageBackground";
 import ActionButton from "@/components/ui/ActionButton";
 import { ROUTES } from "@/constants/routes";
 import { triggerAnalysisRun, fetchRunStatus } from "@/services/analysisService";
+import { getErrorMessage } from "@/lib/api";
 import AnalysisMark from "@/assets/ic_analysis_mark.svg";
 
 const POLL_INTERVAL_MS = 1200;
@@ -24,10 +25,10 @@ function Analysis() {
       let statusRes;
       try {
         statusRes = await fetchRunStatus(analysisId);
-      } catch {
+      } catch (err) {
         if (!cancelled) {
           setFailed(true);
-          setErrorMessage("분석 진행 상태를 불러오지 못했어요.");
+          setErrorMessage(getErrorMessage(err, "분석 진행 상태를 불러오지 못했어요."));
         }
         return;
       }
@@ -57,10 +58,10 @@ function Analysis() {
         setMessage(startRes.message);
         poll(startRes.analysisId);
       })
-      .catch(() => {
+      .catch((err) => {
         if (cancelled) return;
         setFailed(true);
-        setErrorMessage("분석을 시작하지 못했어요.");
+        setErrorMessage(getErrorMessage(err, "분석을 시작하지 못했어요."));
       });
 
     return () => {

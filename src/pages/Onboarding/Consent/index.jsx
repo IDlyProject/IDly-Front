@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import { saveConsent } from "@/services/usersService";
+import { getErrorMessage } from "@/lib/api";
 import ProgressDots from "../components/ProgressDot";
 import PageBackground from "@/components/layouts/PageBackground";
 import AllCheckedBoxIcon from "@/assets/ic_all_checked_box.svg";
@@ -27,7 +28,7 @@ function Consent() {
   const [checked, setChecked] = useState({});
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   const requiredItems = REQUIRED_ITEMS.filter((item) => item.required);
   const allRequiredChecked = requiredItems.every((item) => checked[item.id]);
@@ -48,7 +49,7 @@ function Consent() {
   const goToNextStep = async (notificationAgreed) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
-    setError(false);
+    setError("");
 
     try {
       await saveConsent({
@@ -57,9 +58,9 @@ function Consent() {
         marketingAgreed: !!checked.marketing,
       });
       navigate(ROUTES.ONBOARDING_ACCOUNT_COMPLETE);
-    } catch {
+    } catch (err) {
       setIsSubmitting(false);
-      setError(true);
+      setError(getErrorMessage(err, "저장에 실패했어요. 다시 시도해주세요."));
     }
   };
 
@@ -134,9 +135,7 @@ function Consent() {
           </div>
 
           {error && (
-            <p className="text-xs font-bold text-danger50">
-              저장에 실패했어요. 다시 시도해주세요.
-            </p>
+            <p className="text-xs font-bold text-danger50">{error}</p>
           )}
         </div>
         <ActionButton

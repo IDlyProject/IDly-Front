@@ -5,6 +5,7 @@ import WithdrawConfirmModal from "@/pages/Withdraw/components/WithdrawConfirmMod
 import { deleteAccount } from "@/services/usersService";
 import { logout } from "@/services/authService";
 import { useUserStore } from "@/store/userStore";
+import { getErrorMessage } from "@/lib/api";
 import { ROUTES } from "@/constants/routes";
 import ChevronLeftIcon from "@/assets/ic_chevron_left.svg";
 import UncheckIcon from "@/assets/ic_withdraw_uncheck.svg";
@@ -58,7 +59,7 @@ function WithdrawReason() {
       navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
     } catch (err) {
       console.error("delete account failed:", err);
-      setError("탈퇴 처리에 실패했어요. 다시 시도해주세요.");
+      setError(getErrorMessage(err, "탈퇴 처리에 실패했어요. 다시 시도해주세요."));
       setShowConfirmModal(false);
     } finally {
       setWithdrawing(false);

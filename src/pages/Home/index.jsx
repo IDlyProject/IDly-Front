@@ -18,6 +18,7 @@ import {
 import { getServiceIconGradient } from "@/utils/serviceIcon";
 import { triggerAnalysisRun, waitForAnalysisCompletion } from "@/services/analysisService";
 import { setServiceAccountDormant } from "@/services/serviceAccountsService";
+import { getErrorMessage } from "@/lib/api";
 import { ROUTES } from "@/constants/routes";
 
 function Home() {
@@ -63,8 +64,8 @@ function Home() {
     try {
       await setServiceAccountDormant(accountId);
       await reload();
-    } catch {
-      showToast("휴면 처리에 실패했어요. 다시 시도해주세요.");
+    } catch (err) {
+      showToast(getErrorMessage(err, "휴면 처리에 실패했어요. 다시 시도해주세요."));
     }
   };
 
@@ -81,8 +82,8 @@ function Home() {
       const { analysisId } = await triggerAnalysisRun();
       await waitForAnalysisCompletion(analysisId);
       await reload();
-    } catch {
-      showToast("재분석에 실패했어요. 다시 시도해주세요.");
+    } catch (err) {
+      showToast(getErrorMessage(err, "재분석에 실패했어요. 다시 시도해주세요."));
     }
   };
 
