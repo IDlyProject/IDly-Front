@@ -8,7 +8,7 @@ import ProgressDots from "../components/ProgressDot";
 import PageBackground from "@/components/layouts/PageBackground";
 import ActionButton from "@/components/ui/ActionButton";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { getPrimaryGmailAccount } from "@/api/auth";
+import { getPrimaryGmailAccount } from "@/services/authService";
 
 function InfoRow({ icon, label, value }) {
   return (

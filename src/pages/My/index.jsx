@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { logout, getPrimaryGmailAccount } from "@/api/auth";
+import { logout, getPrimaryGmailAccount } from "@/services/authService";
 import SettingIcon from "@/assets/ic_setting.svg";
 import AccountManageIcon from "@/assets/ic_account_manage.svg";
 import HeadphoneIcon from "@/assets/ic_headphone.svg";

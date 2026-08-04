@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import WithdrawConfirmModal from "@/pages/Withdraw/components/WithdrawConfirmModal";
 import { deleteAccount } from "@/api/users";
-import { logout } from "@/api/auth";
+import { logout } from "@/services/authService";
 import { ROUTES } from "@/constants/routes";
 import ChevronLeftIcon from "@/assets/ic_chevron_left.svg";
 import UncheckIcon from "@/assets/ic_withdraw_uncheck.svg";

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
-import { fetchCurrentUser } from "@/api/auth";
+import { fetchCurrentUser } from "@/services/authService";
 
 function AuthCallback() {
   const [searchParams] = useSearchParams();

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ActionButton from "@/components/ui/ActionButton";
 import { ROUTES } from "@/constants/routes";
 import { updateProfile } from "@/api/users";
-import { getPrimaryGmailAccount } from "@/api/auth";
+import { getPrimaryGmailAccount } from "@/services/authService";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import PageBackground from "@/components/layouts/PageBackground";
 import ProgressDots from "../components/ProgressDot";

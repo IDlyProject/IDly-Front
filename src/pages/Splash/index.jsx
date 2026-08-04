@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
-import { fetchCurrentUser } from "@/api/auth";
+import { fetchCurrentUser } from "@/services/authService";
 import typoLogo from "@/assets/ic_typo_logo_white.svg";
 import PageBackground from "@/components/layouts/PageBackground";
 

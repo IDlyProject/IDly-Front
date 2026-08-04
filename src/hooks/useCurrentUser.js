@@ -1,5 +1,5 @@
 import { useAsync } from "./useAsync";
-import { fetchCurrentUser } from "@/api/auth";
+import { fetchCurrentUser } from "@/services/authService";
 
 export function useCurrentUser() {
   const { data: user, status: asyncStatus } = useAsync(fetchCurrentUser);

@@ -1,21 +1,20 @@
-import { apiFetch, refreshAccessToken } from "@/api/client";
-
+import { axiosInstance, refreshAccessToken } from "@/lib/api";
 
 export async function fetchCurrentUser() {
-  const res = await apiFetch("/api/users/me");
-
-  if (!res.ok) return null;
-  return res.json();
+  try {
+    const { data } = await axiosInstance.get("/api/users/me");
+    return data;
+  } catch {
+    return null;
+  }
 }
 
 export async function refreshSession() {
   return refreshAccessToken();
 }
 
-
 export async function logout() {
-  const res = await apiFetch("/api/auth/logout", { method: "POST" });
-  if (!res.ok) throw new Error(`logout failed: ${res.status}`);
+  await axiosInstance.post("/api/auth/logout");
 }
 
 export function getPrimaryGmailAccount(user) {
