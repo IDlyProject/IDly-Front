@@ -1,5 +1,5 @@
 import { useAsync } from "./useAsync";
-import { getSummary } from "@/api/summary";
+import { getSummary } from "@/services/summaryService";
 
 export function useSummary() {
   const { data: summary, status } = useAsync(getSummary);
