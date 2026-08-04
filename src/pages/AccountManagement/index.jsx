@@ -5,7 +5,7 @@ import UnlinkConfirmModal from "./components/UnlinkConfirmModal";
 import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useGmailAccounts } from "@/hooks/useGmailAccounts";
-import { disconnectAccount } from "@/api/users";
+import { disconnectAccount } from "@/services/usersService";
 import BackIcon from "@/assets/ic_back.svg";
 import PencilIcon from "@/assets/ic_pencil.svg";
 import CancelIcon from "@/assets/ic_cancel.svg";

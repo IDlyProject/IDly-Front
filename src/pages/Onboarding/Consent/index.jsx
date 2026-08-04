@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
-import { saveConsent } from "@/api/users";
+import { saveConsent } from "@/services/usersService";
 import ProgressDots from "../components/ProgressDot";
 import PageBackground from "@/components/layouts/PageBackground";
 import AllCheckedBoxIcon from "@/assets/ic_all_checked_box.svg";

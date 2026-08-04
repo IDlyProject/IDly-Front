@@ -1,5 +1,5 @@
 import { useAsync } from "./useAsync";
-import { getAccounts } from "@/api/users";
+import { getAccounts } from "@/services/usersService";
 
 export function useGmailAccounts() {
 

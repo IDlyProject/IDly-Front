@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ActionButton from "@/components/ui/ActionButton";
 import { ROUTES } from "@/constants/routes";
-import { updateProfile } from "@/api/users";
+import { updateProfile } from "@/services/usersService";
 import { getPrimaryGmailAccount } from "@/services/authService";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import PageBackground from "@/components/layouts/PageBackground";
