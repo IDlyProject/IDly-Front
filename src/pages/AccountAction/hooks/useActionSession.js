@@ -3,7 +3,7 @@ import {
   getActionSession,
   createActionSession,
   sendActionSessionMessage,
-} from "@/api/actionSession";
+} from "@/services/actionSessionService";
 
 function mergeActionsById(current, actions) {
   if (!actions?.length) return current;

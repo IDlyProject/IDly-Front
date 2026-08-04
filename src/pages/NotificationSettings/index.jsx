@@ -5,7 +5,7 @@ import LoadingScreen from "@/components/ui/LoadingScreen";
 import ErrorScreen from "@/components/ui/ErrorScreen";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useNotificationSettings } from "@/hooks/useNotificationSettings";
-import { updateNotificationSettings } from "@/api/notificationSettings";
+import { updateNotificationSettings } from "@/services/notificationSettingsService";
 import BackIcon from "@/assets/ic_back.svg";
 import ShieldIcon from "@/assets/ic_shield.svg";
 import KeyIcon from "@/assets/ic_key.svg";
