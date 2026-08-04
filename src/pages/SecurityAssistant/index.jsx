@@ -15,7 +15,10 @@ import {
   resolveOfficialLinkCard,
   resolveCardNews,
 } from "@/pages/AccountAction/utils/messageContent";
-import { getSecurityChat, sendSecurityChatMessage } from "@/api/securityChat";
+import {
+  getSecurityChat,
+  sendSecurityChatMessage,
+} from "@/services/securityChatService";
 
 function normalizeMessages(raw) {
   return Array.isArray(raw) ? raw : (raw?.messages ?? []);
