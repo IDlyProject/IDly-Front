@@ -6,7 +6,7 @@ import LoadingScreen from "@/components/ui/LoadingScreen";
 import ErrorScreen from "@/components/ui/ErrorScreen";
 import { useDormantAccounts } from "@/hooks/useDormantAccounts";
 import { restoreAllDormant } from "@/api/dormantAccounts";
-import { restoreServiceAccountDormant } from "@/api/serviceAccounts";
+import { restoreServiceAccountDormant } from "@/services/serviceAccountsService";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
 import BackIcon from "@/assets/ic_back.svg";
 import InfoIcon from "@/assets/ic_information.svg";

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useAsync } from "./useAsync";
-import { getServiceAccountDetail } from "@/api/serviceAccounts";
+import { getServiceAccountDetail } from "@/services/serviceAccountsService";
 
 export function useServiceAccountDetail(serviceAccountId) {
   const fetcher = useCallback(

@@ -17,7 +17,7 @@ import {
 } from "@/utils/palette";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
 import { triggerAnalysisRun, waitForAnalysisCompletion } from "@/services/analysisService";
-import { setServiceAccountDormant } from "@/api/serviceAccounts";
+import { setServiceAccountDormant } from "@/services/serviceAccountsService";
 import { ROUTES } from "@/constants/routes";
 
 function Home() {
