@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import ActionButton from "@/components/ui/ActionButton";
 import { ROUTES } from "@/constants/routes";
-import { triggerAnalysisRun, fetchRunStatus } from "@/api/analysis";
+import { triggerAnalysisRun, fetchRunStatus } from "@/services/analysisService";
 import AnalysisMark from "@/assets/ic_analysis_mark.svg";
 
 const POLL_INTERVAL_MS = 1200;

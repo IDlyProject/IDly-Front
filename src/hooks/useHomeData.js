@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useAsync } from "./useAsync";
-import { getHome } from "@/api/home";
+import { getHome } from "@/services/homeService";
 
 export function useHomeData(mailAccountId) {
   const fetcher = useCallback(() => getHome(mailAccountId), [mailAccountId]);

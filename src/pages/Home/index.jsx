@@ -16,7 +16,7 @@ import {
   getGradientByIndexReservingPrimary,
 } from "@/utils/palette";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
-import { triggerAnalysisRun, waitForAnalysisCompletion } from "@/api/analysis";
+import { triggerAnalysisRun, waitForAnalysisCompletion } from "@/services/analysisService";
 import { setServiceAccountDormant } from "@/api/serviceAccounts";
 import { ROUTES } from "@/constants/routes";
 
