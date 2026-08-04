@@ -1,10 +1,14 @@
-import { useAsync } from "./useAsync";
-import { fetchCurrentUser } from "@/services/authService";
+import { useEffect } from "react";
+import { useUserStore } from "@/store/userStore";
 
 export function useCurrentUser() {
-  const { data: user, status: asyncStatus } = useAsync(fetchCurrentUser);
+  const user = useUserStore((state) => state.user);
+  const status = useUserStore((state) => state.status);
+  const fetchUser = useUserStore((state) => state.fetchUser);
 
-  const status = asyncStatus === "ready" && !user ? "error" : asyncStatus;
+  useEffect(() => {
+    if (status === "idle") fetchUser();
+  }, [status, fetchUser]);
 
   return { user, status };
 }

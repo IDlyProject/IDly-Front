@@ -5,6 +5,7 @@ import { ROUTES } from "@/constants/routes";
 import { updateProfile } from "@/services/usersService";
 import { getPrimaryGmailAccount } from "@/services/authService";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useUserStore } from "@/store/userStore";
 import PageBackground from "@/components/layouts/PageBackground";
 import ProgressDots from "../components/ProgressDot";
 import PersonIcon from "@/assets/ic_person.svg";
@@ -37,6 +38,7 @@ function AccountConfirm() {
       if (ageGroup) payload.ageGroup = ageGroup;
 
       await updateProfile(payload);
+      await useUserStore.getState().fetchUser(true);
       navigate(ROUTES.ONBOARDING_CONSENT);
     } catch {
       setIsSubmitting(false);
