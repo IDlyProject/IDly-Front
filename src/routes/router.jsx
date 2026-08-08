@@ -20,7 +20,6 @@ const RegistrationComplete = lazy(
 );
 const Analysis = lazy(() => import("@/pages/Analysis"));
 const Home = lazy(() => import("@/pages/Home"));
-const Organize = lazy(() => import("@/pages/Organize"));
 const My = lazy(() => import("@/pages/My"));
 const AccountManagement = lazy(() => import("@/pages/AccountManagement"));
 const DormantAccounts = lazy(() => import("@/pages/DormantAccounts"));
@@ -180,7 +179,6 @@ export const router = createBrowserRouter([
     ),
     children: [
       { path: ROUTES.HOME, element: <Home /> },
-      { path: ROUTES.ORGANIZE, element: <Organize /> },
       { path: ROUTES.MY, element: <My /> },
     ],
   },

@@ -17,8 +17,6 @@ export const ROUTES = {
   SECURITY_REPORT: "/security-report",
   SECURITY_ASSISTANT: "/security-report/assistant",
 
-  ORGANIZE: "/organize",
-
   MY: "/my",
   ACCOUNT_MANAGEMENT: "/my/account",
   DORMANT_ACCOUNTS: "/my/dormant",

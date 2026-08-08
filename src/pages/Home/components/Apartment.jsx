@@ -10,7 +10,7 @@ const DOT_COLOR = {
   risk: "bg-[#EE4E4E]",
 };
 
-function AptCard({ account, onHide, onOrganize }) {
+function AptCard({ account, onHide }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const buttonRef = useRef(null);
@@ -67,10 +67,6 @@ function AptCard({ account, onHide, onOrganize }) {
             onHide?.(account.id);
             setMenuOpen(false);
           }}
-          onOrganize={() => {
-            onOrganize?.(account.id);
-            setMenuOpen(false);
-          }}
           onClose={() => setMenuOpen(false)}
         />
       )}
@@ -78,16 +74,11 @@ function AptCard({ account, onHide, onOrganize }) {
   );
 }
 
-function Apartment({ accounts, onHideAccount, onOrganizeAccount }) {
+function Apartment({ accounts, onHideAccount }) {
   return (
     <div className="grid grid-cols-3 gap-3">
       {accounts.map((account) => (
-        <AptCard
-          key={account.id}
-          account={account}
-          onHide={onHideAccount}
-          onOrganize={onOrganizeAccount}
-        />
+        <AptCard key={account.id} account={account} onHide={onHideAccount} />
       ))}
     </div>
   );
