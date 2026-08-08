@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
-import CompleteMark from "@/assets/ic_complete_mark.svg";
+import logo from "@/assets/ic_logo.svg";
 import ShieldCheckIcon from "@/assets/ic_shield_check.svg";
 import AccountIcon from "@/assets/ic_account.svg";
 import BellIcon from "@/assets/ic_bell.svg";
@@ -46,7 +46,7 @@ function RegistrationComplete() {
           <ProgressDots current={7} total={7} />
 
           <div className="flex flex-1 flex-col items-center justify-center text-center gap-6.25">
-            <img src={CompleteMark} className="h-25 w-25 m-5" />
+            <img src={logo} alt="" />
             <div className="flex flex-col gap-3">
               <h1 className="text-b24 text-gray100">모든 준비 완료!</h1>
               <p className="mx-auto max-w-65 text-r14 text-gray60">
