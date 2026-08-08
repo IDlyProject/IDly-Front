@@ -2,8 +2,7 @@ import { NavLink } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import homeIcon from "@/assets/ic_home.svg";
 import homeIconActive from "@/assets/ic_home_filled.svg";
-import organizeIcon from "@/assets/ic_folder.svg";
-import organizeIconActive from "@/assets/ic_folder_filled.svg";
+import owlIcon from "@/assets/ic_character.png";
 import myIcon from "@/assets/ic_profile.svg";
 import myIconActive from "@/assets/ic_profile_filled.svg";
 
@@ -15,10 +14,10 @@ const navItems = [
     iconActive: homeIconActive,
   },
   {
-    path: ROUTES.ORGANIZE,
-    label: "정리",
-    icon: organizeIcon,
-    iconActive: organizeIconActive,
+    path: ROUTES.SECURITY_ASSISTANT,
+    label: "보안 도우미",
+    icon: owlIcon,
+    iconActive: owlIcon,
   },
   {
     path: ROUTES.MY,
