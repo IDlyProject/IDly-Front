@@ -18,7 +18,7 @@ function CtaListBubble({ ctas = [], nextServiceAccountId }) {
 
   const items = [
     ...ctas
-      .filter((cta) => cta.enabled !== false)
+      .filter((cta) => cta.enabled !== false && !(nextServiceAccountId && cta.id === "next_account"))
       .map((cta) => ({
         key: cta.id,
         ...(STYLE_ICON[cta.style] ?? DEFAULT_ICON),
