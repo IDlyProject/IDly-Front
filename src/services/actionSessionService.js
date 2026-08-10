@@ -14,7 +14,7 @@ export async function getActionSession(serviceAccountId) {
 
 export async function createActionSession(
   serviceAccountId,
-  bootstrapFirstAction = true,
+  bootstrapFirstAction = false,
 ) {
   const { data } = await axiosInstance.post(
     `/api/service-accounts/${serviceAccountId}/action-session`,

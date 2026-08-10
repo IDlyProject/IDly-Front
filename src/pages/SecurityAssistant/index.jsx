@@ -50,6 +50,7 @@ function ChatMessageBubble({ message }) {
         title: item.actionTitle,
         subtitle: item.serviceName ?? item.displayName,
         status: item.status,
+        iconEmoji: item.iconEmoji,
         serviceAccountId: item.serviceAccountId,
       }));
       return (
