@@ -11,13 +11,10 @@ export const ROUTES = {
   ANALYSIS: "/analysis",
 
   HOME: "/home",
-  NOTIFICATION: "/notifications",
   ACCOUNT_DETAIL: (id) => `/account/${id}`,
   ACCOUNT_ACTION: (id) => `/account/${id}/action`,
   SECURITY_REPORT: "/security-report",
   SECURITY_ASSISTANT: "/security-report/assistant",
-
-  ORGANIZE: "/organize",
 
   MY: "/my",
   ACCOUNT_MANAGEMENT: "/my/account",

@@ -40,7 +40,7 @@ function AccountConfirm() {
 
       await updateProfile(payload);
       await useUserStore.getState().fetchUser(true);
-      navigate(ROUTES.ONBOARDING_CONSENT);
+      navigate(ROUTES.ONBOARDING_ACCOUNT_COMPLETE);
     } catch (err) {
       setIsSubmitting(false);
       setError(getErrorMessage(err, "저장에 실패했어요. 다시 시도해주세요."));
@@ -51,7 +51,7 @@ function AccountConfirm() {
     <PageBackground variant="default">
       <div className="flex min-h-dvh flex-col px-4 pb-8">
         <div className="px-1 flex-1">
-          <ProgressDots current={3} total={7} />
+          <ProgressDots current={4} total={7} />
           <div className="py-5 gap-1.5">
             <h1 className="text-b24 text-[22px] text-gray100">
               대표 계정 설정

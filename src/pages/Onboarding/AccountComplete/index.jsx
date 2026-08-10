@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import ProgressDots from "../components/ProgressDot";
 import { ROUTES } from "@/constants/routes";
-import CheckIcon from "@/assets/ic_check_40.svg";
+import logo from "@/assets/ic_logo.svg";
 import ActionButton from "@/components/ui/ActionButton";
 import PageBackground from "@/components/layouts/PageBackground";
 
@@ -22,11 +22,7 @@ function AccountComplete() {
         <div className="flex flex-col flex-1 px-1">
           <ProgressDots current={5} total={7} />
           <div className="flex flex-1 flex-col justify-center items-center text-center">
-            <div className="grid place-items-center mb-6 w-30 h-30 rounded-full bg-[#12B886]/30">
-              <div className="grid place-items-center w-20 h-20 rounded-full bg-[#12B886]">
-                <img src={CheckIcon} className="h-10 w-10" />
-              </div>
-            </div>
+            <img src={logo} alt="" className="mb-6" />
             <h1 className="text-b24 text-gray100">입주 완료!</h1>
             <p className="mx-auto mt-2.5 max-w-65 text-r14 text-gray60">
               대표 계정 등록이 완료되었어요.

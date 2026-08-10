@@ -2,7 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { useAsync } from "./useAsync";
 
-// useAsync는 6개 이상의 페이지 훅(useHomeData, useSummary, useGmailAccounts 등)이
+// useAsync는 여러 페이지 훅(useHomeData, useGmailAccounts 등)이
 // 공통으로 의존하는 기반 훅이라, 여기가 깨지면 앱 전반의 데이터 로딩이 조용히 깨진다.
 describe("useAsync", () => {
   afterEach(() => {

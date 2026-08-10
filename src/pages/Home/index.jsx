@@ -69,10 +69,6 @@ function Home() {
     }
   };
 
-  const handleOrganizeAccount = () => {
-    navigate(ROUTES.ORGANIZE);
-  };
-
   const handleAddAccount = () => {
     navigate(ROUTES.ONBOARDING_ADD_ACCOUNT);
   };
@@ -134,11 +130,7 @@ function Home() {
 
           <div className="h-3.25" />
 
-          <Apartment
-            accounts={accounts}
-            onHideAccount={handleHideAccount}
-            onOrganizeAccount={handleOrganizeAccount}
-          />
+          <Apartment accounts={accounts} onHideAccount={handleHideAccount} />
         </PullToRefresh>
       </div>
     </PageBackground>

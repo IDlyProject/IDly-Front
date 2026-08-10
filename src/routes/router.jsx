@@ -20,7 +20,6 @@ const RegistrationComplete = lazy(
 );
 const Analysis = lazy(() => import("@/pages/Analysis"));
 const Home = lazy(() => import("@/pages/Home"));
-const Organize = lazy(() => import("@/pages/Organize"));
 const My = lazy(() => import("@/pages/My"));
 const AccountManagement = lazy(() => import("@/pages/AccountManagement"));
 const DormantAccounts = lazy(() => import("@/pages/DormantAccounts"));
@@ -31,7 +30,6 @@ const Withdraw = lazy(() => import("@/pages/Withdraw"));
 const WithdrawReason = lazy(() => import("@/pages/WithdrawReason"));
 const AccountDetail = lazy(() => import("@/pages/AccountDetail"));
 const AccountAction = lazy(() => import("@/pages/AccountAction"));
-const NotificationCenter = lazy(() => import("@/pages/NotificationCenter"));
 const SecurityReport = lazy(() => import("@/pages/SecurityReport"));
 const SecurityAssistant = lazy(() => import("@/pages/SecurityAssistant"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -77,14 +75,6 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <RegistrationComplete />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: ROUTES.NOTIFICATION,
-    element: (
-      <ProtectedRoute>
-        <NotificationCenter />
       </ProtectedRoute>
     ),
   },
@@ -180,7 +170,6 @@ export const router = createBrowserRouter([
     ),
     children: [
       { path: ROUTES.HOME, element: <Home /> },
-      { path: ROUTES.ORGANIZE, element: <Organize /> },
       { path: ROUTES.MY, element: <My /> },
     ],
   },
