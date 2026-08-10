@@ -15,6 +15,7 @@ import {
   resolveOfficialLinkCard,
   resolveCardNews,
 } from "@/pages/AccountAction/utils/messageContent";
+import CtaListBubble from "@/pages/AccountAction/components/CtaListBubble";
 import {
   getSecurityChat,
   sendSecurityChatMessage,
@@ -39,6 +40,9 @@ function ChatMessageBubble({ message }) {
       const news = resolveCardNews(message);
       return news ? <AdStripBubble news={news} /> : <TextBubble text={message.text} />;
     }
+    case "exit_cta":
+      return <CtaListBubble ctas={message.metadata?.exitCtas ?? []} />;
+
     case "action_list": {
 
       const items = (message.metadata?.actionList?.items ?? []).map((item) => ({
