@@ -93,7 +93,11 @@ function AccountAction() {
           onChange={setInputValue}
           onSend={handleSend}
           disabled={!session.composerEnabled || sending}
-          placeholder={session.composerPlaceholder ?? undefined}
+          placeholder={
+            session.composerEnabled
+              ? (session.composerPlaceholder ?? "막힌 부분을 알려주세요")
+              : "조치가 막히면 아래 버튼을 눌러주세요"
+          }
         />
       </div>
     </PageBackground>

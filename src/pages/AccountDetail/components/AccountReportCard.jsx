@@ -10,7 +10,19 @@ function formatAnalyzedAt(isoString) {
 }
 
 function AccountReportCard({ detail }) {
-  const isComplete = detail.remainingActionCount === 0;
+  const hasActions = detail.actionCount > 0;
+  const isComplete =
+    detail.status === "resolved" && detail.remainingActionCount === 0;
+  const isSafe =
+    detail.status === "safe" && detail.remainingActionCount === 0;
+  const isHealthy = isComplete || isSafe;
+  const title = isComplete
+    ? "모든 보안 조치를 완료했어요"
+    : isSafe
+      ? hasActions
+        ? "현재 필요한 보안 조치가 없어요"
+        : "현재 계정 상태가 안전해요"
+      : "확인이 필요한 계정이에요";
 
   return (
     <section className="mb-5 rounded-[18px] bg-white p-5 shadow-[0_8px_24px_rgba(17,31,67,0.06)]">
@@ -18,17 +30,17 @@ function AccountReportCard({ detail }) {
         <div>
           <p className="text-[12px] font-semibold text-gray50">계정 보안 상태</p>
           <h3 className="mt-1 text-[17px] font-bold text-gray100">
-            {isComplete ? "모든 보안 조치를 완료했어요" : "확인이 필요한 조치가 있어요"}
+            {title}
           </h3>
         </div>
         <span
           className={`shrink-0 rounded-full px-3 py-1 text-[12px] font-bold ${
-            isComplete
+            isHealthy
               ? "bg-[#E9F8F1] text-[#16865C]"
               : "bg-[#FFF1F2] text-danger50"
           }`}
         >
-          {isComplete ? "조치 완료" : detail.riskBadgeLabel}
+          {isComplete ? "조치 완료" : isSafe ? "안전" : detail.riskBadgeLabel}
         </span>
       </div>
 

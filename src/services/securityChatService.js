@@ -15,8 +15,10 @@ export async function getSecurityChatHistory() {
   return data || null;
 }
 
-export async function getSecurityChatSessionList() {
-  const { data } = await axiosInstance.get("/api/security-chat/sessions/list");
+export async function getSecurityChatSessionList(excludeSessionId) {
+  const { data } = await axiosInstance.get("/api/security-chat/sessions/list", {
+    params: excludeSessionId ? { excludeSessionId } : undefined,
+  });
   return data || { sessions: [] };
 }
 
@@ -25,8 +27,9 @@ export async function getSecurityChatSessionMessages(sessionId) {
   return data || null;
 }
 
-export async function sendSecurityChatMessage(message) {
+export async function sendSecurityChatMessage(sessionId, message) {
   const { data } = await axiosInstance.post("/api/security-chat/messages", {
+    sessionId,
     message,
   });
   return data || null;

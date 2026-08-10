@@ -38,6 +38,8 @@ function toViewDetail(raw, navState) {
 
   return {
     name: raw.displayName,
+    status: raw.status,
+    riskLevel: raw.riskLevel,
     iconUrl: raw.iconUrl ?? navState?.iconUrl ?? null,
     iconBg: getServiceIconGradient(raw.serviceName),
     iconText:
@@ -45,8 +47,7 @@ function toViewDetail(raw, navState) {
       navState?.iconLabel ||
       raw.displayName?.[0]?.toUpperCase() ||
       "?",
-    isRisk:
-      raw.status === "action_required" ||
+    isRisk: Boolean(raw.primaryCta) &&
       (raw.accountSummary?.remainingActionCount ?? 0) > 0,
     riskBadgeLabel: raw.riskBadgeText,
     riskTitle: raw.headline,

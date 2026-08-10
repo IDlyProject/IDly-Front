@@ -7,17 +7,14 @@ import OwlAvatar from "@/pages/AccountAction/components/OwlAvatar";
 import UserBubble from "@/pages/AccountAction/components/UserBubble";
 import TextBubble from "@/pages/AccountAction/components/TextBubble";
 import LinkCardBubble from "@/pages/AccountAction/components/LinkCardBubble";
-import AdStripBubble from "@/pages/AccountAction/components/AdStripBubble";
 import ActionListBubble from "@/pages/AccountAction/components/ActionListBubble";
 import TypingIndicator from "@/pages/AccountAction/components/TypingIndicator";
 import {
   resolveOfficialLinkCard,
-  resolveCardNews,
 } from "@/pages/AccountAction/utils/messageContent";
 import CtaListBubble from "@/pages/AccountAction/components/CtaListBubble";
 import {
   startSecurityChatSession,
-  getSecurityChat,
   getSecurityChatSessionList,
   getSecurityChatSessionMessages,
   sendSecurityChatMessage,
@@ -40,8 +37,8 @@ function ChatMessageBubble({ message }) {
       return card ? <LinkCardBubble card={card} /> : <TextBubble text={message.text} />;
     }
     case "card_news": {
-      const news = resolveCardNews(message);
-      return news ? <AdStripBubble news={news} /> : <TextBubble text={message.text} />;
+      // 일반 보안 도우미에서는 완료 전 카드뉴스를 노출하지 않는다.
+      return null;
     }
     case "exit_cta":
       return <CtaListBubble ctas={message.metadata?.exitCtas ?? []} />;
@@ -171,6 +168,7 @@ function SecurityAssistant() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [hasHistory, setHasHistory] = useState(false);
+  const [sessionId, setSessionId] = useState(null);
 
   // 이전 대화 오버레이 상태
   const [historyView, setHistoryView] = useState(null); // null | "list" | "session"
@@ -189,11 +187,9 @@ function SecurityAssistant() {
       try {
         const session = await startSecurityChatSession();
         if (cancelled) return;
+        setSessionId(session.sessionId);
         setHasHistory(session.hasHistory ?? false);
-
-        const data = await getSecurityChat();
-        if (cancelled) return;
-        setMessages(normalizeMessages(data));
+        setMessages([]);
       } catch (err) {
         console.error("security chat init failed:", err);
       } finally {
@@ -217,7 +213,7 @@ function SecurityAssistant() {
 
   const handleSend = async () => {
     const text = input.trim();
-    if (!text || sending) return;
+    if (!text || sending || !sessionId) return;
 
     setInput("");
     setError("");
@@ -227,7 +223,7 @@ function SecurityAssistant() {
     setSending(true);
 
     try {
-      const result = await sendSecurityChatMessage(text);
+      const result = await sendSecurityChatMessage(sessionId, text);
       if (result?.userMessage && result?.assistantMessages) {
         setMessages((prev) => [
           ...prev.filter((m) => m.id !== optimisticId),
@@ -235,8 +231,7 @@ function SecurityAssistant() {
           ...result.assistantMessages,
         ]);
       } else {
-        const history = await getSecurityChat();
-        setMessages(normalizeMessages(history));
+        setError("응답을 불러오지 못했어요. 다시 시도해주세요.");
       }
     } catch (err) {
       console.error("security chat send failed:", err);
@@ -258,7 +253,7 @@ function SecurityAssistant() {
     if (sessionList !== null) return;
     setSessionListLoading(true);
     try {
-      const data = await getSecurityChatSessionList();
+      const data = await getSecurityChatSessionList(sessionId);
       setSessionList(data.sessions ?? []);
     } catch (err) {
       console.error("session list load failed:", err);
@@ -332,7 +327,7 @@ function SecurityAssistant() {
           value={input}
           onChange={setInput}
           onSend={handleSend}
-          disabled={sending}
+          disabled={sending || !sessionId}
           hasHistory={hasHistory}
           onOpenHistory={handleOpenHistoryList}
         />

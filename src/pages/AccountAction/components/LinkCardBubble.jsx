@@ -38,6 +38,9 @@ function LinkCardBubble({ card }) {
             {card.ctaLabel ?? "페이지로 이동"}
             <img src={ExternalIcon} alt="" className="h-3.25 w-3.25" />
           </button>
+          <p className="mt-2.5 text-center text-[10.5px] font-semibold leading-relaxed text-[#70737a]">
+            IDly는 절대 비밀번호를 묻지 않습니다
+          </p>
         </div>
       </div>
     </div>
