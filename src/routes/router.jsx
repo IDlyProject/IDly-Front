@@ -30,7 +30,6 @@ const Withdraw = lazy(() => import("@/pages/Withdraw"));
 const WithdrawReason = lazy(() => import("@/pages/WithdrawReason"));
 const AccountDetail = lazy(() => import("@/pages/AccountDetail"));
 const AccountAction = lazy(() => import("@/pages/AccountAction"));
-const SecurityReport = lazy(() => import("@/pages/SecurityReport"));
 const SecurityAssistant = lazy(() => import("@/pages/SecurityAssistant"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
@@ -129,14 +128,6 @@ export const router = createBrowserRouter([
     ),
   },
 
-  {
-    path: ROUTES.SECURITY_REPORT,
-    element: (
-      <ProtectedRoute>
-        <SecurityReport />
-      </ProtectedRoute>
-    ),
-  },
   {
     path: ROUTES.SECURITY_ASSISTANT,
     element: (

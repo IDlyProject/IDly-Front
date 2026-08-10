@@ -89,6 +89,7 @@ function Home() {
   }
 
   const cardNews = homeData.cardNews?.[0];
+  const priorityAccountId = homeData.riskSummary.serviceAccountId;
 
   return (
     <PageBackground variant="frost">
@@ -96,7 +97,11 @@ function Home() {
         <HomeHeader />
         <PullToRefresh onRefresh={handleRefresh}>
           <button
-            onClick={() => navigate(ROUTES.SECURITY_REPORT)}
+            onClick={() =>
+              priorityAccountId &&
+              navigate(ROUTES.ACCOUNT_DETAIL(priorityAccountId))
+            }
+            disabled={!priorityAccountId}
             className="w-full text-left"
           >
             <StatusHero

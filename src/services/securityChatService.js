@@ -15,6 +15,16 @@ export async function getSecurityChatHistory() {
   return data || null;
 }
 
+export async function getSecurityChatSessionList() {
+  const { data } = await axiosInstance.get("/api/security-chat/sessions/list");
+  return data || { sessions: [] };
+}
+
+export async function getSecurityChatSessionMessages(sessionId) {
+  const { data } = await axiosInstance.get(`/api/security-chat/sessions/${sessionId}`);
+  return data || null;
+}
+
 export async function sendSecurityChatMessage(message) {
   const { data } = await axiosInstance.post("/api/security-chat/messages", {
     message,

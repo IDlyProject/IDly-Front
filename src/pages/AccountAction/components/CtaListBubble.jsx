@@ -5,39 +5,42 @@ import { ROUTES } from "@/constants/routes";
 const STYLE_ICON = {
   home: { icon: "🏠", bg: "#eef0f8" },
   report: { icon: "📊", bg: "#e8eeff" },
+  account: { icon: "📋", bg: "#e8eeff" },
 };
 const DEFAULT_ICON = { icon: "🔗", bg: "#eef0f8" };
 
 const HREF_TO_ROUTE = {
   "/home": ROUTES.HOME,
-  "/report": ROUTES.SECURITY_REPORT,
 };
 
-function CtaListBubble({ ctas = [], nextServiceAccountId }) {
+function CtaListBubble({ ctas = [], serviceAccountId }) {
   const navigate = useNavigate();
 
-  const items = [
-    ...ctas
-      .filter((cta) => cta.enabled !== false && !(nextServiceAccountId && cta.id === "next_account"))
-      .map((cta) => ({
-        key: cta.id,
-        ...(STYLE_ICON[cta.style] ?? DEFAULT_ICON),
-        label: cta.label,
-        onClick: () => navigate(HREF_TO_ROUTE[cta.href] ?? cta.href),
-      })),
-    ...(nextServiceAccountId
-      ? [
-          {
-            key: "next_account",
-            icon: "🔒",
-            bg: "#e8f5e9",
-            label: "다음 계정 보안 조치 하기",
-            onClick: () =>
-              navigate(ROUTES.ACCOUNT_ACTION(nextServiceAccountId)),
-          },
-        ]
-      : []),
-  ];
+  const items = ctas
+    .filter((cta) => cta.enabled !== false && cta.id !== "next_account")
+    .map((cta) => {
+      const isLegacyReport = cta.id === "report" || cta.href === "/report";
+      if (isLegacyReport && !serviceAccountId) return null;
+
+      const normalized = isLegacyReport
+        ? {
+            ...cta,
+            id: "account_report",
+            style: "account",
+            label: "계정 리포트 보러 가기",
+            href: ROUTES.ACCOUNT_DETAIL(serviceAccountId),
+          }
+        : cta;
+
+      return {
+        key: normalized.id,
+        ...(STYLE_ICON[normalized.style] ?? DEFAULT_ICON),
+        label: normalized.label,
+        onClick: () =>
+          navigate(HREF_TO_ROUTE[normalized.href] ?? normalized.href),
+      };
+    })
+    .filter(Boolean);
 
   if (items.length === 0) return null;
 

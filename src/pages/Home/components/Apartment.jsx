@@ -21,12 +21,9 @@ function AptCard({ account, onHide }) {
   const handleClick = () => {
     if (longPress.wasLongPress()) return;
 
-    if (isRisk) {
-
-      navigate(ROUTES.ACCOUNT_DETAIL(account.id), {
-        state: { iconUrl: account.iconUrl, iconLabel: account.iconText },
-      });
-    }
+    navigate(ROUTES.ACCOUNT_DETAIL(account.id), {
+      state: { iconUrl: account.iconUrl, iconLabel: account.iconText },
+    });
   };
 
   return (

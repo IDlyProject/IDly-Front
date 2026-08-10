@@ -48,6 +48,7 @@ function ChatMessage({ message, session, isLatest, onSelectAction, onDone, onFai
     }
 
     case "card_news": {
+      if (session?.sessionStatus !== "completed") return null;
       const news = resolveCardNews(message);
       return news ? <AdStripBubble news={news} /> : <TextBubble text={message.text} />;
     }
@@ -70,7 +71,7 @@ function ChatMessage({ message, session, isLatest, onSelectAction, onDone, onFai
       return (
         <CtaListBubble
           ctas={message.metadata?.exitCtas ?? []}
-          nextServiceAccountId={session?.completion?.nextServiceAccountId}
+          serviceAccountId={session?.serviceAccountId}
         />
       );
 
