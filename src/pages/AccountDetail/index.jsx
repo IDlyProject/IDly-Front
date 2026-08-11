@@ -3,6 +3,7 @@ import PageBackground from "@/components/layouts/PageBackground";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import ErrorScreen from "@/components/ui/ErrorScreen";
 import DetailHero from "./components/DetailHero";
+import AccountReportCard from "./components/AccountReportCard";
 import RiskCard from "./components/RiskCard";
 import EventsList from "./components/EventsList";
 import { useServiceAccountDetail } from "@/hooks/useServiceAccountDetail";
@@ -37,6 +38,8 @@ function toViewDetail(raw, navState) {
 
   return {
     name: raw.displayName,
+    status: raw.status,
+    riskLevel: raw.riskLevel,
     iconUrl: raw.iconUrl ?? navState?.iconUrl ?? null,
     iconBg: getServiceIconGradient(raw.serviceName),
     iconText:
@@ -44,7 +47,8 @@ function toViewDetail(raw, navState) {
       navState?.iconLabel ||
       raw.displayName?.[0]?.toUpperCase() ||
       "?",
-    isRisk: raw.status === "action_required",
+    isRisk: Boolean(raw.primaryCta) &&
+      (raw.accountSummary?.remainingActionCount ?? 0) > 0,
     riskBadgeLabel: raw.riskBadgeText,
     riskTitle: raw.headline,
     summaryTitle: raw.summary,
@@ -53,6 +57,18 @@ function toViewDetail(raw, navState) {
       ? `${latestEvent.sender} · ${formatEventTime(latestEvent.receivedAt)} 수신`
       : "",
     ctaLabel: raw.primaryCta?.label ?? "지금 바로 조치하기",
+    analyzedAt: raw.analyzedAt,
+    actionCount:
+      raw.accountSummary?.actionCount ?? raw.accountSummary?.requiredActionCount ?? 0,
+    completedActionCount:
+      raw.accountSummary?.completedActionCount ??
+      raw.accountSummary?.completedRequiredActionCount ??
+      0,
+    remainingActionCount:
+      raw.accountSummary?.remainingActionCount ??
+      raw.accountSummary?.remainingRequiredActionCount ??
+      0,
+    evidenceCount: raw.accountSummary?.evidenceCount ?? recentEvents.length,
     events: recentEvents.map((event) => ({
       id: event.id,
       type: event.riskType,
@@ -96,6 +112,8 @@ function AccountDetail() {
         </div>
 
         <DetailHero detail={detail} />
+
+        <AccountReportCard detail={detail} />
 
         {detail.isRisk && (
           <RiskCard

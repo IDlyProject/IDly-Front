@@ -30,7 +30,8 @@ const Withdraw = lazy(() => import("@/pages/Withdraw"));
 const WithdrawReason = lazy(() => import("@/pages/WithdrawReason"));
 const AccountDetail = lazy(() => import("@/pages/AccountDetail"));
 const AccountAction = lazy(() => import("@/pages/AccountAction"));
-const SecurityReport = lazy(() => import("@/pages/SecurityReport"));
+// 보안 리포트 화면은 현재 비활성화 상태이며, 재사용을 위해 구현 파일은 보존한다.
+// const SecurityReport = lazy(() => import("@/pages/SecurityReport"));
 const SecurityAssistant = lazy(() => import("@/pages/SecurityAssistant"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
@@ -129,14 +130,15 @@ export const router = createBrowserRouter([
     ),
   },
 
-  {
-    path: ROUTES.SECURITY_REPORT,
-    element: (
-      <ProtectedRoute>
-        <SecurityReport />
-      </ProtectedRoute>
-    ),
-  },
+  // {
+  //   path: ROUTES.SECURITY_REPORT,
+  //   element: (
+  //     <ProtectedRoute>
+  //       <SecurityReport />
+  //     </ProtectedRoute>
+  //   ),
+  // },
+
   {
     path: ROUTES.SECURITY_ASSISTANT,
     element: (

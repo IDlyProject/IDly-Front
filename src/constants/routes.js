@@ -13,7 +13,7 @@ export const ROUTES = {
   HOME: "/home",
   ACCOUNT_DETAIL: (id) => `/account/${id}`,
   ACCOUNT_ACTION: (id) => `/account/${id}/action`,
-  SECURITY_REPORT: "/security-report",
+  // SECURITY_REPORT: "/security-report",
   SECURITY_ASSISTANT: "/security-report/assistant",
 
   MY: "/my",

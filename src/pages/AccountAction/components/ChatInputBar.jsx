@@ -15,7 +15,7 @@ function ChatInputBar({
         onKeyDown={(e) => e.key === "Enter" && onSend()}
         disabled={disabled}
         placeholder={placeholder}
-        className="h-11 flex-1 rounded-full bg-[#f0f1f4] px-4 text-sm outline-none placeholder:text-gray-400 disabled:opacity-60"
+        className="h-11 flex-1 rounded-full bg-[#f0f1f4] px-4 text-sm outline-none placeholder:text-gray-400 disabled:cursor-not-allowed disabled:bg-[#e5e8ef] disabled:text-gray-400 disabled:opacity-75"
       />
       <button
         onClick={onSend}

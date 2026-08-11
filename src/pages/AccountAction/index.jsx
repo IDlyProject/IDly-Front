@@ -55,8 +55,10 @@ function AccountAction() {
           <ChatHeader
             title={session.title ?? "지금 바로 조치하기"}
             doneCount={session.progress?.doneCount}
-            totalActions={session.progress?.totalRequired}
-            label={session.progress?.label}
+            totalActions={
+              session.recommendedActions?.length ??
+              session.progress?.totalRequired
+            }
             onBack={() => navigate(-1)}
           />
         </div>
@@ -91,7 +93,11 @@ function AccountAction() {
           onChange={setInputValue}
           onSend={handleSend}
           disabled={!session.composerEnabled || sending}
-          placeholder={session.composerPlaceholder ?? undefined}
+          placeholder={
+            session.composerEnabled
+              ? (session.composerPlaceholder ?? "막힌 부분을 알려주세요")
+              : "조치가 막히면 아래 버튼을 눌러주세요"
+          }
         />
       </div>
     </PageBackground>

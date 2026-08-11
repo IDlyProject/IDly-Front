@@ -28,10 +28,13 @@ function ActionListBubble({ title, titleColor, actions, onSelect }) {
                 } ${clickable ? "cursor-pointer" : ""}`}
               >
                 <div
-                  className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-lg text-xs font-bold text-white"
-                  style={{ background: isDone ? "#43a047" : "#08257e" }}
+                  className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-lg text-sm font-bold"
+                  style={{
+                    background: isDone ? "#43a047" : "#08257e",
+                    color: isDone ? "white" : undefined,
+                  }}
                 >
-                  {isDone ? "✓" : action.required ? "!" : ""}
+                  {isDone ? "✓" : (action.iconEmoji ?? "🔒")}
                 </div>
                 <div className="flex-1">
                   <p className="text-[13px] font-semibold text-[#212125]">
