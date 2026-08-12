@@ -42,7 +42,7 @@ function RegistrationComplete() {
     <PageBackground variant="default">
       <div className="flex min-h-dvh flex-col px-4 pb-8">
         <div className="flex flex-col flex-1 px-1">
-          <ProgressDots current={7} total={7} />
+          <ProgressDots current={6} total={6} />
 
           <div className="flex flex-1 flex-col items-center justify-center text-center gap-6.25">
             <img src={logo} alt="" />

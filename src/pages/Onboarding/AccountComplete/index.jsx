@@ -20,7 +20,7 @@ function AccountComplete() {
     <PageBackground variant="default">
       <div className="flex min-h-dvh flex-col px-4 pb-8">
         <div className="flex flex-col flex-1 px-1">
-          <ProgressDots current={5} total={7} />
+          <ProgressDots current={4} total={6} />
           <div className="flex flex-1 flex-col justify-center items-center text-center">
             <img src={logo} alt="" className="mb-6" />
             <h1 className="text-b24 text-gray100">입주 완료!</h1>

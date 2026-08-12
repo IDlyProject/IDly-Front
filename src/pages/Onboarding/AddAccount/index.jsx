@@ -39,7 +39,7 @@ function AddAccount() {
     <PageBackground variant="default">
       <div className="flex min-h-dvh flex-col px-4 pb-8">
         <div className="flex flex-col flex-1 px-1">
-          <ProgressDots current={6} total={7} />
+          <ProgressDots current={5} total={6} />
           <div className="py-4 flex flex-col gap-2">
             <h1 className="text-b24 text-gray100">메일함 추가 연동</h1>
             <p className="text-r14 text-gray60">

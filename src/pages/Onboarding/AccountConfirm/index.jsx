@@ -52,7 +52,7 @@ function AccountConfirm() {
     <PageBackground variant="default">
       <div className="flex min-h-dvh flex-col px-4 pb-8">
         <div className="px-1 flex-1">
-          <ProgressDots current={4} total={7} />
+          <ProgressDots current={3} total={6} />
           <div className="py-5 gap-1.5">
             <h1 className="text-b24 text-[22px] text-gray100">프로필 설정</h1>
             <p className="text-r14 text-gray60">

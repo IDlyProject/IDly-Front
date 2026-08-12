@@ -90,7 +90,7 @@ function Consent() {
     <PageBackground variant="default">
       <div className="flex min-h-dvh flex-col px-4 pb-8">
         <div className="flex-1 px-1">
-          <ProgressDots current={3} total={7} />
+          <ProgressDots current={2} total={6} />
           <div className="py-4 gap-2">
             <h1 className="text-b24 text-gray100">서비스 이용 동의</h1>
             <p className="text-r14 text-gray60">
