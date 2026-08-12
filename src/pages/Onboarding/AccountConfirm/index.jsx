@@ -12,31 +12,32 @@ import ProgressDots from "../components/ProgressDot";
 import PersonIcon from "@/assets/ic_person.svg";
 import NicknameIcon from "@/assets/ic_nickname.svg";
 import CallIcon from "@/assets/ic_call.svg";
-const AGE_GROUPS = ["10대", "20대", "30대", "40대", "50대 이상"];
 
 function AccountConfirm() {
   const navigate = useNavigate();
   const { user, status: userStatus } = useCurrentUser();
   const primaryAccount = getPrimaryGmailAccount(user);
   const primaryEmail = primaryAccount?.email ?? "이메일 없음";
+  const phoneRequired = !!user?.notificationAgreed;
 
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [phone, setPhone] = useState("");
-  const [ageGroup, setAgeGroup] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  const canSubmit = !!nickname.trim() && (!phoneRequired || !!phone.trim());
+
   const handleConfirm = async () => {
-    if (!name.trim() || isSubmitting) return;
+    if (!canSubmit || isSubmitting) return;
 
     setIsSubmitting(true);
     setError("");
 
     try {
-      const payload = { name: name.trim() };
+      const payload = { nickname: nickname.trim() };
+      if (name.trim()) payload.name = name.trim();
       if (phone.trim()) payload.phone = phone.trim();
-      if (ageGroup) payload.ageGroup = ageGroup;
 
       await updateProfile(payload);
       await useUserStore.getState().fetchUser(true);
@@ -53,23 +54,23 @@ function AccountConfirm() {
         <div className="px-1 flex-1">
           <ProgressDots current={4} total={7} />
           <div className="py-5 gap-1.5">
-            <h1 className="text-b24 text-[22px] text-gray100">
-              대표 계정 설정
-            </h1>
+            <h1 className="text-b24 text-[22px] text-gray100">프로필 설정</h1>
             <p className="text-r14 text-gray60">
-              본인 확인을 위해 기본 정보를 입력해주세요.
+              IDly에서 사용할 정보를 입력해주세요.
             </p>
           </div>
 
           <div className="flex items-center gap-3 rounded-[14px] bg-[#ECF1F9] px-4 py-3.5 mb-5">
             <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-main100 text-b20 text-[17px] text-white">
-              {name.trim() ? name.trim()[0] : "?"}
+              {name.trim() || nickname.trim()
+                ? (name.trim() || nickname.trim())[0]
+                : "?"}
             </div>
             <div className="flex-1">
               <strong className="block text-sb16 text-[15px] text-gray100">
                 {userStatus === "loading"
                   ? "불러오는 중..."
-                  : name.trim() || "이름을 입력해주세요"}
+                  : name.trim() || nickname.trim() || "닉네임을 입력해주세요"}
               </strong>
               <span className="mt-1 block text-14 text-[13px] text-gray60">
                 {primaryEmail}
@@ -83,14 +84,14 @@ function AccountConfirm() {
           <div className="py-2 flex-1 space-y-4">
             <label className="block">
               <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
-                이름
+                이름 (선택)
               </span>
               <div className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-gray10 bg-white focus-within:border-main100">
                 <img src={PersonIcon} alt="" className="h-4.5 w-4.5" />
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="홍길동"
+                  placeholder="이름을 입력해주세요"
                   className="h-full flex-1 text-r14 text-gray100 outline-none placeholder:text-gray50"
                 />
               </div>
@@ -98,14 +99,14 @@ function AccountConfirm() {
 
             <label className="block">
               <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
-                닉네임
+                닉네임 (필수)
               </span>
               <div className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-gray10 bg-white focus-within:border-main100">
                 <img src={NicknameIcon} alt="" className="h-4.5 w-4.5" />
                 <input
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  placeholder="길동이"
+                  placeholder="닉네임을 입력해주세요"
                   className="h-full flex-1 text-r14 text-gray100 outline-none placeholder:text-gray50"
                 />
               </div>
@@ -113,7 +114,7 @@ function AccountConfirm() {
 
             <label className="block">
               <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
-                전화번호
+                전화번호 {phoneRequired ? "(필수)" : "(선택)"}
               </span>
               <div className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-gray10 bg-white focus-within:border-main100">
                 <img src={CallIcon} alt="" className="h-4.5 w-4.5" />
@@ -126,30 +127,6 @@ function AccountConfirm() {
               </div>
             </label>
 
-            <label className="block">
-              <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
-                연령대
-              </span>
-              <div className="p-3.75 flex h-12 items-center rounded-xl border border-gray10 bg-white focus-within:border-main100">
-                <select
-                  value={ageGroup}
-                  onChange={(e) => setAgeGroup(e.target.value)}
-                  className={`h-full flex-1 bg-transparent text-r14 outline-none ${
-                    ageGroup ? "text-gray100" : "text-gray50"
-                  }`}
-                >
-                  <option value="" disabled>
-                    선택해주세요
-                  </option>
-                  {AGE_GROUPS.map((group) => (
-                    <option key={group} value={group} className="text-gray100">
-                      {group}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </label>
-
             {error && (
               <p className="text-xs font-bold text-danger50">{error}</p>
             )}
@@ -159,9 +136,9 @@ function AccountConfirm() {
           bgColor="var(--color-main100)"
           textColor="var(--color-white)"
           onClick={handleConfirm}
-          disabled={!name.trim() || isSubmitting}
+          disabled={!canSubmit || isSubmitting}
         >
-          {isSubmitting ? "저장 중..." : "대표 계정으로 설정하기"}
+          {isSubmitting ? "저장 중..." : "다음"}
         </ActionButton>
       </div>
     </PageBackground>
