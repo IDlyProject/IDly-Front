@@ -9,6 +9,7 @@ import StatusHero from "./components/StatusHero";
 import EmailSelector from "./components/EmailSelector";
 import RecommendCard from "./components/RecommendCard";
 import Apartment from "./components/Apartment";
+import MailboxGrid from "./components/MailboxGrid";
 import { useHomeData } from "@/hooks/useHomeData";
 import {
   PALETTE_GRADIENTS,
@@ -33,18 +34,32 @@ function Home() {
     );
     return [
       { id: "all", label: "전체", count: homeData.metrics.totalServiceAccounts },
-      ...primaryFirst.map((account, idx) => ({
-        id: account.id,
-        label: account.email,
-        count: account.serviceAccountCount,
-        avatarBg:
-          account.role === "primary"
-            ? PALETTE_GRADIENTS[0]
-            : getGradientByIndexReservingPrimary(idx),
-        avatarLabel: account.email[0]?.toUpperCase() ?? "?",
-      })),
+      ...primaryFirst.map((account, idx) => {
+        const hasRisk = homeData.serviceAccounts.some(
+          (sa) =>
+            sa.sourceMailAccountId === account.id &&
+            sa.status === "action_required",
+        );
+        return {
+          id: account.id,
+          label: account.email,
+          count: account.serviceAccountCount,
+          status: hasRisk ? "risk" : "safe",
+          avatarBg:
+            account.role === "primary"
+              ? PALETTE_GRADIENTS[0]
+              : getGradientByIndexReservingPrimary(idx),
+          avatarLabel:
+            (account.label || account.email)[0]?.toUpperCase() ?? "?",
+        };
+      }),
     ];
   }, [homeData]);
+
+  const mailboxes = useMemo(
+    () => emails.filter((email) => email.id !== "all"),
+    [emails],
+  );
 
   const accounts = useMemo(() => {
     if (!homeData) return [];
@@ -94,6 +109,8 @@ function Home() {
           <StatusHero
             userName={homeData.userName ?? "회원"}
             totalCount={homeData.metrics.totalServiceAccounts}
+            mailboxCount={homeData.mailAccounts.length}
+            showMailboxCount={selectedEmailId === "all"}
             isSafe={homeData.riskSummary.state === "safe"}
             riskCount={homeData.metrics.actionRequiredCount}
             score={homeData.metrics.securityScore}
@@ -122,7 +139,11 @@ function Home() {
 
         <div className="h-3.25" />
 
-        <Apartment accounts={accounts} onHideAccount={handleHideAccount} />
+        {selectedEmailId === "all" ? (
+          <MailboxGrid mailboxes={mailboxes} onSelect={setSelectedEmailId} />
+        ) : (
+          <Apartment accounts={accounts} onHideAccount={handleHideAccount} />
+        )}
       </div>
     </PageBackground>
   );

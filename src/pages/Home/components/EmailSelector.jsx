@@ -10,7 +10,7 @@ function EmailSelector({ emails, selectedId, onSelect, onAddAccount }) {
   if (emails.length === 0) return null;
 
   const selected = emails.find((e) => e.id === selectedId) ?? emails[0];
-  const primaryLabel = selected.id === "all" ? "전체 계정" : selected.label;
+  const primaryLabel = selected.id === "all" ? "전체 메일함" : selected.label;
   const countLabel =
     selected.id === "all"
       ? `총 ${selected.count}개 계정`
@@ -73,7 +73,7 @@ function EmailSelector({ emails, selectedId, onSelect, onAddAccount }) {
             </span>
             <div className="flex-1">
               <span className="block text-sb16 text-[14px] text-gray100">
-                전체 계정
+                전체 메일함
               </span>
               <small className="mt-0.5 block text-r14 text-[11px] text-gray50">
                 모든 이메일 · {totalAll}개 계정

@@ -2,7 +2,16 @@ import AptIcon from "@/assets/ic_apt.svg";
 import SafeIcon from "@/assets/ic_status_safe.svg";
 import DangerIcon from "@/assets/ic_status_danger.svg";
 
-function StatusHero({ userName, totalCount, isSafe, riskCount, score, title }) {
+function StatusHero({
+  userName,
+  totalCount,
+  mailboxCount,
+  showMailboxCount,
+  isSafe,
+  riskCount,
+  score,
+  title,
+}) {
   const headline =
     title ??
     (isSafe
@@ -24,7 +33,9 @@ function StatusHero({ userName, totalCount, isSafe, riskCount, score, title }) {
           {userName} 님의 계정아파트
         </div>
         <span className="ml-2 rounded-full bg-[#FFD36C] px-2.25 py-1 text-[11px] font-semibold text-gray100">
-          {totalCount}개의 계정
+          {showMailboxCount
+            ? `메일함 ${mailboxCount}개 · 계정 ${totalCount}개`
+            : `계정 ${totalCount}개`}
         </span>
       </div>
       <div className="mx-1">
