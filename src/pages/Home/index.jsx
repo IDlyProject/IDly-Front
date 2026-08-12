@@ -5,7 +5,6 @@ import LoadingScreen from "@/components/ui/LoadingScreen";
 import ErrorScreen from "@/components/ui/ErrorScreen";
 import { useToast } from "@/components/ui/ToastProvider";
 import HomeHeader from "./components/HomeHeader";
-import PullToRefresh from "./components/PullToRefresh";
 import StatusHero from "./components/StatusHero";
 import EmailSelector from "./components/EmailSelector";
 import RecommendCard from "./components/RecommendCard";
@@ -16,7 +15,6 @@ import {
   getGradientByIndexReservingPrimary,
 } from "@/utils/palette";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
-import { triggerAnalysisRun, waitForAnalysisCompletion } from "@/services/analysisService";
 import { setServiceAccountDormant } from "@/services/serviceAccountsService";
 import { getErrorMessage } from "@/lib/api";
 import { ROUTES } from "@/constants/routes";
@@ -73,16 +71,6 @@ function Home() {
     navigate(ROUTES.ONBOARDING_ADD_MAILBOXES);
   };
 
-  const handleRefresh = async () => {
-    try {
-      const { analysisId } = await triggerAnalysisRun();
-      await waitForAnalysisCompletion(analysisId);
-      await reload();
-    } catch (err) {
-      showToast(getErrorMessage(err, "재분석에 실패했어요. 다시 시도해주세요."));
-    }
-  };
-
   if (homeStatus === "loading" && !homeData) return <LoadingScreen />;
   if (homeStatus === "error" && !homeData) {
     return <ErrorScreen text="홈 정보를 불러오지 못했어요." />;
@@ -95,48 +83,46 @@ function Home() {
     <PageBackground variant="frost">
       <div className="min-h-dvh px-4 pb-4 pt-[max(8px,env(safe-area-inset-top))]">
         <HomeHeader />
-        <PullToRefresh onRefresh={handleRefresh}>
-          <button
-            onClick={() =>
-              priorityAccountId &&
-              navigate(ROUTES.ACCOUNT_DETAIL(priorityAccountId))
-            }
-            disabled={!priorityAccountId}
-            className="w-full text-left"
-          >
-            <StatusHero
-              userName={homeData.userName ?? "회원"}
-              totalCount={homeData.metrics.totalServiceAccounts}
-              isSafe={homeData.riskSummary.state === "safe"}
-              riskCount={homeData.metrics.actionRequiredCount}
-              score={homeData.metrics.securityScore}
-              title={homeData.riskSummary.title}
-            />
-          </button>
-
-          <div className="h-3.5" />
-
-          {cardNews && (
-            <RecommendCard
-              url={cardNews.url}
-              emoji={cardNews.emoji}
-              title={cardNews.title}
-            />
-          )}
-
-          <div className="h-3.25" />
-
-          <EmailSelector
-            emails={emails}
-            selectedId={selectedEmailId}
-            onSelect={setSelectedEmailId}
-            onAddAccount={handleAddAccount}
+        <button
+          onClick={() =>
+            priorityAccountId &&
+            navigate(ROUTES.ACCOUNT_DETAIL(priorityAccountId))
+          }
+          disabled={!priorityAccountId}
+          className="w-full text-left"
+        >
+          <StatusHero
+            userName={homeData.userName ?? "회원"}
+            totalCount={homeData.metrics.totalServiceAccounts}
+            isSafe={homeData.riskSummary.state === "safe"}
+            riskCount={homeData.metrics.actionRequiredCount}
+            score={homeData.metrics.securityScore}
+            title={homeData.riskSummary.title}
           />
+        </button>
 
-          <div className="h-3.25" />
+        <div className="h-3.5" />
 
-          <Apartment accounts={accounts} onHideAccount={handleHideAccount} />
-        </PullToRefresh>
+        {cardNews && (
+          <RecommendCard
+            url={cardNews.url}
+            emoji={cardNews.emoji}
+            title={cardNews.title}
+          />
+        )}
+
+        <div className="h-3.25" />
+
+        <EmailSelector
+          emails={emails}
+          selectedId={selectedEmailId}
+          onSelect={setSelectedEmailId}
+          onAddAccount={handleAddAccount}
+        />
+
+        <div className="h-3.25" />
+
+        <Apartment accounts={accounts} onHideAccount={handleHideAccount} />
       </div>
     </PageBackground>
   );
