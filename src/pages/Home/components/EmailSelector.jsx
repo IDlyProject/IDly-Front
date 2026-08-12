@@ -11,12 +11,12 @@ function EmailSelector({ emails, selectedId, onSelect, onAddAccount }) {
 
   const selected = emails.find((e) => e.id === selectedId) ?? emails[0];
   const primaryLabel = selected.id === "all" ? "전체 메일함" : selected.label;
-  const countLabel =
-    selected.id === "all"
-      ? `총 ${selected.count}개 계정`
-      : `${selected.count}개의 계정`;
   const totalAll = emails.find((e) => e.id === "all")?.count ?? 0;
   const mailboxCount = emails.filter((e) => e.id !== "all").length;
+  const countLabel =
+    selected.id === "all"
+      ? `메일함 ${mailboxCount}개 · 계정 ${selected.count}개`
+      : `${selected.count}개의 계정`;
 
   return (
     <div className="relative">
