@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
-import { saveConsent } from "@/services/usersService";
+import { updateProfile } from "@/services/usersService";
 import { getErrorMessage } from "@/lib/api";
+import { useUserStore } from "@/store/userStore";
 import ProgressDots from "../components/ProgressDot";
 import PageBackground from "@/components/layouts/PageBackground";
 import AllCheckedBoxIcon from "@/assets/ic_all_checked_box.svg";
@@ -50,7 +51,7 @@ function Consent() {
     setError("");
 
     try {
-      await saveConsent({
+      await updateProfile({
         requiredTermsAgreed: true,
         notificationAgreed,
         marketingAgreed: !!checked.marketing,

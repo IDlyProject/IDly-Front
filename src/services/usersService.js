@@ -5,11 +5,6 @@ export async function updateProfile(payload) {
   return data;
 }
 
-export async function saveConsent(payload) {
-  const { data } = await axiosInstance.post("/api/users/me/consent", payload);
-  return data;
-}
-
 export async function getAccounts() {
   const { data } = await axiosInstance.get("/api/users/me/accounts");
   return data;
