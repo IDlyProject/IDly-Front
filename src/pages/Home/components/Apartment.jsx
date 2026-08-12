@@ -18,19 +18,17 @@ function AptCard({ account, onHide }) {
 
   const longPress = useLongPress(() => setMenuOpen(true));
 
-  const handleClick = () => {
-    if (longPress.wasLongPress()) return;
-
+  const handleViewDetail = () => {
     navigate(ROUTES.ACCOUNT_DETAIL(account.id), {
       state: { iconUrl: account.iconUrl, iconLabel: account.iconText },
     });
+    setMenuOpen(false);
   };
 
   return (
     <div className="relative">
       <button
         ref={buttonRef}
-        onClick={handleClick}
         {...longPress}
         className={`relative flex w-full py-[21.5px] flex-col items-center justify-center gap-2 rounded-2xl ${
           isRisk
@@ -60,6 +58,7 @@ function AptCard({ account, onHide }) {
       {menuOpen && (
         <AccountQuickMenu
           anchorRef={buttonRef}
+          onViewDetail={handleViewDetail}
           onHide={() => {
             onHide?.(account.id);
             setMenuOpen(false);
