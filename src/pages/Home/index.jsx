@@ -49,8 +49,7 @@ function Home() {
             account.role === "primary"
               ? PALETTE_GRADIENTS[0]
               : getGradientByIndexReservingPrimary(idx),
-          avatarLabel:
-            (account.label || account.email)[0]?.toUpperCase() ?? "?",
+          avatarLabel: account.email[0]?.toUpperCase() ?? "?",
         };
       }),
     ];

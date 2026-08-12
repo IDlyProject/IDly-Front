@@ -16,6 +16,7 @@ function EmailSelector({ emails, selectedId, onSelect, onAddAccount }) {
       ? `총 ${selected.count}개 계정`
       : `${selected.count}개의 계정`;
   const totalAll = emails.find((e) => e.id === "all")?.count ?? 0;
+  const mailboxCount = emails.filter((e) => e.id !== "all").length;
 
   return (
     <div className="relative">
@@ -76,7 +77,7 @@ function EmailSelector({ emails, selectedId, onSelect, onAddAccount }) {
                 전체 메일함
               </span>
               <small className="mt-0.5 block text-r14 text-[11px] text-gray50">
-                모든 이메일 · {totalAll}개 계정
+                메일함 {mailboxCount}개 · 계정 {totalAll}개
               </small>
             </div>
             {selectedId === "all" && (
