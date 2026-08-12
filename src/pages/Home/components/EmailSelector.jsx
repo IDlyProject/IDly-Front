@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GridIcon from "@/assets/ic_grid.svg";
 import ChevronBottomIcon from "@/assets/ic_chevron_bottom_mini.svg";
 import PlusIcon from "@/assets/ic_plus_gray.svg";
 import CheckIcon from "@/assets/ic_check.svg";
 
-function EmailSelector({ emails, selectedId, onSelect, onAddAccount }) {
+function EmailSelector({
+  emails,
+  selectedId,
+  onSelect,
+  onAddAccount,
+  onOpenChange,
+}) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    onOpenChange?.(open);
+  }, [open, onOpenChange]);
 
   if (emails.length === 0) return null;
 

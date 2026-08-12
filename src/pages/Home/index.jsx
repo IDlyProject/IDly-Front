@@ -10,6 +10,8 @@ import EmailSelector from "./components/EmailSelector";
 import RecommendCard from "./components/RecommendCard";
 import Apartment from "./components/Apartment";
 import MailboxGrid from "./components/MailboxGrid";
+import ActionRequiredBar from "./components/ActionRequiredBar";
+import ImmediateActionsSheet from "./components/ImmediateActionsSheet";
 import { useHomeData } from "@/hooks/useHomeData";
 import {
   PALETTE_GRADIENTS,
@@ -24,6 +26,8 @@ function Home() {
   const navigate = useNavigate();
   const showToast = useToast();
   const [selectedEmailId, setSelectedEmailId] = useState("all");
+  const [emailSelectorOpen, setEmailSelectorOpen] = useState(false);
+  const [showActionsSheet, setShowActionsSheet] = useState(false);
   const mailAccountId = selectedEmailId === "all" ? undefined : selectedEmailId;
   const { data: homeData, status: homeStatus, reload } = useHomeData(mailAccountId);
 
@@ -85,6 +89,13 @@ function Home() {
     navigate(ROUTES.ONBOARDING_ADD_MAILBOXES);
   };
 
+  const handleStartActions = (priorityAccountId) => {
+    setShowActionsSheet(false);
+    if (priorityAccountId) {
+      navigate(ROUTES.ACCOUNT_ACTION(priorityAccountId));
+    }
+  };
+
   if (homeStatus === "loading" && !homeData) return <LoadingScreen />;
   if (homeStatus === "error" && !homeData) {
     return <ErrorScreen text="홈 정보를 불러오지 못했어요." />;
@@ -134,6 +145,7 @@ function Home() {
           selectedId={selectedEmailId}
           onSelect={setSelectedEmailId}
           onAddAccount={handleAddAccount}
+          onOpenChange={setEmailSelectorOpen}
         />
 
         <div className="h-3.25" />
@@ -144,6 +156,22 @@ function Home() {
           <Apartment accounts={accounts} onHideAccount={handleHideAccount} />
         )}
       </div>
+
+      {selectedEmailId === "all" &&
+        !emailSelectorOpen &&
+        homeData.metrics.actionRequiredCount > 0 && (
+          <ActionRequiredBar
+            count={homeData.metrics.actionRequiredCount}
+            onClick={() => setShowActionsSheet(true)}
+          />
+        )}
+
+      {showActionsSheet && (
+        <ImmediateActionsSheet
+          onClose={() => setShowActionsSheet(false)}
+          onStart={() => handleStartActions(priorityAccountId)}
+        />
+      )}
     </PageBackground>
   );
 }
