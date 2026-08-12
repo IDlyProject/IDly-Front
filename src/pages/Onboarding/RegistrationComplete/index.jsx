@@ -32,8 +32,7 @@ function RegistrationComplete() {
 
   const primaryEmail = getPrimaryGmailAccount(user)?.email ?? "";
   const totalAccountCount = user?.gmailAccounts?.length ?? 0;
-  // TODO: 실제 알림 동의 상태를 유저 데이터에서 가져와야 함 (현재는 임시로 true 고정)
-  const notificationEnabled = true;
+  const notificationEnabled = !!user?.notificationAgreed;
 
   const handleStart = () => {
     navigate(ROUTES.ANALYSIS);
@@ -59,18 +58,22 @@ function RegistrationComplete() {
             <div className="flex flex-col gap-3.5 w-full rounded-[18px] bg-[#F0F6FF] p-5">
               <InfoRow
                 icon={<img src={ShieldCheckIcon} />}
-                label="대표 계정"
+                label="대표 메일함"
                 value={primaryEmail}
               />
               <InfoRow
                 icon={<img src={AccountIcon} />}
-                label="연동된 계정"
+                label="연동된 메일함"
                 value={`총 ${totalAccountCount}개 Gmail 계정`}
               />
               <InfoRow
                 icon={<img src={BellIcon} />}
                 label="알림"
-                value={notificationEnabled ? "활성화됨" : "비활성화됨"}
+                value={
+                  notificationEnabled
+                    ? "카카오톡 알림톡 활성화"
+                    : "카카오톡 알림톡 비활성화"
+                }
               />
             </div>
           </div>
