@@ -15,7 +15,6 @@ function AddAccount() {
   const { accounts, status } = useGmailAccounts();
 
   const handleStartConnect = () => {
-
     window.location.href = `${API_BASE_URL}/api/auth/google`;
   };
 
@@ -42,9 +41,9 @@ function AddAccount() {
         <div className="flex flex-col flex-1 px-1">
           <ProgressDots current={6} total={7} />
           <div className="py-4 flex flex-col gap-2">
-            <h1 className="text-b24 text-gray100">추가 계정 연동</h1>
+            <h1 className="text-b24 text-gray100">메일함 추가 연동</h1>
             <p className="text-r14 text-gray60">
-              관리할 Gmail 계정을 추가해 주세요.
+              관리할 Gmail 메일함을 추가해 주세요.
               <br />
               추가된 계정의 보안 상태도 함께 모니터링합니다.
             </p>
@@ -68,7 +67,7 @@ function AddAccount() {
                     </strong>
                     {account.isPrimary && (
                       <span className="rounded-full bg-main100 px-2 py-0.5 text-sb16 text-[10px] text-white">
-                        대표
+                        대표 메일함
                       </span>
                     )}
                   </div>
@@ -87,7 +86,7 @@ function AddAccount() {
                 <img src={PlusIcon} className="h-3.25 w-3.25" />
               </div>
               <span className="text-sb16 text-[14px] text-gray60">
-                다른 Gmail 계정 추가
+                다른 메일함 계정 추가
               </span>
             </button>
           </div>
@@ -98,7 +97,7 @@ function AddAccount() {
             textColor="var(--color-white)"
             onClick={handleComplete}
           >
-            {mailAccounts.length}개 계정 연동 완료
+            {mailAccounts.length}개 메일함 연동 완료
           </ActionButton>
           <ActionButton
             bordered
