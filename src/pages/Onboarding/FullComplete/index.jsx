@@ -64,7 +64,7 @@ function FullComplete() {
               <InfoRow
                 icon={<img src={AccountIcon} />}
                 label="연동된 메일함"
-                value={`총 ${totalAccountCount}개 Gmail 계정`}
+                value={`총 ${totalAccountCount}개`}
               />
               <InfoRow
                 icon={<img src={BellIcon} />}
