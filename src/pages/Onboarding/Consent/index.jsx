@@ -57,7 +57,7 @@ function Consent() {
         marketingAgreed: !!checked.marketing,
       });
       await useUserStore.getState().fetchUser(true);
-      navigate(ROUTES.ONBOARDING_ACCOUNT_CONFIRM);
+      navigate(ROUTES.ONBOARDING_PROFILE);
     } catch (err) {
       setIsSubmitting(false);
       setError(getErrorMessage(err, "저장에 실패했어요. 다시 시도해주세요."));

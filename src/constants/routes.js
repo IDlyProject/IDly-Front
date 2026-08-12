@@ -3,12 +3,12 @@ export const ROUTES = {
   AUTH_CALLBACK: "/auth/callback",
   ONBOARDING_LOGIN: "/onboarding/login",
   ONBOARDING_CONSENT: "/onboarding/consent",
-  ONBOARDING_ACCOUNT_CONFIRM: "/onboarding/account-confirm",
-  ONBOARDING_ACCOUNT_COMPLETE: "/onboarding/account-complete",
-  ONBOARDING_ADD_ACCOUNT: "/onboarding/add-account",
-  ONBOARDING_COMPLETE: "/onboarding/complete",
+  ONBOARDING_PROFILE: "/onboarding/profile",
+  ONBOARDING_PRIMARY_COMPLETE: "/onboarding/primary-complete",
+  ONBOARDING_ADD_MAILBOXES: "/onboarding/add-mailboxes",
+  ONBOARDING_FULL_COMPLETE: "/onboarding/full-complete",
 
-  ANALYSIS: "/analysis",
+  ANALYZING: "/analyzing",
 
   HOME: "/home",
   ACCOUNT_DETAIL: (id) => `/account/${id}`,

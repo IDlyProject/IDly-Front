@@ -5,11 +5,11 @@ import ActionButton from "@/components/ui/ActionButton";
 import { ROUTES } from "@/constants/routes";
 import { triggerAnalysisRun, fetchRunStatus } from "@/services/analysisService";
 import { getErrorMessage } from "@/lib/api";
-import AnalysisMark from "@/assets/ic_analysis_mark.svg";
+import AnalyzingMark from "@/assets/ic_analysis_mark.svg";
 
 const POLL_INTERVAL_MS = 1200;
 
-function Analysis() {
+function Analyzing() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState("분석을 준비하고 있어요.");
@@ -82,7 +82,7 @@ function Analysis() {
     <PageBackground variant="frost">
       <div className="flex min-h-dvh flex-col items-center justify-center px-10 text-center">
         <img
-          src={AnalysisMark}
+          src={AnalyzingMark}
           alt=""
           className="h-35 w-35"
           style={{ filter: "drop-shadow(0 12px 32px rgba(8,37,126,0.1))" }}
@@ -121,4 +121,4 @@ function Analysis() {
   );
 }
 
-export default Analysis;
+export default Analyzing;

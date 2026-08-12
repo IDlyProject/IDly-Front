@@ -13,7 +13,7 @@ import PersonIcon from "@/assets/ic_person.svg";
 import NicknameIcon from "@/assets/ic_nickname.svg";
 import CallIcon from "@/assets/ic_call.svg";
 
-function AccountConfirm() {
+function Profile() {
   const navigate = useNavigate();
   const { user, status: userStatus } = useCurrentUser();
   const primaryAccount = getPrimaryGmailAccount(user);
@@ -41,7 +41,7 @@ function AccountConfirm() {
 
       await updateProfile(payload);
       await useUserStore.getState().fetchUser(true);
-      navigate(ROUTES.ONBOARDING_ACCOUNT_COMPLETE);
+      navigate(ROUTES.ONBOARDING_PRIMARY_COMPLETE);
     } catch (err) {
       setIsSubmitting(false);
       setError(getErrorMessage(err, "저장에 실패했어요. 다시 시도해주세요."));
@@ -145,4 +145,4 @@ function AccountConfirm() {
   );
 }
 
-export default AccountConfirm;
+export default Profile;

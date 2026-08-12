@@ -85,7 +85,7 @@ npm run lint
 
 - `/` : 스플래시
 - `/onboarding/*` : 로그인 및 계정 연결 플로우
-- `/analysis` : 분석 진행 화면
+- `/analyzing` : 분석 진행 화면
 - `/home` : 홈 대시보드
 - `/organize` : 계정 정리 화면
 - `/security-report` : 보안 리포트

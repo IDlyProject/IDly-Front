@@ -27,7 +27,7 @@ function AuthCallback() {
       }
 
       if (mode === "add") {
-        navigate(ROUTES.ONBOARDING_ADD_ACCOUNT, { replace: true });
+        navigate(ROUTES.ONBOARDING_ADD_MAILBOXES, { replace: true });
         return;
       }
 

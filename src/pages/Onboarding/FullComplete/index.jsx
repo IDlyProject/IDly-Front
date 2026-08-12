@@ -26,7 +26,7 @@ function InfoRow({ icon, label, value }) {
   );
 }
 
-function RegistrationComplete() {
+function FullComplete() {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
 
@@ -35,7 +35,7 @@ function RegistrationComplete() {
   const notificationEnabled = !!user?.notificationAgreed;
 
   const handleStart = () => {
-    navigate(ROUTES.ANALYSIS);
+    navigate(ROUTES.ANALYZING);
   };
 
   return (
@@ -90,4 +90,4 @@ function RegistrationComplete() {
   );
 }
 
-export default RegistrationComplete;
+export default FullComplete;

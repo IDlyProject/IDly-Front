@@ -10,7 +10,7 @@ import PageBackground from "../../../components/layouts/PageBackground";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import ErrorScreen from "@/components/ui/ErrorScreen";
 
-function AddAccount() {
+function AddMailboxes() {
   const navigate = useNavigate();
   const { accounts, status } = useGmailAccounts();
 
@@ -19,11 +19,11 @@ function AddAccount() {
   };
 
   const handleComplete = () => {
-    navigate(ROUTES.ONBOARDING_COMPLETE);
+    navigate(ROUTES.ONBOARDING_FULL_COMPLETE);
   };
 
   const handleSkip = () => {
-    navigate(ROUTES.ONBOARDING_COMPLETE);
+    navigate(ROUTES.ONBOARDING_FULL_COMPLETE);
   };
 
   if (status === "loading") return <LoadingScreen variant="default" />;
@@ -114,4 +114,4 @@ function AddAccount() {
   );
 }
 
-export default AddAccount;
+export default AddMailboxes;

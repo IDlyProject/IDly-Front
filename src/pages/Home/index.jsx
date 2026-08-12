@@ -70,7 +70,7 @@ function Home() {
   };
 
   const handleAddAccount = () => {
-    navigate(ROUTES.ONBOARDING_ADD_ACCOUNT);
+    navigate(ROUTES.ONBOARDING_ADD_MAILBOXES);
   };
 
   const handleRefresh = async () => {

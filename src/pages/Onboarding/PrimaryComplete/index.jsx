@@ -5,15 +5,15 @@ import logo from "@/assets/ic_logo.svg";
 import ActionButton from "@/components/ui/ActionButton";
 import PageBackground from "@/components/layouts/PageBackground";
 
-function AccountComplete() {
+function PrimaryComplete() {
   const navigate = useNavigate();
 
   const handleAddAccount = () => {
-    navigate(ROUTES.ONBOARDING_ADD_ACCOUNT);
+    navigate(ROUTES.ONBOARDING_ADD_MAILBOXES);
   };
 
   const handleSkip = () => {
-    navigate(ROUTES.ONBOARDING_COMPLETE);
+    navigate(ROUTES.ONBOARDING_FULL_COMPLETE);
   };
 
   return (
@@ -56,4 +56,4 @@ function AccountComplete() {
   );
 }
 
-export default AccountComplete;
+export default PrimaryComplete;

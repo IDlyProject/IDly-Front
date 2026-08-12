@@ -10,15 +10,15 @@ import Login from "@/pages/Onboarding/Login";
 import AuthCallback from "@/pages/AuthCallback";
 
 const Consent = lazy(() => import("@/pages/Onboarding/Consent"));
-const AccountConfirm = lazy(() => import("@/pages/Onboarding/AccountConfirm"));
-const AccountComplete = lazy(
-  () => import("@/pages/Onboarding/AccountComplete"),
+const Profile = lazy(() => import("@/pages/Onboarding/Profile"));
+const PrimaryComplete = lazy(
+  () => import("@/pages/Onboarding/PrimaryComplete"),
 );
-const AddAccount = lazy(() => import("@/pages/Onboarding/AddAccount"));
-const RegistrationComplete = lazy(
-  () => import("@/pages/Onboarding/RegistrationComplete"),
+const AddMailboxes = lazy(() => import("@/pages/Onboarding/AddMailboxes"));
+const FullComplete = lazy(
+  () => import("@/pages/Onboarding/FullComplete"),
 );
-const Analysis = lazy(() => import("@/pages/Analysis"));
+const Analyzing = lazy(() => import("@/pages/Analyzing"));
 const Home = lazy(() => import("@/pages/Home"));
 const My = lazy(() => import("@/pages/My"));
 const AccountManagement = lazy(() => import("@/pages/AccountManagement"));
@@ -48,34 +48,34 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: ROUTES.ONBOARDING_ACCOUNT_CONFIRM,
+    path: ROUTES.ONBOARDING_PROFILE,
     element: (
       <ProtectedRoute>
-        <AccountConfirm />
+        <Profile />
       </ProtectedRoute>
     ),
   },
   {
-    path: ROUTES.ONBOARDING_ACCOUNT_COMPLETE,
+    path: ROUTES.ONBOARDING_PRIMARY_COMPLETE,
     element: (
       <ProtectedRoute>
-        <AccountComplete />
+        <PrimaryComplete />
       </ProtectedRoute>
     ),
   },
   {
-    path: ROUTES.ONBOARDING_ADD_ACCOUNT,
+    path: ROUTES.ONBOARDING_ADD_MAILBOXES,
     element: (
       <ProtectedRoute>
-        <AddAccount />
+        <AddMailboxes />
       </ProtectedRoute>
     ),
   },
   {
-    path: ROUTES.ONBOARDING_COMPLETE,
+    path: ROUTES.ONBOARDING_FULL_COMPLETE,
     element: (
       <ProtectedRoute>
-        <RegistrationComplete />
+        <FullComplete />
       </ProtectedRoute>
     ),
   },
@@ -105,10 +105,10 @@ export const router = createBrowserRouter([
   },
 
   {
-    path: ROUTES.ANALYSIS,
+    path: ROUTES.ANALYZING,
     element: (
       <ProtectedRoute>
-        <Analysis />
+        <Analyzing />
       </ProtectedRoute>
     ),
   },
