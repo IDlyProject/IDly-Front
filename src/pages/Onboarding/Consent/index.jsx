@@ -14,7 +14,6 @@ import NotificationConfirmModal from "./components/NotificationConfirmModal";
 const REQUIRED_ITEMS = [
   { id: "terms", label: "(필수) 서비스 이용약관", required: true },
   { id: "privacy", label: "(필수) 개인정보 처리방침", required: true },
-  { id: "location", label: "(필수) 위치기반 서비스 이용약관", required: true },
   {
     id: "notification",
     label: "(선택) 실시간 보안 알림 수신 동의",
@@ -45,7 +44,6 @@ function Consent() {
     setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-
   const goToNextStep = async (notificationAgreed) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -67,7 +65,6 @@ function Consent() {
   const handleAgreeClick = () => {
     if (!allRequiredChecked) return;
 
-
     if (!notificationChecked) {
       setShowNotificationModal(true);
       return;
@@ -77,14 +74,12 @@ function Consent() {
   };
 
   const handleModalAgree = () => {
-
     setChecked((prev) => ({ ...prev, notification: true }));
     setShowNotificationModal(false);
     goToNextStep(true);
   };
 
   const handleModalDismiss = () => {
-
     setShowNotificationModal(false);
     goToNextStep(false);
   };
@@ -134,9 +129,7 @@ function Consent() {
             </div>
           </div>
 
-          {error && (
-            <p className="text-xs font-bold text-danger50">{error}</p>
-          )}
+          {error && <p className="text-xs font-bold text-danger50">{error}</p>}
         </div>
         <ActionButton
           bgColor="var(--color-main100)"
