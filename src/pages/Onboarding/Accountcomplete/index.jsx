@@ -25,9 +25,9 @@ function AccountComplete() {
             <img src={logo} alt="" className="mb-6" />
             <h1 className="text-b24 text-gray100">입주 완료!</h1>
             <p className="mx-auto mt-2.5 max-w-65 text-r14 text-gray60">
-              대표 계정 등록이 완료되었어요.
+              대표 메일함 등록이 완료되었어요.
               <br />
-              추가 Gmail 계정을 연동하면
+              메일함을 연동하면
               <br />
               모든 계정을 한 번에 관리할 수 있어요.
             </p>
@@ -39,7 +39,7 @@ function AccountComplete() {
             textColor="var(--color-white)"
             onClick={handleAddAccount}
           >
-            추가 Gmail 계정 연동하기
+            추가 Gmail 메일함 연동하기
           </ActionButton>
           <ActionButton
             bordered
