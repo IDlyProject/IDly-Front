@@ -56,6 +56,7 @@ function Consent() {
         notificationAgreed,
         marketingAgreed: !!checked.marketing,
       });
+      await useUserStore.getState().fetchUser(true);
       navigate(ROUTES.ONBOARDING_ACCOUNT_CONFIRM);
     } catch (err) {
       setIsSubmitting(false);
