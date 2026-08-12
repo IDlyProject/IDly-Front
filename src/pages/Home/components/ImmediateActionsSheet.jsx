@@ -35,18 +35,16 @@ function ImmediateActionsSheet({ onClose, onStart }) {
         className="fixed inset-0 z-40 bg-[#000000]/[33.3%]"
         onClick={onClose}
       />
-      <div className="fixed inset-x-0 bottom-0 z-50 rounded-t-3xl bg-white px-5 pb-4 pt-3">
-        <div className="mx-auto mb-4.5 h-1 w-10 rounded-full bg-[#D9DBE0]" />
-        <h2 className="mb-5 text-sb20 font-bold text-[#171C26]">
+      <div className="fixed inset-x-0 bottom-0 z-50 flex h-130 flex-col rounded-t-3xl bg-white px-5 pt-3">
+        <div className="mx-auto mb-4.5 h-1 w-10 shrink-0 rounded-full bg-[#D9DBE0]" />
+        <h2 className="mb-5 shrink-0 text-sb20 font-bold text-[#171C26]">
           즉시 할일 {MOCK_ACTIONS.length}개
         </h2>
-        <div className="mb-5">
-          {MOCK_ACTIONS.map((action, idx) => (
+        <div className="flex-1 space-y-2.5 overflow-y-auto">
+          {MOCK_ACTIONS.map((action) => (
             <div
               key={action.id}
-              className={`flex items-center gap-3 py-3 ${
-                idx < MOCK_ACTIONS.length - 1 ? "border-b border-[#F0F1F4]" : ""
-              }`}
+              className="flex items-center gap-3 rounded-2xl bg-[#F7F7FA] px-4 py-3.5"
             >
               <span
                 className={`h-2 w-2 shrink-0 rounded-full ${SEVERITY_DOT[action.severity]}`}
@@ -63,13 +61,15 @@ function ImmediateActionsSheet({ onClose, onStart }) {
             </div>
           ))}
         </div>
-        <ActionButton
-          bgColor="var(--color-main100)"
-          textColor="var(--color-white)"
-          onClick={onStart}
-        >
-          가장 위험한 것부터 시작하기
-        </ActionButton>
+        <div className="shrink-0 pt-4 pb-[calc(16px+env(safe-area-inset-bottom))]">
+          <ActionButton
+            bgColor="var(--color-main100)"
+            textColor="var(--color-white)"
+            onClick={onStart}
+          >
+            가장 위험한 것부터 시작하기
+          </ActionButton>
+        </div>
       </div>
     </>
   );
