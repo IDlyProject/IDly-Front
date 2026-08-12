@@ -28,7 +28,9 @@ function Analyzing() {
       } catch (err) {
         if (!cancelled) {
           setFailed(true);
-          setErrorMessage(getErrorMessage(err, "분석 진행 상태를 불러오지 못했어요."));
+          setErrorMessage(
+            getErrorMessage(err, "분석 진행 상태를 불러오지 못했어요."),
+          );
         }
         return;
       }
@@ -79,7 +81,7 @@ function Analyzing() {
   };
 
   return (
-    <PageBackground variant="frost">
+    <PageBackground variant="default">
       <div className="flex min-h-dvh flex-col items-center justify-center px-10 text-center">
         <img
           src={AnalyzingMark}
@@ -104,10 +106,7 @@ function Analyzing() {
             <p className="mt-3 text-r14 text-[11px] text-danger50">
               {errorMessage}
             </p>
-            <ActionButton
-              onClick={handleRetry}
-              className="mt-5 max-w-50"
-            >
+            <ActionButton onClick={handleRetry} className="mt-5 max-w-50">
               다시 시도
             </ActionButton>
           </>
