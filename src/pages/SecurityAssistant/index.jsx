@@ -407,7 +407,7 @@ function SecurityAssistant() {
           </div>
         )}
       </div>
-      <FeedbackButton variant="chatbot" />
+      <FeedbackButton variant="chatbot" hidden={!!historyView} />
     </PageBackground>
   );
 }

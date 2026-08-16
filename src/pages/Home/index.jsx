@@ -174,7 +174,15 @@ function Home() {
         />
       )}
 
-      <FeedbackButton />
+      <FeedbackButton
+        bottomOffset={
+          selectedEmailId === "all" &&
+          !emailSelectorOpen &&
+          homeData.metrics.actionRequiredCount > 0
+            ? 180
+            : 80
+        }
+      />
     </PageBackground>
   );
 }

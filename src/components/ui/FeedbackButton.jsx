@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { submitFeedback } from "@/services/feedbackService";
 
@@ -17,15 +17,34 @@ const VARIANTS = {
   },
 };
 
-export default function FeedbackButton({ variant = "default" }) {
+export default function FeedbackButton({ variant = "default", hidden = false, bottomOffset = 80 }) {
   const location = useLocation();
   const { title, description, placeholder } = VARIANTS[variant] ?? VARIANTS.default;
 
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [images, setImages] = useState([]); // [{ file, previewUrl }]
-  const [status, setStatus] = useState("idle"); // idle | loading | done | error
+  const [images, setImages] = useState([]);
+  const [status, setStatus] = useState("idle");
   const fileInputRef = useRef(null);
+  const timerRef = useRef(null);
+
+  // hidden 전환 시 모달 닫기
+  useEffect(() => {
+    if (hidden && open) {
+      setOpen(false);
+    }
+  }, [hidden, open]);
+
+  // unmount 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  function revokeAll(imgs) {
+    imgs.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+  }
 
   function handleOpen() {
     setOpen(true);
@@ -36,7 +55,8 @@ export default function FeedbackButton({ variant = "default" }) {
 
   function handleClose() {
     if (status === "loading") return;
-    images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+    revokeAll(images);
+    setImages([]);
     setOpen(false);
   }
 
@@ -68,8 +88,9 @@ export default function FeedbackButton({ variant = "default" }) {
         images: images.map((img) => img.file),
       });
       setStatus("done");
-      setTimeout(() => {
-        images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+      timerRef.current = setTimeout(() => {
+        revokeAll(images);
+        setImages([]);
         setOpen(false);
       }, 1400);
     } catch {
@@ -77,27 +98,32 @@ export default function FeedbackButton({ variant = "default" }) {
     }
   }
 
+  const bottomStyle = { bottom: `calc(env(safe-area-inset-bottom) + ${bottomOffset}px)` };
+
   return (
     <>
       {/* 플로팅 버튼 */}
-      <button
-        onClick={handleOpen}
-        aria-label={title}
-        className="fixed bottom-[calc(env(safe-area-inset-bottom)+80px)] right-4 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-[#212125]/80 shadow-lg backdrop-blur-sm transition-transform active:scale-95"
-      >
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path
-            d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 3a1 1 0 110 2 1 1 0 010-2zm0 4a1 1 0 011 1v4a1 1 0 11-2 0V10a1 1 0 011-1z"
-            fill="white"
-            opacity="0.85"
-          />
-        </svg>
-      </button>
+      {!hidden && (
+        <button
+          onClick={handleOpen}
+          aria-label={title}
+          style={bottomStyle}
+          className="fixed right-4 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-[#212125]/80 shadow-lg backdrop-blur-sm transition-transform active:scale-95"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 3a1 1 0 110 2 1 1 0 010-2zm0 4a1 1 0 011 1v4a1 1 0 11-2 0V10a1 1 0 011-1z"
+              fill="white"
+              opacity="0.85"
+            />
+          </svg>
+        </button>
+      )}
 
       {/* 모달 오버레이 */}
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-[calc(env(safe-area-inset-bottom)+16px)]"
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 px-4 pb-[calc(env(safe-area-inset-bottom)+16px)]"
           onClick={(e) => { if (e.target === e.currentTarget) handleClose(); }}
         >
           <div className="w-full max-w-sm rounded-2xl bg-white px-5 py-5 shadow-xl">
