@@ -180,7 +180,7 @@ function Home() {
           !emailSelectorOpen &&
           homeData.metrics.actionRequiredCount > 0
             ? 180
-            : 80
+            : 116
         }
       />
     </PageBackground>

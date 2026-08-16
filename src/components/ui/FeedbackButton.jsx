@@ -17,7 +17,7 @@ const VARIANTS = {
   },
 };
 
-export default function FeedbackButton({ variant = "default", hidden = false, bottomOffset = 80 }) {
+export default function FeedbackButton({ variant = "default", hidden = false, bottomOffset = 116 }) {
   const location = useLocation();
   const { title, description, placeholder } = VARIANTS[variant] ?? VARIANTS.default;
 
