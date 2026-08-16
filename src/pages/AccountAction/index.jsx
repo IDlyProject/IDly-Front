@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import { ROUTES } from "@/constants/routes";
+import FeedbackButton from "@/components/ui/FeedbackButton";
 import useActionSession from "./hooks/useActionSession";
 import ChatHeader from "./components/ChatHeader";
 import ChatMessage from "./components/ChatMessage";
@@ -100,6 +101,7 @@ function AccountAction() {
           }
         />
       </div>
+      <FeedbackButton variant="chatbot" />
     </PageBackground>
   );
 }

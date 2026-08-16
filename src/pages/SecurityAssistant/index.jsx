@@ -407,7 +407,7 @@ function SecurityAssistant() {
           </div>
         )}
       </div>
-      <FeedbackButton />
+      <FeedbackButton variant="chatbot" />
     </PageBackground>
   );
 }

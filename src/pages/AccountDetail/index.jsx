@@ -6,6 +6,7 @@ import DetailHero from "./components/DetailHero";
 import AccountReportCard from "./components/AccountReportCard";
 import RiskCard from "./components/RiskCard";
 import EventsList from "./components/EventsList";
+import FeedbackButton from "@/components/ui/FeedbackButton";
 import { useServiceAccountDetail } from "@/hooks/useServiceAccountDetail";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
 import { ROUTES } from "@/constants/routes";
@@ -124,6 +125,7 @@ function AccountDetail() {
 
         <EventsList events={detail.events} />
       </div>
+      <FeedbackButton variant="chatbot" />
     </PageBackground>
   );
 }
