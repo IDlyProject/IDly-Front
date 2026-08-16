@@ -12,6 +12,7 @@ import Apartment from "./components/Apartment";
 import MailboxGrid from "./components/MailboxGrid";
 import ActionRequiredBar from "./components/ActionRequiredBar";
 import ImmediateActionsSheet from "./components/ImmediateActionsSheet";
+import FeedbackButton from "@/components/ui/FeedbackButton";
 import { useHomeData } from "@/hooks/useHomeData";
 import {
   PALETTE_GRADIENTS,
@@ -172,6 +173,8 @@ function Home() {
           onStart={() => handleStartActions(priorityAccountId)}
         />
       )}
+
+      <FeedbackButton />
     </PageBackground>
   );
 }
