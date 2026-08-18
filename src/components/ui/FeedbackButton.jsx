@@ -28,12 +28,12 @@ export default function FeedbackButton({ variant = "default", hidden = false, bo
   const fileInputRef = useRef(null);
   const timerRef = useRef(null);
 
-  // hidden 전환 시 모달 닫기
-  useEffect(() => {
-    if (hidden && open) {
-      setOpen(false);
-    }
-  }, [hidden, open]);
+  // hidden 전환 시 모달 닫기 (effect 대신 렌더 중 조정 — cascading render 방지)
+  const [prevHidden, setPrevHidden] = useState(hidden);
+  if (hidden !== prevHidden) {
+    setPrevHidden(hidden);
+    if (hidden) setOpen(false);
+  }
 
   // unmount 시 타이머 정리
   useEffect(() => {
