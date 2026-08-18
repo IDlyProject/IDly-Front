@@ -30,6 +30,7 @@ function MenuRow({ icon, label, onClick }) {
 function My() {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
+  const displayName = user?.nickname ?? user?.name;
   const primaryEmail = getPrimaryGmailAccount(user)?.email;
   const isSafe = false;
   const [loggingOut, setLoggingOut] = useState(false);
@@ -67,11 +68,11 @@ function My() {
           }}
         >
           <div className="grid h-13 w-13 shrink-0 place-items-center rounded-full bg-white/20 text-[20px] text-white font-bold">
-            {user?.name?.[0] ?? "?"}
+            {displayName?.[0] ?? "?"}
           </div>
           <div>
             <b className="block text-b24 text-[18px] text-white">
-              {user?.name ?? "회원"}
+              {displayName ?? "회원"}
             </b>
             <span className="mt-1 block text-r14 text-[13px] text-white/66">
               {primaryEmail ?? "이메일 없음"}

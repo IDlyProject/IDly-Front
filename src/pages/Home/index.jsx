@@ -13,6 +13,7 @@ import MailboxGrid from "./components/MailboxGrid";
 import ActionRequiredBar from "./components/ActionRequiredBar";
 import ImmediateActionsSheet from "./components/ImmediateActionsSheet";
 import { useHomeData } from "@/hooks/useHomeData";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import {
   PALETTE_GRADIENTS,
   getGradientByIndexReservingPrimary,
@@ -30,6 +31,8 @@ function Home() {
   const [showActionsSheet, setShowActionsSheet] = useState(false);
   const mailAccountId = selectedEmailId === "all" ? undefined : selectedEmailId;
   const { data: homeData, status: homeStatus, reload } = useHomeData(mailAccountId);
+  const { user } = useCurrentUser();
+  const displayName = user?.nickname ?? user?.name ?? homeData?.userName;
 
   const emails = useMemo(() => {
     if (!homeData) return [];
@@ -117,7 +120,7 @@ function Home() {
           className="w-full text-left"
         >
           <StatusHero
-            userName={homeData.userName ?? "회원"}
+            userName={displayName ?? "회원"}
             totalCount={homeData.metrics.totalServiceAccounts}
             mailboxCount={homeData.mailAccounts.length}
             showMailboxCount={selectedEmailId === "all"}

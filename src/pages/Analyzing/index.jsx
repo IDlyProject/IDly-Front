@@ -5,6 +5,7 @@ import ActionButton from "@/components/ui/ActionButton";
 import { ROUTES } from "@/constants/routes";
 import { triggerAnalysisRun, fetchRunStatus } from "@/services/analysisService";
 import { getErrorMessage } from "@/lib/api";
+import AnalysisSteps from "./components/AnalysisSteps";
 import AnalyzingMark from "@/assets/ic_analysis_mark.svg";
 
 const POLL_INTERVAL_MS = 1200;
@@ -13,6 +14,7 @@ function Analyzing() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState("분석을 준비하고 있어요.");
+  const [currentStep, setCurrentStep] = useState("waiting");
   const [failed, setFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [retryKey, setRetryKey] = useState(0);
@@ -36,8 +38,10 @@ function Analyzing() {
       }
       if (cancelled) return;
 
-      setProgress(statusRes.progress);
+      // progress는 절대 역행하지 않는다는 API 계약을 방어적으로 보장한다.
+      setProgress((prev) => Math.max(prev, statusRes.progress));
       setMessage(statusRes.displayMessage);
+      setCurrentStep(statusRes.currentStep);
 
       if (statusRes.status === "completed") {
         navigate(ROUTES.HOME, { replace: true });
@@ -77,6 +81,7 @@ function Analyzing() {
     setErrorMessage("");
     setProgress(0);
     setMessage("분석을 준비하고 있어요.");
+    setCurrentStep("waiting");
     setRetryKey((key) => key + 1);
   };
 
@@ -111,9 +116,12 @@ function Analyzing() {
             </ActionButton>
           </>
         ) : (
-          <p className="mt-3 text-r14 text-[11px] text-gray50">
-            완료되면 자동으로 결과 화면으로 이동합니다
-          </p>
+          <>
+            <p className="mt-3 text-r14 text-[11px] text-gray50">
+              완료되면 자동으로 결과 화면으로 이동합니다
+            </p>
+            <AnalysisSteps currentStep={currentStep} displayMessage={message} />
+          </>
         )}
       </div>
     </PageBackground>
