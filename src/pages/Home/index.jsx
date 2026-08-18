@@ -42,16 +42,20 @@ function Home() {
     return [
       { id: "all", label: "전체", count: homeData.metrics.totalServiceAccounts },
       ...primaryFirst.map((account, idx) => {
-        const hasRisk = homeData.serviceAccounts.some(
-          (sa) =>
-            sa.sourceMailAccountId === account.id &&
-            sa.status === "action_required",
+        const mailboxServiceAccounts = homeData.serviceAccounts.filter(
+          (sa) => sa.sourceMailAccountId === account.id,
+        );
+        const hasRisk = mailboxServiceAccounts.some(
+          (sa) => sa.status === "action_required",
+        );
+        const hasWatch = mailboxServiceAccounts.some(
+          (sa) => sa.status === "watch",
         );
         return {
           id: account.id,
           label: account.email,
           count: account.serviceAccountCount,
-          status: hasRisk ? "risk" : "safe",
+          status: hasRisk ? "risk" : hasWatch ? "watch" : "safe",
           avatarBg:
             account.role === "primary"
               ? PALETTE_GRADIENTS[0]
@@ -72,7 +76,12 @@ function Home() {
     return homeData.serviceAccounts.map((sa) => ({
       id: sa.id,
       name: sa.displayName,
-      status: sa.status === "action_required" ? "risk" : "safe",
+      status:
+        sa.status === "action_required"
+          ? "risk"
+          : sa.status === "watch"
+            ? "watch"
+            : "safe",
       iconUrl: sa.iconUrl,
       iconBg: getServiceIconGradient(sa.serviceName),
       iconText: sa.iconLabel || sa.displayName?.[0]?.toUpperCase() || "?",

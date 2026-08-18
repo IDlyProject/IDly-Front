@@ -7,6 +7,7 @@ import useLongPress from "../hooks/useLongPress";
 
 const DOT_COLOR = {
   safe: "bg-[#43A047]",
+  watch: "bg-[#FABF2E]",
   risk: "bg-[#EE4E4E]",
 };
 
@@ -39,7 +40,7 @@ function AptCard({ account, onHide }) {
         <span
           className={`absolute right-2.75 top-1.75 rounded-full ${
             isRisk ? "h-3 w-3 border-2 border-white" : "h-2 w-2"
-          } ${isRisk ? DOT_COLOR.risk : DOT_COLOR.safe}`}
+          } ${DOT_COLOR[account.status] ?? DOT_COLOR.safe}`}
         />
 
         <ServiceIcon
