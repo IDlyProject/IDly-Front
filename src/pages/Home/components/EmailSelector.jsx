@@ -56,7 +56,7 @@ function EmailSelector({
             <span className="text-[15px] font-bold text-gray100">
               {primaryLabel}
             </span>
-            <img src={ChevronBottomIcon} />
+            <img src={ChevronBottomIcon} alt="" className="h-3.5 w-3.5 shrink-0" />
           </div>
           <span className="block text-r14 text-[11px] text-gray50">
             {countLabel}

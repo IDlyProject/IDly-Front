@@ -24,7 +24,7 @@ function StatusHero({
       style={{
         background: isSafe
           ? "linear-gradient(135deg, #3B6CFF 0%, #08257E 100%)"
-          : "linear-gradient(135deg, #E43939 0%, #08257E 100%)",
+          : "linear-gradient(135deg, #E46C39 0%, #A90404 100%)",
       }}
     >
       <div className="mt-1 mb-3 flex items-center justify-between">

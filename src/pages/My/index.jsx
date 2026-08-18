@@ -63,7 +63,7 @@ function My() {
           style={{
             background: isSafe
               ? "linear-gradient(135deg, #3B6CFF 0%, #08257E 100%)"
-              : "linear-gradient(135deg, #E43939 0%, #08257E 100%)",
+              : "linear-gradient(135deg, #E46C39 0%, #A90404 100%)",
           }}
         >
           <div className="grid h-13 w-13 shrink-0 place-items-center rounded-full bg-white/20 text-[20px] text-white font-bold">
