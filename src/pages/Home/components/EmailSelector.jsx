@@ -52,16 +52,14 @@ function EmailSelector({
           )}
         </span>
         <div className="flex-1">
-          <div className="flex items-center gap-1.75">
-            <span className="text-[15px] font-bold text-gray100">
-              {primaryLabel}
-            </span>
-            <img src={ChevronBottomIcon} alt="" className="h-3.5 w-3.5 shrink-0" />
-          </div>
+          <span className="text-[15px] font-bold text-gray100">
+            {primaryLabel}
+          </span>
           <span className="block text-r14 text-[11px] text-gray50">
             {countLabel}
           </span>
         </div>
+        <img src={ChevronBottomIcon} alt="" className="h-3.5 w-3.5 shrink-0" />
       </button>
 
       {open && (
