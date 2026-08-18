@@ -5,16 +5,13 @@ import ActionButton from "@/components/ui/ActionButton";
 import { ROUTES } from "@/constants/routes";
 import { triggerAnalysisRun, fetchRunStatus } from "@/services/analysisService";
 import { getErrorMessage } from "@/lib/api";
-import AnalysisSteps from "./components/AnalysisSteps";
 import AnalyzingMark from "@/assets/ic_analysis_mark.svg";
 
 const POLL_INTERVAL_MS = 1200;
 
 function Analyzing() {
   const navigate = useNavigate();
-  const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState("분석을 준비하고 있어요.");
-  const [currentStep, setCurrentStep] = useState("waiting");
   const [failed, setFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [retryKey, setRetryKey] = useState(0);
@@ -38,10 +35,7 @@ function Analyzing() {
       }
       if (cancelled) return;
 
-      // progress는 절대 역행하지 않는다는 API 계약을 방어적으로 보장한다.
-      setProgress((prev) => Math.max(prev, statusRes.progress));
       setMessage(statusRes.displayMessage);
-      setCurrentStep(statusRes.currentStep);
 
       if (statusRes.status === "completed") {
         navigate(ROUTES.HOME, { replace: true });
@@ -79,36 +73,30 @@ function Analyzing() {
   const handleRetry = () => {
     setFailed(false);
     setErrorMessage("");
-    setProgress(0);
     setMessage("분석을 준비하고 있어요.");
-    setCurrentStep("waiting");
     setRetryKey((key) => key + 1);
   };
 
   return (
     <PageBackground variant="default">
-      <div className="flex min-h-dvh flex-col items-center justify-center px-10 text-center">
-        <img
-          src={AnalyzingMark}
-          alt=""
-          className="h-35 w-35"
-          style={{ filter: "drop-shadow(0 12px 32px rgba(8,37,126,0.1))" }}
-        />
-
-        <h1 className="mt-8 text-b24 text-[22px] text-gray100">
-          {failed ? "분석에 실패했어요" : message}
-        </h1>
-
-        <div className="mt-6.5 h-1.5 w-full overflow-hidden rounded-[3px] bg-[#E8EEFF]">
-          <div
-            className="h-full rounded-[3px] bg-linear-to-r from-[#5C7DEA] to-[#09267F] transition-all duration-500"
-            style={{ width: `${progress}%` }}
+      <div className="flex min-h-dvh flex-col items-center justify-center px-8">
+        <div className="grid place-items-center">
+          <div className="col-start-1 row-start-1 h-45 w-45 rounded-full border-2 border-dashed border-info10" />
+          <img
+            src={AnalyzingMark}
+            alt=""
+            className="col-start-1 row-start-1 h-35 w-35"
+            style={{ filter: "drop-shadow(0 12px 32px rgba(8,37,126,0.1))" }}
           />
         </div>
 
+        <h1 className="mt-8 w-full text-left text-b24 text-[22px] text-gray100">
+          {failed ? "분석에 실패했어요" : message}
+        </h1>
+
         {failed ? (
           <>
-            <p className="mt-3 text-r14 text-[11px] text-danger50">
+            <p className="mt-3 w-full text-left text-r14 text-[11px] text-danger50">
               {errorMessage}
             </p>
             <ActionButton onClick={handleRetry} className="mt-5 max-w-50">
@@ -116,12 +104,13 @@ function Analyzing() {
             </ActionButton>
           </>
         ) : (
-          <>
-            <p className="mt-3 text-r14 text-[11px] text-gray50">
-              완료되면 자동으로 결과 화면으로 이동합니다
-            </p>
-            <AnalysisSteps currentStep={currentStep} displayMessage={message} />
-          </>
+          <p className="mt-3 text-center text-[16px] font-medium text-gray50">
+            완료되면 자동으로 결과 화면으로 이동합니다.
+            <br />
+            웹을 나가셔도 분석은 계속되며,
+            <br />
+            분석이 완료된 경우 알림톡이 발송됩니다.
+          </p>
         )}
       </div>
     </PageBackground>
