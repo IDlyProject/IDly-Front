@@ -26,7 +26,10 @@ function Login() {
   const handleGoogleLogin = () => {
     if (isLoading) return;
     setIsLoading(true);
-    window.location.href = `${API_BASE_URL}/api/auth/google`;
+    // refresh_token_missing은 Google이 refresh_token을 재발급하지 않은 상태라
+    // reauth=true로 consent 화면을 강제로 띄워야 재발급받을 수 있다.
+    const query = errorCode === "refresh_token_missing" ? "?reauth=true" : "";
+    window.location.href = `${API_BASE_URL}/api/auth/google${query}`;
   };
 
   return (

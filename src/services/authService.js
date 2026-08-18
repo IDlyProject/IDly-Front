@@ -1,4 +1,4 @@
-import { axiosInstance, refreshAccessToken } from "@/lib/api";
+import { axiosInstance, refreshAccessToken, clearTokens } from "@/lib/api";
 
 export async function fetchCurrentUser() {
   try {
@@ -14,7 +14,11 @@ export async function refreshSession() {
 }
 
 export async function logout() {
-  await axiosInstance.post("/api/auth/logout");
+  try {
+    await axiosInstance.post("/api/auth/logout");
+  } finally {
+    clearTokens();
+  }
 }
 
 export function getPrimaryGmailAccount(user) {
