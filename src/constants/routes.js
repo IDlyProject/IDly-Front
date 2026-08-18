@@ -2,6 +2,10 @@ export const ROUTES = {
   SPLASH: "/",
   AUTH_CALLBACK: "/auth/callback",
   ONBOARDING_LOGIN: "/onboarding/login",
+  ONBOARDING_PRE_REGISTER: "/onboarding/pre-register",
+  ONBOARDING_PRE_REGISTER_TERMS: (type) =>
+    `/onboarding/pre-register/terms/${type}`,
+  ONBOARDING_PRE_REGISTER_COMPLETE: "/onboarding/pre-register/complete",
   ONBOARDING_CONSENT: "/onboarding/consent",
   ONBOARDING_PROFILE: "/onboarding/profile",
   ONBOARDING_PRIMARY_COMPLETE: "/onboarding/primary-complete",
