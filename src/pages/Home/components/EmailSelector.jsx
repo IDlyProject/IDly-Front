@@ -51,7 +51,7 @@ function EmailSelector({
             </span>
           )}
         </span>
-        <div className="flex-1">
+        <div>
           <span className="text-[15px] font-bold text-gray100">
             {primaryLabel}
           </span>
@@ -59,7 +59,11 @@ function EmailSelector({
             {countLabel}
           </span>
         </div>
-        <img src={ChevronBottomIcon} alt="" className="h-3.5 w-3.5 shrink-0" />
+        <img
+          src={ChevronBottomIcon}
+          alt=""
+          className="ml-15 h-3.5 w-3.5 shrink-0"
+        />
       </button>
 
       {open && (
