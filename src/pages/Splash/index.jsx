@@ -25,7 +25,7 @@ function Splash() {
     fetchCurrentUser()
       .then((user) => {
         if (!user) {
-          goTo(ROUTES.ONBOARDING_LOGIN);
+          goTo(ROUTES.ONBOARDING_PRE_REGISTER);
           return;
         }
 
@@ -37,7 +37,7 @@ function Splash() {
       })
       .catch((error) => {
         console.error("Failed to fetch current user:", error);
-        goTo(ROUTES.ONBOARDING_LOGIN);
+        goTo(ROUTES.ONBOARDING_PRE_REGISTER);
       });
   }, []);
 

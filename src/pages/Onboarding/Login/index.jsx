@@ -6,7 +6,6 @@ import logo from "@/assets/ic_logo.svg";
 import googleIcon from "@/assets/ic_google.svg";
 import PageBackground from "@/components/layouts/PageBackground";
 
-
 const OAUTH_ERROR_MESSAGES = {
   gmail_already_linked: "이미 다른 계정에 연동되어 있는 Gmail이에요.",
   refresh_token_missing: "로그인 정보가 만료됐어요. 다시 로그인해 주세요.",
@@ -34,10 +33,23 @@ function Login() {
     <PageBackground variant="default">
       <div className="flex min-h-dvh flex-col px-4 pb-8">
         <div className="flex flex-1 flex-col items-center justify-center">
-          <img src={logo} alt="IDly" />
-          <h1 className="mt-6 text-center text-b24 text-gray100">안녕하세요</h1>
-          <p className="mt-2.5 text-center text-r14 text-gray60">
+          <img src={logo} alt="IDly" className="w-auto h-22" />
+          <h1 className="mt-5 text-center text-b24 text-gray100">
+            안녕하세요
+            <br />
             계정을 지키는 IDly입니다!
+          </h1>
+          <p className="mt-4 text-center text-[18px] font-bold text-gray60">
+            계정 등록이 완료되셨나요?
+            <br />
+            아래 버튼을 눌러
+            <br />
+            IDly에서 사용할 대표 Gmail부터 연결해주세요!
+          </p>
+          <p className="mt-6 text-center text-[18px] font-bold text-gray60">
+            대표 Gmail을 연결한 뒤
+            <br />
+            다른 Gmail 연동도 가능합니다.
           </p>
         </div>
         {errorMessage && (

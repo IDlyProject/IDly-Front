@@ -7,8 +7,15 @@ import MainLayout from "@/components/layouts/MainLayout";
 
 import Splash from "@/pages/Splash";
 import Login from "@/pages/Onboarding/Login";
+import PreRegister from "@/pages/Onboarding/PreRegister";
 import AuthCallback from "@/pages/AuthCallback";
 
+const PreRegisterTermsDetail = lazy(
+  () => import("@/pages/Onboarding/PreRegister/TermsDetail"),
+);
+const PreRegisterComplete = lazy(
+  () => import("@/pages/Onboarding/PreRegister/Complete"),
+);
 const Consent = lazy(() => import("@/pages/Onboarding/Consent"));
 const Profile = lazy(() => import("@/pages/Onboarding/Profile"));
 const PrimaryComplete = lazy(
@@ -37,6 +44,15 @@ export const router = createBrowserRouter([
   { path: ROUTES.SPLASH, element: <Splash /> },
   { path: ROUTES.AUTH_CALLBACK, element: <AuthCallback /> },
   { path: ROUTES.ONBOARDING_LOGIN, element: <Login /> },
+  { path: ROUTES.ONBOARDING_PRE_REGISTER, element: <PreRegister /> },
+  {
+    path: "/onboarding/pre-register/terms/:type",
+    element: <PreRegisterTermsDetail />,
+  },
+  {
+    path: ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE,
+    element: <PreRegisterComplete />,
+  },
   {
     path: ROUTES.ONBOARDING_CONSENT,
     element: (
