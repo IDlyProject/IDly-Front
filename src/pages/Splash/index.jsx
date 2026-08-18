@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import { fetchCurrentUser } from "@/services/authService";
+import {
+  getWaitlistStatus,
+  verifyWaitlistToken,
+} from "@/services/waitlistService";
+import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
 import typoLogo from "@/assets/ic_typo_logo_white.svg";
 import PageBackground from "@/components/layouts/PageBackground";
 
@@ -9,6 +14,7 @@ const MIN_DISPLAY_TIME = 1200;
 
 function Splash() {
   const [dest, setDest] = useState(null);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const startTime = Date.now();
@@ -21,11 +27,55 @@ function Splash() {
       }, remaining);
     };
 
+    const resolveWaitlistEntry = async () => {
+      const token = searchParams.get("token");
+      if (token) {
+        try {
+          const { approved } = await verifyWaitlistToken(token);
+          if (approved) {
+            localStorage.setItem(WAITLIST_STORAGE_KEYS.APPROVED, "true");
+            goTo(ROUTES.ONBOARDING_LOGIN);
+            return;
+          }
+        } catch {
+          // expired/invalid token → fall through to registration
+        }
+        goTo(ROUTES.ONBOARDING_PRE_REGISTER);
+        return;
+      }
+
+      if (localStorage.getItem(WAITLIST_STORAGE_KEYS.APPROVED) === "true") {
+        goTo(ROUTES.ONBOARDING_LOGIN);
+        return;
+      }
+
+      const phone = localStorage.getItem(WAITLIST_STORAGE_KEYS.PHONE);
+      if (phone) {
+        try {
+          const { status } = await getWaitlistStatus(phone);
+          if (status === "approved") {
+            localStorage.setItem(WAITLIST_STORAGE_KEYS.APPROVED, "true");
+            goTo(ROUTES.ONBOARDING_LOGIN);
+          } else if (status === "not_found") {
+            localStorage.removeItem(WAITLIST_STORAGE_KEYS.PHONE);
+            goTo(ROUTES.ONBOARDING_PRE_REGISTER);
+          } else {
+            goTo(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE);
+          }
+        } catch {
+          // status API 실패 → 대기 화면 유지 (재시도 안내)
+          goTo(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE);
+        }
+        return;
+      }
+
+      goTo(ROUTES.ONBOARDING_PRE_REGISTER);
+    };
 
     fetchCurrentUser()
       .then((user) => {
         if (!user) {
-          goTo(ROUTES.ONBOARDING_PRE_REGISTER);
+          resolveWaitlistEntry();
           return;
         }
 
@@ -37,9 +87,9 @@ function Splash() {
       })
       .catch((error) => {
         console.error("Failed to fetch current user:", error);
-        goTo(ROUTES.ONBOARDING_PRE_REGISTER);
+        resolveWaitlistEntry();
       });
-  }, []);
+  }, [searchParams]);
 
   if (dest) {
     return <Navigate to={dest} replace />;

@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ActionButton from "@/components/ui/ActionButton";
 import PageBackground from "@/components/layouts/PageBackground";
 import { ROUTES } from "@/constants/routes";
+import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
+import { registerWaitlist } from "@/services/waitlistService";
+import { getErrorMessage } from "@/lib/api";
 import logo from "@/assets/ic_logo.svg";
 import PersonIcon from "@/assets/ic_person.svg";
 import CallIcon from "@/assets/ic_call.svg";
@@ -81,6 +84,7 @@ function PreRegister() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const goToTerms = (type) => {
     navigate(ROUTES.ONBOARDING_PRE_REGISTER_TERMS(type), {
@@ -137,10 +141,36 @@ function PreRegister() {
     (confirmedEmails.length > 0 || !!trimmedDraftEmail) &&
     allTermsChecked;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!canSubmit || isSubmitting) return;
     setIsSubmitting(true);
-    navigate(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE);
+    setSubmitError("");
+
+    const emails = trimmedDraftEmail
+      ? [...confirmedEmails, trimmedDraftEmail]
+      : confirmedEmails;
+    const normalizedPhone = phone.trim().replace(/-/g, "");
+
+    try {
+      await registerWaitlist({
+        name: name.trim(),
+        phone: normalizedPhone,
+        emails,
+      });
+      localStorage.setItem(WAITLIST_STORAGE_KEYS.PHONE, normalizedPhone);
+      navigate(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE);
+    } catch (err) {
+      setIsSubmitting(false);
+      if (err?.response?.status === 409) {
+        setSubmitError(
+          "이미 등록된 번호입니다. 카카오톡 안내를 기다려주세요.",
+        );
+      } else {
+        setSubmitError(
+          getErrorMessage(err, "등록에 실패했어요. 다시 시도해주세요."),
+        );
+      }
+    }
   };
 
   return (
@@ -305,6 +335,11 @@ function PreRegister() {
           </div>
         </div>
         <div className="px-1.5">
+          {submitError && (
+            <p className="mb-2 text-center text-r14 text-[11px] text-[#FF0000]">
+              {submitError}
+            </p>
+          )}
           <ActionButton
             bgColor="var(--color-main100)"
             textColor="var(--color-white)"

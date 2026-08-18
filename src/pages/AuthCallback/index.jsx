@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import { fetchCurrentUser } from "@/services/authService";
+import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
 
 function AuthCallback() {
   const [searchParams] = useSearchParams();
@@ -25,6 +26,9 @@ function AuthCallback() {
         navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
         return;
       }
+
+      localStorage.removeItem(WAITLIST_STORAGE_KEYS.PHONE);
+      localStorage.removeItem(WAITLIST_STORAGE_KEYS.APPROVED);
 
       if (mode === "add") {
         navigate(ROUTES.ONBOARDING_ADD_MAILBOXES, { replace: true });
