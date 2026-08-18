@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressDots from "../components/ProgressDot";
 import ActionButton from "@/components/ui/ActionButton";
 import PlusIcon from "@/assets/ic_plus.svg";
-import { API_BASE_URL } from "@/constants/api";
 import { ROUTES } from "@/constants/routes";
 import { useGmailAccounts } from "@/hooks/useGmailAccounts";
+import { fetchAddAccountUrl } from "@/services/addAccountService";
 import { toMailAccount } from "@/utils/mailAccount";
 import PageBackground from "../../../components/layouts/PageBackground";
 import LoadingScreen from "@/components/ui/LoadingScreen";
@@ -13,9 +14,22 @@ import ErrorScreen from "@/components/ui/ErrorScreen";
 function AddMailboxes() {
   const navigate = useNavigate();
   const { accounts, status } = useGmailAccounts();
+  const [isConnecting, setIsConnecting] = useState(false);
 
-  const handleStartConnect = () => {
-    window.location.href = `${API_BASE_URL}/api/auth/google`;
+  const handleStartConnect = async () => {
+    if (isConnecting) return;
+    setIsConnecting(true);
+    try {
+      // URL을 먼저 받아온 뒤 이동한다. 이 요청에는 Bearer 토큰이 실리므로
+      // 쿠키가 차단된 환경에서도 기존 유저에 계정이 붙는다.
+      const url = await fetchAddAccountUrl();
+      window.location.href = url;
+    } catch {
+      // 세션이 끊긴 상태에서는 계정을 추가할 대상 유저를 알 수 없다.
+      // 이 경우 신규 유저를 만드는 대신 다시 로그인시킨다.
+      setIsConnecting(false);
+      navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
+    }
   };
 
   const handleComplete = () => {
@@ -80,7 +94,8 @@ function AddMailboxes() {
 
             <button
               onClick={handleStartConnect}
-              className="flex w-full items-center gap-3.5 px-4.5 py-4 text-left"
+              disabled={isConnecting}
+              className="flex w-full items-center gap-3.5 px-4.5 py-4 text-left disabled:opacity-40"
             >
               <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-main100">
                 <img src={PlusIcon} className="h-3.25 w-3.25" />
