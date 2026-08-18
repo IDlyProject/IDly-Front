@@ -12,6 +12,7 @@ const POLL_INTERVAL_MS = 1200;
 function Analyzing() {
   const navigate = useNavigate();
   const [message, setMessage] = useState("분석을 준비하고 있어요.");
+  const [progress, setProgress] = useState(0);
   const [failed, setFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [retryKey, setRetryKey] = useState(0);
@@ -35,6 +36,7 @@ function Analyzing() {
       }
       if (cancelled) return;
 
+      setProgress((prev) => Math.max(prev, statusRes.progress));
       setMessage(statusRes.displayMessage);
 
       if (statusRes.status === "completed") {
@@ -74,6 +76,7 @@ function Analyzing() {
     setFailed(false);
     setErrorMessage("");
     setMessage("분석을 준비하고 있어요.");
+    setProgress(0);
     setRetryKey((key) => key + 1);
   };
 
@@ -90,6 +93,13 @@ function Analyzing() {
         <h1 className="mt-8 w-full text-left text-b24 text-[22px] text-gray100">
           {failed ? "분석에 실패했어요" : message}
         </h1>
+
+        <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-info10">
+          <div
+            className="h-full rounded-full bg-linear-to-r from-[#5C7DEA] to-[#09267F] transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
 
         {failed ? (
           <>
