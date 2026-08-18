@@ -12,6 +12,7 @@ import Apartment from "./components/Apartment";
 import MailboxGrid from "./components/MailboxGrid";
 import ActionRequiredBar from "./components/ActionRequiredBar";
 import ImmediateActionsSheet from "./components/ImmediateActionsSheet";
+import FeedbackButton from "@/components/ui/FeedbackButton";
 import { useHomeData } from "@/hooks/useHomeData";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import {
@@ -184,6 +185,16 @@ function Home() {
           onStart={() => handleStartActions(priorityAccountId)}
         />
       )}
+
+      <FeedbackButton
+        bottomOffset={
+          selectedEmailId === "all" &&
+          !emailSelectorOpen &&
+          homeData.metrics.actionRequiredCount > 0
+            ? 180
+            : 116
+        }
+      />
     </PageBackground>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import FeedbackButton from "@/components/ui/FeedbackButton";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import { ROUTES } from "@/constants/routes";
@@ -406,6 +407,7 @@ function SecurityAssistant() {
           </div>
         )}
       </div>
+      <FeedbackButton variant="chatbot" hidden={!!historyView} />
     </PageBackground>
   );
 }
