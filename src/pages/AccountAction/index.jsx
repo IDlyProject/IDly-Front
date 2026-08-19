@@ -89,19 +89,23 @@ function AccountAction() {
           )}
         </div>
 
-        <ChatInputBar
-          value={inputValue}
-          onChange={setInputValue}
-          onSend={handleSend}
-          disabled={!session.composerEnabled || sending}
-          placeholder={
-            session.composerEnabled
-              ? (session.composerPlaceholder ?? "막힌 부분을 알려주세요")
-              : "조치가 막히면 아래 버튼을 눌러주세요"
-          }
-        />
+        {/* 제보 버튼을 입력창 바로 위에 붙인다 — placeholder가 상태에 따라
+            바뀌면서 입력창 높이도 달라지기 때문이다. */}
+        <div className="relative">
+          <FeedbackButton variant="chatbot" anchor="above" />
+          <ChatInputBar
+            value={inputValue}
+            onChange={setInputValue}
+            onSend={handleSend}
+            disabled={!session.composerEnabled || sending}
+            placeholder={
+              session.composerEnabled
+                ? (session.composerPlaceholder ?? "막힌 부분을 알려주세요")
+                : "조치가 막히면 아래 버튼을 눌러주세요"
+            }
+          />
+        </div>
       </div>
-      <FeedbackButton variant="chatbot" />
     </PageBackground>
   );
 }
