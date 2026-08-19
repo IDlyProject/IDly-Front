@@ -324,14 +324,23 @@ function SecurityAssistant() {
           )}
         </div>
 
-        <SecurityAssistantComposer
-          value={input}
-          onChange={setInput}
-          onSend={handleSend}
-          disabled={sending || !sessionId}
-          hasHistory={hasHistory}
-          onOpenHistory={handleOpenHistoryList}
-        />
+        {/* 제보 버튼을 입력창 바로 위에 붙인다. 입력창 높이는 '이전 대화' 버튼
+            유무에 따라 달라지므로 화면 하단 기준으로 잡으면 어긋난다. */}
+        <div className="relative">
+          <FeedbackButton
+            variant="chatbot"
+            hidden={!!historyView}
+            anchor="above"
+          />
+          <SecurityAssistantComposer
+            value={input}
+            onChange={setInput}
+            onSend={handleSend}
+            disabled={sending || !sessionId}
+            hasHistory={hasHistory}
+            onOpenHistory={handleOpenHistoryList}
+          />
+        </div>
 
         {/* 이전 대화 오버레이 */}
         {historyView && (
@@ -407,7 +416,6 @@ function SecurityAssistant() {
           </div>
         )}
       </div>
-      <FeedbackButton variant="chatbot" hidden={!!historyView} />
     </PageBackground>
   );
 }
