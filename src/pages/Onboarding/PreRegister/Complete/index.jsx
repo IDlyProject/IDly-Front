@@ -1,5 +1,6 @@
 import PageBackground from "@/components/layouts/PageBackground";
 import logo from "@/assets/ic_logo.svg";
+import InstallPromptSheet from "@/components/ui/InstallPromptSheet";
 
 function PreRegisterComplete() {
   return (
@@ -19,6 +20,9 @@ function PreRegisterComplete() {
           서비스 링크를 발송드리겠습니다.
         </p>
       </div>
+
+      {/* 등록 직후가 홈 화면 추가를 권하기 가장 좋은 시점이다 */}
+      <InstallPromptSheet />
     </PageBackground>
   );
 }
