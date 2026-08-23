@@ -19,6 +19,9 @@ export default defineConfig({
         short_name: "IDly",
         description: "메일함을 분석해 내 계정의 보안 위험을 찾고 조치까지 안내합니다.",
         lang: "ko",
+        // id를 명시하지 않으면 start_url이 앱 식별자로 쓰인다. 나중에 start_url을
+        // 바꾸면 다른 앱으로 인식돼 재설치가 필요해지므로 고정해둔다.
+        id: "/",
         start_url: "/",
         scope: "/",
         display: "standalone",
