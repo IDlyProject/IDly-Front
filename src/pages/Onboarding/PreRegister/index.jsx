@@ -53,7 +53,6 @@ const REQUIRED_TERMS = [
     label: "(필수) 개인정보 수집·이용 동의",
     termsType: "privacy",
   },
-  { id: "kakao", label: "(필수) 카카오 알림톡 수신 동의", termsType: "kakao" },
 ];
 
 function buildInitialForm(state) {
@@ -162,9 +161,7 @@ function PreRegister() {
     } catch (err) {
       setIsSubmitting(false);
       if (err?.response?.status === 409) {
-        setSubmitError(
-          "이미 등록된 번호입니다. 카카오톡 안내를 기다려주세요.",
-        );
+        setSubmitError("이미 등록된 번호입니다. 카카오톡 안내를 기다려주세요.");
       } else {
         setSubmitError(
           getErrorMessage(err, "등록에 실패했어요. 다시 시도해주세요."),
@@ -190,8 +187,8 @@ function PreRegister() {
             <p className="text-[15px] font-[600]  text-gray60">
               IDly 이용을 위해 먼저 Gmail 계정 등록이 필요해요.
               <br />
-              <span className="text-[#000000]">메일과 전화번호</span>를
-              입력해주시면 카카오톡으로 안내해드릴게요!
+              <span className="text-[#000000]">전화번호와 이메일을</span>
+              입력해주시면 계정 등록 후 알려드릴게요!
             </p>
             <button
               type="button"
@@ -296,42 +293,6 @@ function PreRegister() {
                 )
               )}
             </div>
-
-            <div className="pt-5 px-10">
-              {REQUIRED_TERMS.map((term) => (
-                <div
-                  key={term.id}
-                  className="flex w-full flex-wrap items-center py-2.5 text-left"
-                >
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setChecked((prev) => ({
-                        ...prev,
-                        [term.id]: !prev[term.id],
-                      }))
-                    }
-                    className="flex items-center gap-3 text-left pr-1"
-                  >
-                    <img
-                      src={checked[term.id] ? CheckedBoxIcon : UncheckedBoxIcon}
-                      alt=""
-                      className="h-4.5 w-4.5"
-                    />
-                    <span className="text-r14 text-gray100">{term.label}</span>
-                  </button>
-                  {term.termsType && (
-                    <button
-                      type="button"
-                      onClick={() => goToTerms(term.termsType)}
-                      className="text-r14 text-gray100"
-                    >
-                      [보기]
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
           </div>
         </div>
         <div className="px-1.5">
@@ -340,6 +301,41 @@ function PreRegister() {
               {submitError}
             </p>
           )}
+          <div className="px-10">
+            {REQUIRED_TERMS.map((term) => (
+              <div
+                key={term.id}
+                className="flex w-full flex-wrap items-center py-2.5 text-left"
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    setChecked((prev) => ({
+                      ...prev,
+                      [term.id]: !prev[term.id],
+                    }))
+                  }
+                  className="flex items-center gap-3 text-left pr-1"
+                >
+                  <img
+                    src={checked[term.id] ? CheckedBoxIcon : UncheckedBoxIcon}
+                    alt=""
+                    className="h-4.5 w-4.5"
+                  />
+                  <span className="text-r14 text-gray100">{term.label}</span>
+                </button>
+                {term.termsType && (
+                  <button
+                    type="button"
+                    onClick={() => goToTerms(term.termsType)}
+                    className="text-r14 text-gray100"
+                  >
+                    [보기]
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
           <ActionButton
             bgColor="var(--color-main100)"
             textColor="var(--color-white)"

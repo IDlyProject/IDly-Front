@@ -46,10 +46,12 @@ function AuthCallback() {
       }
 
       if (mode === "login") {
-        if (user.requiredTermsAgreed) {
-          navigate(ROUTES.HOME, { replace: true });
-        } else {
+        if (!user.requiredTermsAgreed) {
           navigate(ROUTES.ONBOARDING_CONSENT, { replace: true });
+        } else if (!user.nickname) {
+          navigate(ROUTES.ONBOARDING_PROFILE, { replace: true });
+        } else {
+          navigate(ROUTES.HOME, { replace: true });
         }
         return;
       }

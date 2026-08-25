@@ -5,17 +5,6 @@ import { ROUTES } from "@/constants/routes";
 import BackIcon from "@/assets/ic_back_white_20.svg";
 
 const TERMS_CONTENT = {
-  kakao: {
-    title: "카카오 알림톡 수신 동의",
-    body: `IDly(이하 "회사")는
-아래와 같이 카카오 알림톡을 발송합니다.
-
-1. 발송 내용: 사전 등록 접수 확인, 서비스 이용 가능 안내
-2. 수신 채널: 카카오톡 (IDly)
-
-귀하는 위 동의를 거부할 권리가 있으나,
-거부 시 카카오톡을 통한 서비스 안내를 받을 수 없습니다.`,
-  },
   privacy: {
     title: "개인정보 수집·이용 동의",
     body: `IDly(이하 "회사")는 사전 등록 및 서비스 이용 안내를 위해

@@ -83,6 +83,10 @@ function Splash() {
           goTo(ROUTES.ONBOARDING_CONSENT);
           return;
         }
+        if (!user.nickname) {
+          goTo(ROUTES.ONBOARDING_PROFILE);
+          return;
+        }
         goTo(ROUTES.HOME);
       })
       .catch((error) => {
