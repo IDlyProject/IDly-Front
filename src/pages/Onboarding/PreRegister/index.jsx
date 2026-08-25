@@ -172,9 +172,9 @@ function PreRegister() {
 
   return (
     <PageBackground variant="default">
-      <div className="flex min-h-dvh flex-col px-2.5 pb-8">
-        <div className="flex-1 px-2.5">
-          <div className="flex flex-col items-center pb-6.5 pt-9 text-center">
+      <div className="flex h-dvh flex-col overflow-y-auto px-2.5 pb-8">
+        <div className="flex min-h-0 flex-1 flex-col px-2.5">
+          <div className="flex shrink-0 flex-col items-center pb-6.5 pt-9 text-center">
             <img src={logo} alt="IDly" className="w-auto h-22" />
             <h1 className="mt-5.5 text-b24 text-gray100">
               안녕하세요
@@ -187,7 +187,7 @@ function PreRegister() {
             <p className="text-[15px] font-[600]  text-gray60">
               IDly 이용을 위해 먼저 Gmail 계정 등록이 필요해요.
               <br />
-              <span className="text-[#000000]">전화번호와 이메일을</span>
+              <span className="text-[#000000]">전화번호와 이메일</span>을
               입력해주시면 계정 등록 후 알려드릴게요!
             </p>
             <button
@@ -200,8 +200,8 @@ function PreRegister() {
             </button>
           </div>
 
-          <div className="space-y-1.5">
-            <div className="grid grid-cols-2 gap-3.5">
+          <div className="flex min-h-0 flex-1 flex-col space-y-1.5">
+            <div className="shrink-0 grid grid-cols-2 gap-3.5">
               <label className="block">
                 <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
                   이름
@@ -233,17 +233,11 @@ function PreRegister() {
               </label>
             </div>
 
-            <div>
-              <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
+            <div className="flex min-h-0 flex-1 flex-col">
+              <span className="mb-1.5 shrink-0 block text-sb16 text-[13px] text-gray60">
                 분석할 이메일(최대 {MAX_EMAILS}개)
               </span>
-              <div
-                className={`space-y-1.5 ${
-                  confirmedEmails.length >= 1
-                    ? "max-h-28 overflow-y-auto pr-1"
-                    : ""
-                }`}
-              >
+              <div className="min-h-0 space-y-1.5 overflow-y-auto pr-1">
                 {confirmedEmails.map((email, idx) => (
                   <div
                     key={idx}
@@ -282,12 +276,12 @@ function PreRegister() {
                 )}
               </div>
               {isCheckingEmail ? (
-                <p className="mt-2 text-r14 text-[11px] text-gray50">
+                <p className="mt-2 shrink-0 text-r14 text-[11px] text-gray50">
                   구글 계정인지 확인하는 중...
                 </p>
               ) : (
                 emailErrorMessage && (
-                  <p className="mt-2 text-r14 text-[11px] text-[#FF0000]">
+                  <p className="mt-2 shrink-0 text-r14 text-[11px] text-[#FF0000]">
                     {emailErrorMessage}
                   </p>
                 )
@@ -295,7 +289,7 @@ function PreRegister() {
             </div>
           </div>
         </div>
-        <div className="px-1.5">
+        <div className="shrink-0 px-1.5">
           {submitError && (
             <p className="mb-2 text-center text-r14 text-[11px] text-[#FF0000]">
               {submitError}
