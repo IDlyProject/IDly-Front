@@ -6,6 +6,7 @@ import { ROUTES } from "@/constants/routes";
 import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
 import { registerWaitlist } from "@/services/waitlistService";
 import { getErrorMessage } from "@/lib/api";
+import InstallPromptModal from "./components/InstallPromptModal";
 import logo from "@/assets/ic_logo.svg";
 import PersonIcon from "@/assets/ic_person.svg";
 import CallIcon from "@/assets/ic_call.svg";
@@ -84,6 +85,7 @@ function PreRegister() {
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [isCheckingEmail, setIsCheckingEmail] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [showInstallModal, setShowInstallModal] = useState(false);
 
   const goToTerms = (type) => {
     navigate(ROUTES.ONBOARDING_PRE_REGISTER_TERMS(type), {
@@ -155,9 +157,13 @@ function PreRegister() {
         name: name.trim(),
         phone: normalizedPhone,
         emails,
+        ageOver14Agreed: !!checked.age,
+        privacyAgreed: !!checked.privacy,
       });
       localStorage.setItem(WAITLIST_STORAGE_KEYS.PHONE, normalizedPhone);
-      navigate(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE);
+      localStorage.setItem(WAITLIST_STORAGE_KEYS.NAME, name.trim());
+      setIsSubmitting(false);
+      setShowInstallModal(true);
     } catch (err) {
       setIsSubmitting(false);
       if (err?.response?.status === 409) {
@@ -171,183 +177,192 @@ function PreRegister() {
   };
 
   return (
-    <PageBackground variant="default">
-      <div className="flex min-h-dvh flex-col px-2.5 pb-8">
-        <div className="flex-1 px-2.5">
-          <div className="flex flex-col items-center pb-6.5 pt-9 text-center">
-            <img src={logo} alt="IDly" className="w-auto h-22" />
-            <h1 className="mt-5.5 text-b24 text-gray100">
-              안녕하세요
-              <br />
-              계정을 지키는 IDly입니다!
-            </h1>
-            <p className="mt-4 mb-1.5 text-[15px] font-[600]  text-gray60">
-              내 이메일 속 보안 위험, IDly가 찾아드립니다.
-            </p>
-            <p className="text-[15px] font-[600]  text-gray60">
-              IDly 이용을 위해 먼저 Gmail 계정 등록이 필요해요.
-              <br />
-              <span className="text-[#000000]">전화번호와 이메일</span>을
-              입력해주시면 계정 등록 후 알려드릴게요!
-            </p>
-            <button
-              type="button"
-              onClick={() => navigate(ROUTES.ONBOARDING_LOGIN)}
-              className="mt-4 font-[600] text-[11px] text-main100"
-            >
-              이미 계정 등록을 마치셨나요?
-              <span className="underline pl-0.5">분석하러 가기</span>
-            </button>
-          </div>
-
-          <div className="space-y-1.5">
-            <div className="grid grid-cols-2 gap-3.5">
-              <label className="block">
-                <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
-                  이름
-                </span>
-                <div className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-white focus-within:border-main100">
-                  <img src={PersonIcon} alt="" className="h-4.5 w-4.5" />
-                  <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="이름을 입력해주세요"
-                    className="h-full min-w-0 flex-1 text-r14 text-gray100 outline-none placeholder:text-[#8C8F96]"
-                  />
-                </div>
-              </label>
-
-              <label className="block">
-                <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
-                  전화번호
-                </span>
-                <div className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-white focus-within:border-main100">
-                  <img src={CallIcon} alt="" className="h-4.5 w-4.5" />
-                  <input
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="010-1234-5678"
-                    className="h-full min-w-0 flex-1 text-r14 text-gray100 outline-none placeholder:text-[#8C8F96]"
-                  />
-                </div>
-              </label>
+    <>
+      <PageBackground variant="default">
+        <div className="flex min-h-dvh flex-col px-2.5 pb-8">
+          <div className="flex-1 px-2.5">
+            <div className="flex flex-col items-center pb-6.5 pt-9 text-center">
+              <img src={logo} alt="IDly" className="w-auto h-22" />
+              <h1 className="mt-5.5 text-b24 text-gray100">
+                안녕하세요
+                <br />
+                계정을 지키는 IDly입니다!
+              </h1>
+              <p className="mt-4 mb-1.5 text-[15px] font-[600]  text-gray60">
+                내 이메일 속 보안 위험, IDly가 찾아드립니다.
+              </p>
+              <p className="text-[15px] font-[600]  text-gray60">
+                IDly 이용을 위해 먼저 Gmail 계정 등록이 필요해요.
+                <br />
+                <span className="text-[#000000]">전화번호와 이메일</span>을
+                입력해주시면 계정 등록 후 알려드릴게요!
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate(ROUTES.ONBOARDING_LOGIN)}
+                className="mt-4 font-[600] text-[11px] text-main100"
+              >
+                이미 계정 등록을 마치셨나요?
+                <span className="underline pl-0.5">분석하러 가기</span>
+              </button>
             </div>
 
-            <div>
-              <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
-                분석할 이메일(최대 {MAX_EMAILS}개)
-              </span>
-              <div
-                className={`space-y-1.5 ${
-                  confirmedEmails.length >= 2
-                    ? "max-h-28 overflow-y-auto pr-1"
-                    : ""
-                }`}
-              >
-                {confirmedEmails.map((email, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-white"
+            <div className="space-y-1.5">
+              <div className="grid grid-cols-2 gap-3.5">
+                <label className="block">
+                  <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
+                    이름
+                  </span>
+                  <div className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-white focus-within:border-main100">
+                    <img src={PersonIcon} alt="" className="h-4.5 w-4.5" />
+                    <input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="이름을 입력해주세요"
+                      className="h-full min-w-0 flex-1 text-r14 text-gray100 outline-none placeholder:text-[#8C8F96]"
+                    />
+                  </div>
+                </label>
+
+                <label className="block">
+                  <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
+                    전화번호
+                  </span>
+                  <div className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-white focus-within:border-main100">
+                    <img src={CallIcon} alt="" className="h-4.5 w-4.5" />
+                    <input
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="010-1234-5678"
+                      className="h-full min-w-0 flex-1 text-r14 text-gray100 outline-none placeholder:text-[#8C8F96]"
+                    />
+                  </div>
+                </label>
+              </div>
+
+              <div>
+                <span className="mb-1.5 block text-sb16 text-[13px] text-gray60">
+                  분석할 이메일(최대 {MAX_EMAILS}개)
+                </span>
+                <div
+                  className={`space-y-1.5 ${
+                    confirmedEmails.length >= 2
+                      ? "max-h-28 overflow-y-auto pr-1"
+                      : ""
+                  }`}
+                >
+                  {confirmedEmails.map((email, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-white"
+                    >
+                      <img
+                        src={MessageColoredIcon}
+                        alt=""
+                        className="h-4.5 w-4.5"
+                      />
+                      <span className="flex-1 truncate text-[14px] font-bold text-main100">
+                        {email}
+                      </span>
+                    </div>
+                  ))}
+
+                  {confirmedEmails.length < MAX_EMAILS && (
+                    <div className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-gray10 bg-white focus-within:border-main100">
+                      <img src={MessageIcon} alt="" className="h-4.5 w-4.5" />
+                      <input
+                        value={draftEmail}
+                        onChange={(e) => handleDraftEmailChange(e.target.value)}
+                        placeholder="이메일을 입력해주세요"
+                        className="h-full min-w-0 flex-1 text-r14 text-[#8C8F96] outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={confirmDraftEmail}
+                        aria-label="이메일 추가"
+                      >
+                        <span className="grid h-7.5 w-7.5 shrink-0 place-items-center rounded-full bg-main100">
+                          <img src={PlusIcon} alt="" className="h-3 w-3" />
+                        </span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {isCheckingEmail ? (
+                  <p className="mt-2 text-r14 text-[11px] text-gray50">
+                    구글 계정인지 확인하는 중...
+                  </p>
+                ) : (
+                  emailErrorMessage && (
+                    <p className="mt-2 text-r14 text-[11px] text-[#FF0000]">
+                      {emailErrorMessage}
+                    </p>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="px-1.5">
+            {submitError && (
+              <p className="mb-2 text-center text-r14 text-[11px] text-[#FF0000]">
+                {submitError}
+              </p>
+            )}
+            <div className="px-10">
+              {REQUIRED_TERMS.map((term) => (
+                <div
+                  key={term.id}
+                  className="flex w-full flex-wrap items-center py-2.5 text-left"
+                >
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setChecked((prev) => ({
+                        ...prev,
+                        [term.id]: !prev[term.id],
+                      }))
+                    }
+                    className="flex items-center gap-3 text-left pr-1"
                   >
                     <img
-                      src={MessageColoredIcon}
+                      src={checked[term.id] ? CheckedBoxIcon : UncheckedBoxIcon}
                       alt=""
                       className="h-4.5 w-4.5"
                     />
-                    <span className="flex-1 truncate text-[14px] font-bold text-main100">
-                      {email}
-                    </span>
-                  </div>
-                ))}
-
-                {confirmedEmails.length < MAX_EMAILS && (
-                  <div className="p-3.75 flex h-12 items-center gap-2.5 rounded-xl border border-gray10 bg-white focus-within:border-main100">
-                    <img src={MessageIcon} alt="" className="h-4.5 w-4.5" />
-                    <input
-                      value={draftEmail}
-                      onChange={(e) => handleDraftEmailChange(e.target.value)}
-                      placeholder="이메일을 입력해주세요"
-                      className="h-full min-w-0 flex-1 text-r14 text-[#8C8F96] outline-none"
-                    />
+                    <span className="text-r14 text-gray100">{term.label}</span>
+                  </button>
+                  {term.termsType && (
                     <button
                       type="button"
-                      onClick={confirmDraftEmail}
-                      aria-label="이메일 추가"
+                      onClick={() => goToTerms(term.termsType)}
+                      className="text-r14 text-gray100"
                     >
-                      <span className="grid h-7.5 w-7.5 shrink-0 place-items-center rounded-full bg-main100">
-                        <img src={PlusIcon} alt="" className="h-3 w-3" />
-                      </span>
+                      [보기]
                     </button>
-                  </div>
-                )}
-              </div>
-              {isCheckingEmail ? (
-                <p className="mt-2 text-r14 text-[11px] text-gray50">
-                  구글 계정인지 확인하는 중...
-                </p>
-              ) : (
-                emailErrorMessage && (
-                  <p className="mt-2 text-r14 text-[11px] text-[#FF0000]">
-                    {emailErrorMessage}
-                  </p>
-                )
-              )}
+                  )}
+                </div>
+              ))}
             </div>
+            <ActionButton
+              bgColor="var(--color-main100)"
+              textColor="var(--color-white)"
+              onClick={handleSubmit}
+              disabled={!canSubmit || isSubmitting}
+              className="mt-4"
+            >
+              {isSubmitting ? "등록 중..." : "등록하기"}
+            </ActionButton>
           </div>
         </div>
-        <div className="px-1.5">
-          {submitError && (
-            <p className="mb-2 text-center text-r14 text-[11px] text-[#FF0000]">
-              {submitError}
-            </p>
-          )}
-          <div className="px-10">
-            {REQUIRED_TERMS.map((term) => (
-              <div
-                key={term.id}
-                className="flex w-full flex-wrap items-center py-2.5 text-left"
-              >
-                <button
-                  type="button"
-                  onClick={() =>
-                    setChecked((prev) => ({
-                      ...prev,
-                      [term.id]: !prev[term.id],
-                    }))
-                  }
-                  className="flex items-center gap-3 text-left pr-1"
-                >
-                  <img
-                    src={checked[term.id] ? CheckedBoxIcon : UncheckedBoxIcon}
-                    alt=""
-                    className="h-4.5 w-4.5"
-                  />
-                  <span className="text-r14 text-gray100">{term.label}</span>
-                </button>
-                {term.termsType && (
-                  <button
-                    type="button"
-                    onClick={() => goToTerms(term.termsType)}
-                    className="text-r14 text-gray100"
-                  >
-                    [보기]
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-          <ActionButton
-            bgColor="var(--color-main100)"
-            textColor="var(--color-white)"
-            onClick={handleSubmit}
-            disabled={!canSubmit || isSubmitting}
-            className="mt-4"
-          >
-            {isSubmitting ? "등록 중..." : "등록하기"}
-          </ActionButton>
-        </div>
-      </div>
-    </PageBackground>
+      </PageBackground>
+      {showInstallModal && (
+        <InstallPromptModal
+          name={name.trim()}
+          phone={phone.trim().replace(/-/g, "")}
+          onClose={() => setShowInstallModal(false)}
+        />
+      )}
+    </>
   );
 }
 

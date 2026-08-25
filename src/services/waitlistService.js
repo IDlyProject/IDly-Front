@@ -1,10 +1,18 @@
 import { axiosInstance } from "@/lib/api";
 
-export async function registerWaitlist({ name, phone, emails }) {
+export async function registerWaitlist({
+  name,
+  phone,
+  emails,
+  ageOver14Agreed,
+  privacyAgreed,
+}) {
   const { data } = await axiosInstance.post("/api/waitlist", {
     name,
     phone,
     emails,
+    ageOver14Agreed,
+    privacyAgreed,
   });
   return data;
 }

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 const DISMISS_KEY = "idly_install_dismissed_until";
 
 /** 사용자가 이미 설치했거나 설치된 앱에서 실행 중이면 안내할 필요가 없다. */
-function isStandalone() {
+export function isStandalone() {
   return (
     window.matchMedia?.("(display-mode: standalone)").matches ||
     window.navigator.standalone === true

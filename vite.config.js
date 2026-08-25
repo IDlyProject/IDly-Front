@@ -12,6 +12,12 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
+      // 푸시 알림(push/notificationclick 핸들러)을 직접 등록해야 해서
+      // Workbox가 통째로 생성하는 대신 src/sw.js를 우리가 작성하고
+      // 프리캐시 목록만 주입받는다.
+      strategies: "injectManifest",
+      srcDir: "src",
+      filename: "sw.js",
       registerType: "autoUpdate",
       includeAssets: ["favicon-32.png", "icons/apple-touch-icon.png"],
       manifest: {
@@ -39,14 +45,13 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
+      injectManifest: {
         // 앱 셸만 프리캐시한다. 계정·위험 정보는 항상 서버에서 받아야 하므로
         // API 응답은 캐시하지 않는다 — 낡은 보안 상태를 보여주면 안 된다.
         globPatterns: ["**/*.{js,css,html,svg,png,woff2}"],
-        navigateFallbackDenylist: [/^\/api\//],
-        cleanupOutdatedCaches: true,
       },
-      devOptions: { enabled: false },
+      // injectManifest 커스텀 SW를 개발 중 켜서 테스트하려면 type: "module"도 필요하다.
+      devOptions: { enabled: false, type: "module" },
     }),
   ],
   resolve: {

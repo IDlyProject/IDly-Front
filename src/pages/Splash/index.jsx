@@ -7,6 +7,9 @@ import {
   verifyWaitlistToken,
 } from "@/services/waitlistService";
 import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
+import InstallPromptModal, {
+  getInstallReminderView,
+} from "@/pages/Onboarding/PreRegister/components/InstallPromptModal";
 import typoLogo from "@/assets/ic_typo_logo_white.svg";
 import PageBackground from "@/components/layouts/PageBackground";
 
@@ -14,16 +17,21 @@ const MIN_DISPLAY_TIME = 1200;
 
 function Splash() {
   const [dest, setDest] = useState(null);
+  // 대기자 등록을 마친 사용자(승인/미승인 모두)가 재방문했을 때만 홈 화면
+  // 추가·알림 권한 안내로 화면 전환을 붙잡아둔다. 그 외 목적지는 그대로 진행.
+  const [gateWithReminder, setGateWithReminder] = useState(false);
+  const [reminderResolved, setReminderResolved] = useState(false);
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const startTime = Date.now();
 
-    const goTo = (destination) => {
+    const goTo = (destination, { gate = false } = {}) => {
       const elapsed = Date.now() - startTime;
       const remaining = Math.max(MIN_DISPLAY_TIME - elapsed, 0);
       setTimeout(() => {
         setDest(destination);
+        setGateWithReminder(gate);
       }, remaining);
     };
 
@@ -34,7 +42,7 @@ function Splash() {
           const { approved } = await verifyWaitlistToken(token);
           if (approved) {
             localStorage.setItem(WAITLIST_STORAGE_KEYS.APPROVED, "true");
-            goTo(ROUTES.ONBOARDING_LOGIN);
+            goTo(ROUTES.ONBOARDING_LOGIN, { gate: true });
             return;
           }
         } catch {
@@ -45,7 +53,7 @@ function Splash() {
       }
 
       if (localStorage.getItem(WAITLIST_STORAGE_KEYS.APPROVED) === "true") {
-        goTo(ROUTES.ONBOARDING_LOGIN);
+        goTo(ROUTES.ONBOARDING_LOGIN, { gate: true });
         return;
       }
 
@@ -55,16 +63,16 @@ function Splash() {
           const { status } = await getWaitlistStatus(phone);
           if (status === "approved") {
             localStorage.setItem(WAITLIST_STORAGE_KEYS.APPROVED, "true");
-            goTo(ROUTES.ONBOARDING_LOGIN);
+            goTo(ROUTES.ONBOARDING_LOGIN, { gate: true });
           } else if (status === "not_found") {
             localStorage.removeItem(WAITLIST_STORAGE_KEYS.PHONE);
             goTo(ROUTES.ONBOARDING_PRE_REGISTER);
           } else {
-            goTo(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE);
+            goTo(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE, { gate: true });
           }
         } catch {
           // status API 실패 → 대기 화면 유지 (재시도 안내)
-          goTo(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE);
+          goTo(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE, { gate: true });
         }
         return;
       }
@@ -95,7 +103,10 @@ function Splash() {
       });
   }, [searchParams]);
 
-  if (dest) {
+  const reminderView = gateWithReminder ? getInstallReminderView() : null;
+  const blocked = gateWithReminder && !!reminderView && !reminderResolved;
+
+  if (dest && !blocked) {
     return <Navigate to={dest} replace />;
   }
 
@@ -113,6 +124,14 @@ function Splash() {
           © 2026 계정아파트
         </p>
       </div>
+      {blocked && (
+        <InstallPromptModal
+          initialView={reminderView}
+          name={localStorage.getItem(WAITLIST_STORAGE_KEYS.NAME)}
+          phone={localStorage.getItem(WAITLIST_STORAGE_KEYS.PHONE)}
+          onClose={() => setReminderResolved(true)}
+        />
+      )}
     </PageBackground>
   );
 }

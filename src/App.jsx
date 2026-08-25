@@ -3,13 +3,16 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "@/routes/router";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import { ToastProvider } from "@/components/ui/ToastProvider";
+import { InstallPromptProvider } from "@/components/ui/InstallPromptProvider";
 
 function App() {
   return (
     <ToastProvider>
-      <Suspense fallback={<LoadingScreen />}>
-        <RouterProvider router={router} />
-      </Suspense>
+      <InstallPromptProvider>
+        <Suspense fallback={<LoadingScreen />}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </InstallPromptProvider>
     </ToastProvider>
   );
 }
