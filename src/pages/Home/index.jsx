@@ -102,10 +102,10 @@ function Home() {
     navigate(ROUTES.ONBOARDING_ADD_MAILBOXES);
   };
 
-  const handleStartActions = (priorityAccountId) => {
+  const handleSelectAction = (serviceAccountId) => {
     setShowActionsSheet(false);
-    if (priorityAccountId) {
-      navigate(ROUTES.ACCOUNT_ACTION(priorityAccountId));
+    if (serviceAccountId) {
+      navigate(ROUTES.ACCOUNT_ACTION(serviceAccountId));
     }
   };
 
@@ -116,6 +116,8 @@ function Home() {
 
   const cardNews = homeData.cardNews?.[0];
   const priorityAccountId = homeData.riskSummary.serviceAccountId;
+  const immediateActions = homeData.immediateActions;
+  const hasImmediateActions = immediateActions.length > 0;
 
   return (
     <PageBackground variant="frost">
@@ -170,27 +172,25 @@ function Home() {
         )}
       </div>
 
-      {selectedEmailId === "all" &&
-        !emailSelectorOpen &&
-        homeData.metrics.actionRequiredCount > 0 && (
-          <ActionRequiredBar
-            count={homeData.metrics.actionRequiredCount}
-            onClick={() => setShowActionsSheet(true)}
-          />
-        )}
+      {selectedEmailId === "all" && !emailSelectorOpen && hasImmediateActions && (
+        <ActionRequiredBar
+          count={homeData.metrics.actionRequiredCount}
+          onClick={() => setShowActionsSheet(true)}
+        />
+      )}
 
       {showActionsSheet && (
         <ImmediateActionsSheet
+          actions={immediateActions}
           onClose={() => setShowActionsSheet(false)}
-          onStart={() => handleStartActions(priorityAccountId)}
+          onSelectAction={handleSelectAction}
+          onStart={() => handleSelectAction(immediateActions[0]?.serviceAccountId)}
         />
       )}
 
       <FeedbackButton
         bottomOffset={
-          selectedEmailId === "all" &&
-          !emailSelectorOpen &&
-          homeData.metrics.actionRequiredCount > 0
+          selectedEmailId === "all" && !emailSelectorOpen && hasImmediateActions
             ? 180
             : 116
         }
