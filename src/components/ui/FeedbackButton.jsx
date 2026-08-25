@@ -17,7 +17,18 @@ const VARIANTS = {
   },
 };
 
-export default function FeedbackButton({ variant = "default", hidden = false, bottomOffset = 116 }) {
+export default function FeedbackButton({
+  variant = "default",
+  hidden = false,
+  bottomOffset = 116,
+  /**
+   * "viewport" — 화면 하단에서 bottomOffset만큼 띄운다. 하단 탭바가 있는 화면용.
+   * "above"    — 부모(relative) 요소 바로 위에 붙인다. 채팅 화면처럼 하단 요소
+   *              높이가 상황에 따라 달라지는 곳에서 쓴다. bottomOffset을 손으로
+   *              맞추면 입력창 높이가 바뀔 때마다 다시 어긋나기 때문이다.
+   */
+  anchor = "viewport",
+}) {
   const location = useLocation();
   const { title, description, placeholder } = VARIANTS[variant] ?? VARIANTS.default;
 
@@ -98,7 +109,13 @@ export default function FeedbackButton({ variant = "default", hidden = false, bo
     }
   }
 
-  const bottomStyle = { bottom: `calc(env(safe-area-inset-bottom) + ${bottomOffset}px)` };
+  const isAnchored = anchor === "above";
+  const bottomStyle = isAnchored
+    ? undefined
+    : { bottom: `calc(env(safe-area-inset-bottom) + ${bottomOffset}px)` };
+  const positionClass = isAnchored
+    ? "absolute bottom-full right-4 mb-3"
+    : "fixed right-4";
 
   return (
     <>
@@ -108,7 +125,7 @@ export default function FeedbackButton({ variant = "default", hidden = false, bo
           onClick={handleOpen}
           aria-label={title}
           style={bottomStyle}
-          className="fixed right-4 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-[#212125]/80 shadow-lg backdrop-blur-sm transition-transform active:scale-95"
+          className={`${positionClass} z-50 flex h-11 w-11 items-center justify-center rounded-full bg-[#212125]/80 shadow-lg backdrop-blur-sm transition-transform active:scale-95`}
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path
