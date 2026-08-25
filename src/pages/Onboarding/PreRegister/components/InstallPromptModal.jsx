@@ -33,7 +33,7 @@ export function getInstallReminderView() {
 function ModalCard({ children }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-8.75">
-      <div className="flex max-h-62 w-full max-w-80 flex-col overflow-y-auto rounded-[20px] bg-white p-6 text-center shadow-xl">
+      <div className="flex max-h-62 w-full max-w-80 flex-col overflow-y-auto rounded-[20px] bg-white px-6 pt-6 pb-2 text-center shadow-xl">
         {children}
       </div>
     </div>
@@ -154,12 +154,12 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
   if (view === VIEW.IOS_NAG) {
     return (
       <ModalCard>
-        <h1 className="text-sb20 text-gray100">
+        <h1 className="text-[18px] font-bold text-gray100">
           홈 화면에 추가하지 않으면
           <br />
           알림을 받을 수 없어요
         </h1>
-        <p className="mt-3 text-r14 text-[13px] text-gray70">
+        <p className="mt-3 text-m14 text-[13px] text-gray70">
           지금 홈 화면에 추가하시면
           <br />
           테스트 계정이 승인됐을 때 바로 알림을 받을 수 있어요!
@@ -168,14 +168,14 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
           bgColor="var(--color-main100)"
           textColor="var(--color-white)"
           onClick={() => setView(VIEW.IOS_GUIDE)}
-          className="mt-4"
+          className="mt-4 h-12! text-[15px]! font-bold!"
         >
           지금 추가할게요
         </ActionButton>
         <button
           type="button"
           onClick={onClose}
-          className="mt-2.5 text-r14 text-[13px] text-gray40"
+          className="mt-2.5 text-r14 text-[12px] text-gray40"
         >
           그래도 웹으로 접속할게요
         </button>
@@ -186,8 +186,8 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
   if (view === VIEW.NOTIFY_PROMPT) {
     return (
       <ModalCard>
-        <h1 className="text-sb20 text-gray100">알림을 받아보시겠어요?</h1>
-        <p className="mt-3 text-r14 text-[13px] text-gray70">
+        <h1 className="text-[18px] font-bold text-gray100">알림을 받아보시겠어요?</h1>
+        <p className="mt-3 text-m14 text-[13px] text-gray70">
           접근 권한이 부여되면 바로 알려드릴게요!
           <br />
           분석 이후에도 실시간 알림을 받아보실 수 있어요.
@@ -197,7 +197,7 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
           textColor="var(--color-white)"
           onClick={handleEnableNotifications}
           disabled={isSubscribing}
-          className="mt-4"
+          className="mt-4 h-12! text-[15px]! font-bold!"
         >
           {isSubscribing ? "설정 중..." : "알림 받기"}
         </ActionButton>
@@ -205,7 +205,7 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
           type="button"
           onClick={onClose}
           disabled={isSubscribing}
-          className="mt-2.5 text-r14 text-[13px] text-gray40 disabled:opacity-40"
+          className="mt-2.5 text-r14 text-[12px] text-gray40 disabled:opacity-40"
         >
           나중에 하기
         </button>
@@ -215,15 +215,15 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
 
   return (
     <ModalCard>
-      <h1 className="text-sb20 text-gray100">등록해주셔서 감사드립니다!</h1>
-      <p className="mt-3 text-r14 text-[13px] text-gray70">
+      <h1 className="text-[18px] font-bold text-gray100">등록해주셔서 감사드립니다!</h1>
+      <p className="mt-3 text-m14 text-[13px] text-gray70">
         접근 권한은 1~2일 이내에 부여될 예정이며
         <br />
         이메일에 권한이 부여되면{" "}
         <span className="font-bold text-main100">푸시 알림</span>을 통해
         알려드립니다.
       </p>
-      <p className="mt-3 text-r14 text-[13px] text-gray70">
+      <p className="mt-3 text-m14 text-[13px] text-gray70">
         푸시 알림을 보내드리기 위해, 아래 버튼을 클릭해
         <br />홈 화면에 IDly를 추가해주세요!
       </p>
@@ -231,14 +231,14 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
         bgColor="var(--color-main100)"
         textColor="var(--color-white)"
         onClick={goAddToHomeScreen}
-        className="mt-4"
+        className="mt-4 h-12! text-[15px]! font-bold!"
       >
         홈 화면에 추가하러 가기
       </ActionButton>
       <button
         type="button"
         onClick={goSkip}
-        className="mt-2.5 text-r14 text-[13px] text-gray40"
+        className="mt-2.5 text-r14 text-[12px] text-gray40"
       >
         나중에 하기
       </button>
