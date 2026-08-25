@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ActionButton from "@/components/ui/ActionButton";
 import { API_BASE_URL } from "@/constants/api";
+import { ROUTES } from "@/constants/routes";
 import logo from "@/assets/ic_logo.svg";
 import googleIcon from "@/assets/ic_google.svg";
 import PageBackground from "@/components/layouts/PageBackground";
@@ -16,6 +17,7 @@ const DEFAULT_OAUTH_ERROR_MESSAGE =
   "로그인 중 문제가 발생했어요. 다시 시도해 주세요.";
 
 function Login() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const errorCode = searchParams.get("error");
@@ -54,6 +56,14 @@ function Login() {
             <br />
             다른 Gmail 연동도 가능합니다.
           </p>
+          <button
+            type="button"
+            onClick={() => navigate(ROUTES.ONBOARDING_PRE_REGISTER)}
+            className="mt-6 text-[11px] font-semibold text-main100"
+          >
+            아직 계정을 등록하지 않으셨나요?
+            <span className="underline pl-0.5">등록하러 가기</span>
+          </button>
         </div>
         {errorMessage && (
           <div className="mb-3 rounded-xl bg-danger50/10 px-4 py-3 text-center text-r14 text-danger50">
