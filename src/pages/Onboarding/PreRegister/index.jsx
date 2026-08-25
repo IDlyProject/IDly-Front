@@ -237,7 +237,7 @@ function PreRegister() {
               <span className="mb-1.5 shrink-0 block text-sb16 text-[13px] text-gray60">
                 분석할 이메일(최대 {MAX_EMAILS}개)
               </span>
-              <div className="min-h-0 space-y-1.5 overflow-y-auto pr-1">
+              <div className="min-h-12 space-y-1.5 overflow-y-auto pr-1">
                 {confirmedEmails.map((email, idx) => (
                   <div
                     key={idx}
