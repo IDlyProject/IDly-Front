@@ -9,6 +9,8 @@ import { subscribeToPush } from "@/lib/push";
 import { getErrorMessage } from "@/lib/api";
 import logo from "@/assets/ic_logo.svg";
 import BackIcon from "@/assets/ic_back_white_20.svg";
+import ShareIcon from "@/assets/ic_share_24.svg";
+import MoreIcon from "@/assets/ic_more.svg";
 
 export const INSTALL_PROMPT_VIEW = {
   MAIN: "main",
@@ -63,8 +65,8 @@ function GuideScreen({ title, note, steps, closing, onBack }) {
               )}
             </div>
             <div className="flex flex-col gap-1.5">
-              {steps.map((step) => (
-                <p key={step} className="text-r16 text-[15px] text-gray80">
+              {steps.map((step, idx) => (
+                <p key={idx} className="text-r16 text-[15px] text-gray80">
                   {step}
                 </p>
               ))}
@@ -139,8 +141,16 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
         title="IDly를 홈 화면에 설치해주세요!"
         note="* 꼭 Safari에서 진행해주세요!"
         steps={[
-          "① 하단 공유 버튼 (⬆) 누르기",
-          "② 더보기 버튼 (⌄) 누르기",
+          <>
+            ① 하단 공유 버튼 (
+            <img src={ShareIcon} alt="공유" className="inline h-4 w-4 align-middle" />
+            ) 누르기
+          </>,
+          <>
+            ② 더보기 버튼 (
+            <img src={MoreIcon} alt="더보기" className="inline h-4 w-4 align-middle" />
+            ) 누르기
+          </>,
           "③ 홈 화면에 추가 ( + ) 누르기",
         ]}
         closing={
