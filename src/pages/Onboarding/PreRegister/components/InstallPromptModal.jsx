@@ -35,7 +35,7 @@ export function getInstallReminderView() {
 function ModalCard({ children }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-8.75">
-      <div className="flex max-h-62 w-full max-w-80 flex-col overflow-y-auto rounded-[20px] bg-white px-6 pt-6 pb-2 text-center shadow-xl">
+      <div className="flex w-full max-w-80 flex-col rounded-[20px] bg-white px-6 pt-6 pb-2 text-center shadow-xl">
         {children}
       </div>
     </div>
@@ -143,12 +143,20 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
         steps={[
           <>
             ① 하단 공유 버튼 (
-            <img src={ShareIcon} alt="공유" className="inline h-4 w-4 align-middle" />
+            <img
+              src={ShareIcon}
+              alt="공유"
+              className="inline h-4 w-4 align-middle"
+            />
             ) 누르기
           </>,
           <>
             ② 더보기 버튼 (
-            <img src={MoreIcon} alt="더보기" className="inline h-4 w-4 align-middle" />
+            <img
+              src={MoreIcon}
+              alt="더보기"
+              className="inline h-4 w-4 align-middle"
+            />
             ) 누르기
           </>,
           "③ 홈 화면에 추가 ( + ) 누르기",
@@ -196,7 +204,9 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
   if (view === VIEW.NOTIFY_PROMPT) {
     return (
       <ModalCard>
-        <h1 className="text-[18px] font-bold text-gray100">알림을 받아보시겠어요?</h1>
+        <h1 className="text-[18px] font-bold text-gray100">
+          알림을 받아보시겠어요?
+        </h1>
         <p className="mt-3 text-m14 text-[13px] text-gray70">
           접근 권한이 부여되면 바로 알려드릴게요!
           <br />
@@ -225,7 +235,9 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
 
   return (
     <ModalCard>
-      <h1 className="text-[18px] font-bold text-gray100">등록해주셔서 감사드립니다!</h1>
+      <h1 className="text-[18px] font-bold text-gray100">
+        등록해주셔서 감사드립니다!
+      </h1>
       <p className="mt-3 text-m14 text-[13px] text-gray70">
         접근 권한은 1~2일 이내에 부여될 예정이며
         <br />
