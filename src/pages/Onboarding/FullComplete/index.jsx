@@ -70,9 +70,7 @@ function FullComplete() {
                 icon={<img src={BellIcon} />}
                 label="알림"
                 value={
-                  notificationEnabled
-                    ? "카카오톡 알림톡 활성화"
-                    : "카카오톡 알림톡 비활성화"
+                  notificationEnabled ? "푸시알림 활성화" : "푸시알림 비활성화"
                 }
               />
             </div>

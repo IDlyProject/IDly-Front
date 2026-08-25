@@ -4,6 +4,7 @@ import PageBackground from "@/components/layouts/PageBackground";
 import ActionButton from "@/components/ui/ActionButton";
 import { ROUTES } from "@/constants/routes";
 import { triggerAnalysisRun, fetchRunStatus } from "@/services/analysisService";
+import { updateProfile } from "@/services/usersService";
 import { getErrorMessage } from "@/lib/api";
 import AnalyzingMark from "@/assets/ic_analysis_mark.svg";
 
@@ -40,6 +41,12 @@ function Analyzing() {
       setMessage(statusRes.displayMessage);
 
       if (statusRes.status === "completed") {
+        try {
+          await updateProfile({ onboardingCompleted: true });
+        } catch (err) {
+          // 재접속 시 다시 분석 화면으로 돌아오는 정도이니, 홈 진입 자체는 막지 않는다.
+          console.error("Failed to mark onboarding complete:", err);
+        }
         navigate(ROUTES.HOME, { replace: true });
         return;
       }
@@ -116,7 +123,7 @@ function Analyzing() {
             <br />
             웹을 나가셔도 분석은 계속되며,
             <br />
-            분석이 완료된 경우 알림톡이 발송됩니다.
+            분석이 완료된 경우 푸시알림으로 알려드립니다.
           </p>
         )}
       </div>

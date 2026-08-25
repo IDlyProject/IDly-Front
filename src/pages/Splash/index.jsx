@@ -95,6 +95,12 @@ function Splash() {
           goTo(ROUTES.ONBOARDING_PROFILE);
           return;
         }
+        // 최초 분석이 끝나기 전까지는 재접속해도 분석 화면부터 재진행한다.
+        // 분석 완료 시 Analyzing 화면이 onboardingCompleted를 true로 저장한다.
+        if (!user.onboardingCompleted) {
+          goTo(ROUTES.ANALYZING);
+          return;
+        }
         goTo(ROUTES.HOME);
       })
       .catch((error) => {
