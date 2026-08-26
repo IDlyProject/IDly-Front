@@ -6,6 +6,7 @@ import { ROUTES } from "@/constants/routes";
 import logo from "@/assets/ic_logo.svg";
 import googleIcon from "@/assets/ic_google.svg";
 import PageBackground from "@/components/layouts/PageBackground";
+import { trackEvent } from "@/lib/ga";
 
 const OAUTH_ERROR_MESSAGES = {
   gmail_already_linked: "이미 다른 계정에 연동되어 있는 Gmail이에요.",
@@ -28,6 +29,7 @@ function Login() {
   const handleGoogleLogin = () => {
     if (isLoading) return;
     setIsLoading(true);
+    trackEvent("login_attempted");
     // refresh_token_missing은 Google이 refresh_token을 재발급하지 않은 상태라
     // reauth=true로 consent 화면을 강제로 띄워야 재발급받을 수 있다.
     const query = errorCode === "refresh_token_missing" ? "?reauth=true" : "";

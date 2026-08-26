@@ -11,3 +11,8 @@ export function trackPageView(path) {
   if (!MEASUREMENT_ID) return;
   ReactGA.send({ hitType: "pageview", page: path });
 }
+
+export function trackEvent(name, params) {
+  if (!MEASUREMENT_ID) return;
+  ReactGA.event(name, params);
+}

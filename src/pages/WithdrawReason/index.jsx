@@ -6,6 +6,7 @@ import { deleteAccount } from "@/services/usersService";
 import { logout } from "@/services/authService";
 import { useUserStore } from "@/store/userStore";
 import { getErrorMessage } from "@/lib/api";
+import { trackEvent } from "@/lib/ga";
 import { ROUTES } from "@/constants/routes";
 import ChevronLeftIcon from "@/assets/ic_chevron_left.svg";
 import UncheckIcon from "@/assets/ic_withdraw_uncheck.svg";
@@ -55,6 +56,7 @@ function WithdrawReason() {
       } catch (logoutErr) {
         console.error("post-withdraw logout failed:", logoutErr);
       }
+      trackEvent("account_withdrawn", { reason: selectedReason });
       useUserStore.getState().clearUser();
       navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
     } catch (err) {

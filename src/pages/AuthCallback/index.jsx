@@ -4,6 +4,7 @@ import { ROUTES } from "@/constants/routes";
 import { fetchCurrentUser } from "@/services/authService";
 import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
 import { setTokens } from "@/lib/api";
+import { trackEvent } from "@/lib/ga";
 
 function AuthCallback() {
   const [searchParams] = useSearchParams();
@@ -12,7 +13,7 @@ function AuthCallback() {
   useEffect(() => {
     const error = searchParams.get("error");
     if (error) {
-
+      trackEvent("login_failed", { error_code: error });
       navigate(`${ROUTES.ONBOARDING_LOGIN}?error=${encodeURIComponent(error)}`, {
         replace: true,
       });
@@ -39,6 +40,7 @@ function AuthCallback() {
 
       localStorage.removeItem(WAITLIST_STORAGE_KEYS.PHONE);
       localStorage.removeItem(WAITLIST_STORAGE_KEYS.APPROVED);
+      trackEvent("login_succeeded", { mode: mode ?? "unknown" });
 
       if (mode === "add") {
         navigate(ROUTES.ONBOARDING_ADD_MAILBOXES, { replace: true });

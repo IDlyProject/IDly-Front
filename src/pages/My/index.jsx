@@ -5,6 +5,7 @@ import { ROUTES } from "@/constants/routes";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { logout, getPrimaryGmailAccount } from "@/services/authService";
 import { useUserStore } from "@/store/userStore";
+import { trackEvent } from "@/lib/ga";
 import SettingIcon from "@/assets/ic_setting.svg";
 import AccountManageIcon from "@/assets/ic_account_manage.svg";
 import HeadphoneIcon from "@/assets/ic_headphone.svg";
@@ -41,6 +42,7 @@ function My() {
     try {
       await logout();
     } finally {
+      trackEvent("logout");
       useUserStore.getState().clearUser();
       navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
     }

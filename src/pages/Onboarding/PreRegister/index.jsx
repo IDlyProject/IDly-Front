@@ -6,6 +6,7 @@ import { ROUTES } from "@/constants/routes";
 import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
 import { registerWaitlist } from "@/services/waitlistService";
 import { getErrorMessage } from "@/lib/api";
+import { trackEvent } from "@/lib/ga";
 import InstallPromptModal from "./components/InstallPromptModal";
 import logo from "@/assets/ic_logo.svg";
 import PersonIcon from "@/assets/ic_person.svg";
@@ -162,6 +163,7 @@ function PreRegister() {
       });
       localStorage.setItem(WAITLIST_STORAGE_KEYS.PHONE, normalizedPhone);
       localStorage.setItem(WAITLIST_STORAGE_KEYS.NAME, name.trim());
+      trackEvent("waitlist_registered", { email_count: emails.length });
       setIsSubmitting(false);
       setShowInstallModal(true);
     } catch (err) {

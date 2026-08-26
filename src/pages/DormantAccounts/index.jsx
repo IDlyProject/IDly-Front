@@ -8,6 +8,7 @@ import { useDormantAccounts } from "@/hooks/useDormantAccounts";
 import { restoreAllDormant } from "@/services/dormantAccountsService";
 import { restoreServiceAccountDormant } from "@/services/serviceAccountsService";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
+import { trackEvent } from "@/lib/ga";
 import BackIcon from "@/assets/ic_back.svg";
 import InfoIcon from "@/assets/ic_information.svg";
 
@@ -19,6 +20,7 @@ function DormantAccounts() {
   const handleRestore = async (id) => {
     try {
       await restoreServiceAccountDormant(id);
+      trackEvent("dormant_account_restored", { serviceAccountId: id });
       await reload();
     } catch (err) {
       console.error("restore dormant account failed:", err);
@@ -29,6 +31,9 @@ function DormantAccounts() {
     setRestoringAll(true);
     try {
       await restoreAllDormant();
+      trackEvent("dormant_accounts_restored_all", {
+        account_count: accounts.length,
+      });
       await reload();
     } catch (err) {
       console.error("restore all dormant accounts failed:", err);

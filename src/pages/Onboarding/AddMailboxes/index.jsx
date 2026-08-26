@@ -7,6 +7,7 @@ import { ROUTES } from "@/constants/routes";
 import { useGmailAccounts } from "@/hooks/useGmailAccounts";
 import { fetchAddAccountUrl } from "@/services/addAccountService";
 import { toMailAccount } from "@/utils/mailAccount";
+import { trackEvent } from "@/lib/ga";
 import PageBackground from "../../../components/layouts/PageBackground";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import ErrorScreen from "@/components/ui/ErrorScreen";
@@ -23,6 +24,7 @@ function AddMailboxes() {
       // URL을 먼저 받아온 뒤 이동한다. 이 요청에는 Bearer 토큰이 실리므로
       // 쿠키가 차단된 환경에서도 기존 유저에 계정이 붙는다.
       const url = await fetchAddAccountUrl();
+      trackEvent("mailbox_connect_started", { source: "onboarding" });
       window.location.href = url;
     } catch {
       // 세션이 끊긴 상태에서는 계정을 추가할 대상 유저를 알 수 없다.
@@ -33,10 +35,18 @@ function AddMailboxes() {
   };
 
   const handleComplete = () => {
+    trackEvent("onboarding_mailboxes_added", {
+      mailbox_count: accounts.length,
+      skipped: false,
+    });
     navigate(ROUTES.ONBOARDING_FULL_COMPLETE);
   };
 
   const handleSkip = () => {
+    trackEvent("onboarding_mailboxes_added", {
+      mailbox_count: accounts.length,
+      skipped: true,
+    });
     navigate(ROUTES.ONBOARDING_FULL_COMPLETE);
   };
 

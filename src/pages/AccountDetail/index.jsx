@@ -9,6 +9,7 @@ import EventsList from "./components/EventsList";
 import FeedbackButton from "@/components/ui/FeedbackButton";
 import { useServiceAccountDetail } from "@/hooks/useServiceAccountDetail";
 import { getServiceIconGradient } from "@/utils/serviceIcon";
+import { trackEvent } from "@/lib/ga";
 import { ROUTES } from "@/constants/routes";
 import ChevronLeftIcon from "@/assets/ic_chevron_left.svg";
 
@@ -119,7 +120,13 @@ function AccountDetail() {
         {detail.isRisk && (
           <RiskCard
             detail={detail}
-            onActionClick={() => navigate(ROUTES.ACCOUNT_ACTION(accountId))}
+            onActionClick={() => {
+              trackEvent("account_action_cta_clicked", {
+                serviceAccountId: accountId,
+                source: "account_detail",
+              });
+              navigate(ROUTES.ACCOUNT_ACTION(accountId));
+            }}
           />
         )}
 

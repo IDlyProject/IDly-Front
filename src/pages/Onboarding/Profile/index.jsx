@@ -7,6 +7,7 @@ import { getPrimaryGmailAccount } from "@/services/authService";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useUserStore } from "@/store/userStore";
 import { getErrorMessage } from "@/lib/api";
+import { trackEvent } from "@/lib/ga";
 import PageBackground from "@/components/layouts/PageBackground";
 import ProgressDots from "../components/ProgressDot";
 import PersonIcon from "@/assets/ic_person.svg";
@@ -41,6 +42,7 @@ function Profile() {
 
       await updateProfile(payload);
       await useUserStore.getState().fetchUser(true);
+      trackEvent("onboarding_profile_completed");
       navigate(ROUTES.ONBOARDING_PRIMARY_COMPLETE);
     } catch (err) {
       setIsSubmitting(false);

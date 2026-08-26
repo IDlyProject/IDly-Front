@@ -7,6 +7,7 @@ import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useGmailAccounts } from "@/hooks/useGmailAccounts";
 import { disconnectAccount } from "@/services/usersService";
 import { getErrorMessage } from "@/lib/api";
+import { trackEvent } from "@/lib/ga";
 import BackIcon from "@/assets/ic_back.svg";
 import PencilIcon from "@/assets/ic_pencil.svg";
 import CancelIcon from "@/assets/ic_cancel.svg";
@@ -41,6 +42,7 @@ function AccountManagement() {
     setUnlinkError("");
     try {
       await disconnectAccount(unlinkTarget.id);
+      trackEvent("mailbox_unlinked");
       setRemovedIds((prev) => new Set(prev).add(unlinkTarget.id));
       setUnlinkTarget(null);
     } catch (err) {

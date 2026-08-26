@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 import { updateProfile } from "@/services/usersService";
 import { getErrorMessage } from "@/lib/api";
+import { trackEvent } from "@/lib/ga";
 import { useUserStore } from "@/store/userStore";
 import ProgressDots from "../components/ProgressDot";
 import PageBackground from "@/components/layouts/PageBackground";
@@ -57,6 +58,7 @@ function Consent() {
         marketingAgreed: !!checked.marketing,
       });
       await useUserStore.getState().fetchUser(true);
+      trackEvent("onboarding_terms_agreed", { notification_agreed: notificationAgreed });
       navigate(ROUTES.ONBOARDING_PROFILE);
     } catch (err) {
       setIsSubmitting(false);

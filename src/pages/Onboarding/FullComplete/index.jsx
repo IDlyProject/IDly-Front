@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
+import { trackEvent } from "@/lib/ga";
 import logo from "@/assets/ic_logo.svg";
 import ShieldCheckIcon from "@/assets/ic_shield_check.svg";
 import AccountIcon from "@/assets/ic_account.svg";
@@ -33,6 +35,11 @@ function FullComplete() {
   const primaryEmail = getPrimaryGmailAccount(user)?.email ?? "";
   const totalAccountCount = user?.gmailAccounts?.length ?? 0;
   const notificationEnabled = !!user?.notificationAgreed;
+
+  useEffect(() => {
+    trackEvent("onboarding_completed", { mailbox_count: totalAccountCount });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleStart = () => {
     navigate(ROUTES.ANALYZING);

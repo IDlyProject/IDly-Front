@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import PageBackground from "@/components/layouts/PageBackground";
 import { ROUTES } from "@/constants/routes";
+import { trackEvent } from "@/lib/ga";
 import BackIcon from "@/assets/ic_back.svg";
 import DeleteAccountIcon from "@/assets/ic_delete_account.svg";
 
@@ -8,6 +9,7 @@ function Withdraw() {
   const navigate = useNavigate();
 
   const handleConfirm = () => {
+    trackEvent("withdraw_flow_confirmed");
     navigate(ROUTES.WITHDRAW_REASON);
   };
 

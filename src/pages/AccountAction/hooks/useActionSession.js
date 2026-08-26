@@ -5,6 +5,7 @@ import {
   sendActionSessionMessage,
 } from "@/services/actionSessionService";
 import { getErrorMessage } from "@/lib/api";
+import { trackEvent } from "@/lib/ga";
 
 function mergeActionsById(current, actions) {
   if (!actions?.length) return current;
@@ -93,6 +94,22 @@ function useActionSession(serviceAccountId) {
           ...payload,
         });
         applyUpdate(update);
+
+        if (payload.type === "action_select") {
+          trackEvent("action_item_selected", { serviceAccountId });
+        } else if (payload.type === "feedback") {
+          trackEvent(
+            payload.feedbackValue === "completed"
+              ? "action_marked_done"
+              : "action_marked_failed",
+            { serviceAccountId },
+          );
+        } else if (payload.type === "failure_reason") {
+          trackEvent("action_failure_reason_sent", { serviceAccountId });
+        }
+        if (update.completion) {
+          trackEvent("action_session_completed", { serviceAccountId });
+        }
       } catch (err) {
         console.error("action-session send failed:", err);
         setSendError(getErrorMessage(err, "메시지 전송에 실패했어요. 다시 시도해주세요."));

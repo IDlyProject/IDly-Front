@@ -21,6 +21,7 @@ import {
   sendSecurityChatMessage,
 } from "@/services/securityChatService";
 import { getErrorMessage } from "@/lib/api";
+import { trackEvent } from "@/lib/ga";
 import { SendIcon } from "@/pages/AccountAction/icons";
 
 function normalizeMessages(raw) {
@@ -226,6 +227,7 @@ function SecurityAssistant() {
     try {
       const result = await sendSecurityChatMessage(sessionId, text);
       if (result?.userMessage && result?.assistantMessages) {
+        trackEvent("security_assistant_message_sent");
         setMessages((prev) => [
           ...prev.filter((m) => m.id !== optimisticId),
           result.userMessage,

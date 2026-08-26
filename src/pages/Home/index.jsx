@@ -22,6 +22,7 @@ import {
 import { getServiceIconGradient } from "@/utils/serviceIcon";
 import { setServiceAccountDormant } from "@/services/serviceAccountsService";
 import { getErrorMessage } from "@/lib/api";
+import { trackEvent } from "@/lib/ga";
 import { ROUTES } from "@/constants/routes";
 
 function Home() {
@@ -92,6 +93,7 @@ function Home() {
   const handleHideAccount = async (accountId) => {
     try {
       await setServiceAccountDormant(accountId);
+      trackEvent("account_dormant_set", { serviceAccountId: accountId });
       await reload();
     } catch (err) {
       showToast(getErrorMessage(err, "휴면 처리에 실패했어요. 다시 시도해주세요."));
@@ -99,14 +101,23 @@ function Home() {
   };
 
   const handleAddAccount = () => {
+    trackEvent("mailbox_add_clicked", { source: "home" });
     navigate(ROUTES.ONBOARDING_ADD_MAILBOXES);
   };
 
   const handleSelectAction = (serviceAccountId) => {
     setShowActionsSheet(false);
     if (serviceAccountId) {
+      trackEvent("immediate_action_start_clicked", { serviceAccountId });
       navigate(ROUTES.ACCOUNT_ACTION(serviceAccountId));
     }
+  };
+
+  const handleOpenActionsSheet = () => {
+    trackEvent("immediate_actions_sheet_opened", {
+      action_count: homeData?.metrics?.actionRequiredCount ?? 0,
+    });
+    setShowActionsSheet(true);
   };
 
   if (homeStatus === "loading" && !homeData) return <LoadingScreen />;
@@ -175,7 +186,7 @@ function Home() {
       {selectedEmailId === "all" && !emailSelectorOpen && hasImmediateActions && (
         <ActionRequiredBar
           count={homeData.metrics.actionRequiredCount}
-          onClick={() => setShowActionsSheet(true)}
+          onClick={handleOpenActionsSheet}
         />
       )}
 
