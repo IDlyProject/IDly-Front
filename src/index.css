@@ -21,6 +21,7 @@ body {
 }
 
 body {
+  min-width: 360px; /* 지원 최소 폭. 이보다 좁은 화면은 가로 스크롤로 봐야 한다 */
   min-height: 100dvh;
   -webkit-tap-highlight-color: transparent; /* 터치 시 파란 하이라이트 제거 */
   -webkit-text-size-adjust: 100%; /* 화면 회전 시 폰트 자동 확대 방지 */
