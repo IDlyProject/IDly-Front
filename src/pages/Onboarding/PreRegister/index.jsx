@@ -169,7 +169,7 @@ function PreRegister() {
     } catch (err) {
       setIsSubmitting(false);
       if (err?.response?.status === 409) {
-        setSubmitError("이미 등록된 번호입니다. 카카오톡 안내를 기다려주세요.");
+        setSubmitError("이미 등록된 번호입니다. 승인 안내를 기다려주세요.");
       } else {
         setSubmitError(
           getErrorMessage(err, "등록에 실패했어요. 다시 시도해주세요."),
