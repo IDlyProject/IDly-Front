@@ -88,20 +88,20 @@ function Splash() {
         }
 
         if (user.requiredTermsAgreed === false || user.requiredTermsAgreed == null) {
-          goTo(ROUTES.ONBOARDING_CONSENT);
+          goTo(ROUTES.ONBOARDING_CONSENT, { gate: true });
           return;
         }
         if (!user.nickname) {
-          goTo(ROUTES.ONBOARDING_PROFILE);
+          goTo(ROUTES.ONBOARDING_PROFILE, { gate: true });
           return;
         }
         // 최초 분석이 끝나기 전까지는 재접속해도 분석 화면부터 재진행한다.
         // 분석 완료 시 Analyzing 화면이 onboardingCompleted를 true로 저장한다.
         if (!user.onboardingCompleted) {
-          goTo(ROUTES.ANALYZING);
+          goTo(ROUTES.ANALYZING, { gate: true });
           return;
         }
-        goTo(ROUTES.HOME);
+        goTo(ROUTES.HOME, { gate: true });
       })
       .catch((error) => {
         console.error("Failed to fetch current user:", error);

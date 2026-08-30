@@ -7,18 +7,23 @@ import { useToast } from "@/components/ui/ToastProvider";
 import { isStandalone } from "@/hooks/useInstallPrompt";
 import { subscribeToPush } from "@/lib/push";
 import { getErrorMessage } from "@/lib/api";
+import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
 import logo from "@/assets/ic_logo.svg";
 import BackIcon from "@/assets/ic_back_white_20.svg";
 import ShareIcon from "@/assets/ic_share_24.svg";
 import MoreIcon from "@/assets/ic_more.svg";
+import PersonIcon from "@/assets/ic_person.svg";
+import CallIcon from "@/assets/ic_call.svg";
 
 export const INSTALL_PROMPT_VIEW = {
   MAIN: "main",
   IOS_NAG: "ios_nag",
   IOS_GUIDE: "ios_guide",
+  IDENTIFY: "identify",
   NOTIFY_PROMPT: "notify_prompt",
 };
 const VIEW = INSTALL_PROMPT_VIEW;
+const PHONE_PATTERN = /^01[016789]-?\d{3,4}-?\d{4}$/;
 
 /**
  * 홈 화면에 이미 추가되어 있으면 "추가하러 가기"를 또 띄울 필요가 없고,
@@ -93,8 +98,33 @@ function GuideScreen({ title, note, steps, closing, onBack }) {
 function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
   const { isIos, install } = useInstallPromptContext();
   const showToast = useToast();
-  const [view, setView] = useState(initialView);
+  // iOS는 Safari와 홈 화면 앱의 저장 공간이 분리돼 있어, 사전등록 때 저장한
+  // 이름·전화번호를 홈 화면 앱에서는 못 읽어오는 경우가 있다. 이 경우 알림을
+  // 켜기 전에 한 번 더 입력받아야 서버가 대기자 건에 구독을 연결할 수 있다.
+  const needsIdentify = !name || !phone;
+  const [view, setView] = useState(
+    initialView === VIEW.NOTIFY_PROMPT && needsIdentify
+      ? VIEW.IDENTIFY
+      : initialView,
+  );
   const [isSubscribing, setIsSubscribing] = useState(false);
+  const [identifyName, setIdentifyName] = useState(name ?? "");
+  const [identifyPhone, setIdentifyPhone] = useState(phone ?? "");
+
+  const effectiveName = name || identifyName.trim();
+  const effectivePhone = phone || identifyPhone.trim().replace(/-/g, "");
+  const canConfirmIdentify =
+    !!identifyName.trim() && PHONE_PATTERN.test(identifyPhone.trim());
+
+  const confirmIdentify = () => {
+    if (!canConfirmIdentify) return;
+    localStorage.setItem(WAITLIST_STORAGE_KEYS.NAME, identifyName.trim());
+    localStorage.setItem(
+      WAITLIST_STORAGE_KEYS.PHONE,
+      identifyPhone.trim().replace(/-/g, ""),
+    );
+    setView(VIEW.NOTIFY_PROMPT);
+  };
 
   const goAddToHomeScreen = async () => {
     if (isIos) {
@@ -116,7 +146,10 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
   const handleEnableNotifications = async () => {
     setIsSubscribing(true);
     try {
-      const result = await subscribeToPush({ name, phone });
+      const result = await subscribeToPush({
+        name: effectiveName,
+        phone: effectivePhone,
+      });
       if (result === "subscribed") {
         showToast("알림이 설정됐어요!");
       } else if (result === "denied") {
@@ -134,6 +167,57 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
       onClose();
     }
   };
+
+  if (view === VIEW.IDENTIFY) {
+    return (
+      <ModalCard>
+        <h1 className="text-[18px] font-bold text-gray100">
+          등록 정보를 다시 확인할게요
+        </h1>
+        <p className="mt-3 text-m14 text-[13px] text-gray70">
+          사전등록 때 입력하신 이름과 전화번호를
+          <br />
+          입력해주시면 알림을 연결해드릴게요.
+        </p>
+        <div className="mt-4 space-y-2.5 text-left">
+          <div className="flex h-12 items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-white px-3.75">
+            <img src={PersonIcon} alt="" className="h-4.5 w-4.5" />
+            <input
+              value={identifyName}
+              onChange={(e) => setIdentifyName(e.target.value)}
+              placeholder="이름을 입력해주세요"
+              className="h-full min-w-0 flex-1 text-r14 text-gray100 outline-none placeholder:text-[#8C8F96]"
+            />
+          </div>
+          <div className="flex h-12 items-center gap-2.5 rounded-xl border border-[#E5E7EB] bg-white px-3.75">
+            <img src={CallIcon} alt="" className="h-4.5 w-4.5" />
+            <input
+              value={identifyPhone}
+              onChange={(e) => setIdentifyPhone(e.target.value)}
+              placeholder="010-1234-5678"
+              className="h-full min-w-0 flex-1 text-r14 text-gray100 outline-none placeholder:text-[#8C8F96]"
+            />
+          </div>
+        </div>
+        <ActionButton
+          bgColor="var(--color-main100)"
+          textColor="var(--color-white)"
+          onClick={confirmIdentify}
+          disabled={!canConfirmIdentify}
+          className="mt-4 h-12! text-[15px]! font-bold!"
+        >
+          확인
+        </ActionButton>
+        <button
+          type="button"
+          onClick={onClose}
+          className="mt-2.5 text-r14 text-[12px] text-gray40"
+        >
+          나중에 하기
+        </button>
+      </ModalCard>
+    );
+  }
 
   if (view === VIEW.IOS_GUIDE) {
     return (
