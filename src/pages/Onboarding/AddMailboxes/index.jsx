@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressDots from "../components/ProgressDot";
 import ActionButton from "@/components/ui/ActionButton";
 import PlusIcon from "@/assets/ic_plus.svg";
 import { ROUTES } from "@/constants/routes";
+import { ONBOARDING_STEP_STORAGE_KEY } from "@/constants/onboarding";
 import { useGmailAccounts } from "@/hooks/useGmailAccounts";
 import { fetchAddAccountUrl } from "@/services/addAccountService";
 import { toMailAccount } from "@/utils/mailAccount";
@@ -16,6 +17,13 @@ function AddMailboxes() {
   const navigate = useNavigate();
   const { accounts, status } = useGmailAccounts();
   const [isConnecting, setIsConnecting] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem(
+      ONBOARDING_STEP_STORAGE_KEY,
+      ROUTES.ONBOARDING_ADD_MAILBOXES,
+    );
+  }, []);
 
   const handleStartConnect = async () => {
     if (isConnecting) return;

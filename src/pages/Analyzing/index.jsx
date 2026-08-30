@@ -6,6 +6,7 @@ import { ROUTES } from "@/constants/routes";
 import { triggerAnalysisRun, fetchRunStatus } from "@/services/analysisService";
 import { updateProfile } from "@/services/usersService";
 import { getErrorMessage } from "@/lib/api";
+import { ONBOARDING_STEP_STORAGE_KEY } from "@/constants/onboarding";
 import AnalyzingMark from "@/assets/ic_analysis_mark.svg";
 
 const POLL_INTERVAL_MS = 1200;
@@ -21,6 +22,10 @@ function Analyzing() {
 
   useEffect(() => {
     let cancelled = false;
+    // 분석이 실제로 끝나기 전까지는(onboardingCompleted가 true가 되기 전까지는)
+    // 이 화면 자체를 재개 지점으로 기록해둔다. 진입하자마자 지우면 분석 도중
+    // 이탈했을 때 Splash가 이 화면 대신 PrimaryComplete로 되돌려보낸다.
+    localStorage.setItem(ONBOARDING_STEP_STORAGE_KEY, ROUTES.ANALYZING);
 
     const poll = async (analysisId) => {
       let statusRes;
@@ -43,6 +48,7 @@ function Analyzing() {
       if (statusRes.status === "completed") {
         try {
           await updateProfile({ onboardingCompleted: true });
+          localStorage.removeItem(ONBOARDING_STEP_STORAGE_KEY);
         } catch (err) {
           // 재접속 시 다시 분석 화면으로 돌아오는 정도이니, 홈 진입 자체는 막지 않는다.
           console.error("Failed to mark onboarding complete:", err);

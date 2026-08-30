@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
+import { ONBOARDING_STEP_STORAGE_KEY } from "@/constants/onboarding";
 import { trackEvent } from "@/lib/ga";
 import logo from "@/assets/ic_logo.svg";
 import ShieldCheckIcon from "@/assets/ic_shield_check.svg";
@@ -37,6 +38,10 @@ function FullComplete() {
   const notificationEnabled = !!user?.notificationAgreed;
 
   useEffect(() => {
+    localStorage.setItem(
+      ONBOARDING_STEP_STORAGE_KEY,
+      ROUTES.ONBOARDING_FULL_COMPLETE,
+    );
     trackEvent("onboarding_completed", { mailbox_count: totalAccountCount });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

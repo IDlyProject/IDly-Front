@@ -1,12 +1,21 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressDots from "../components/ProgressDot";
 import { ROUTES } from "@/constants/routes";
+import { ONBOARDING_STEP_STORAGE_KEY } from "@/constants/onboarding";
 import logo from "@/assets/ic_logo.svg";
 import ActionButton from "@/components/ui/ActionButton";
 import PageBackground from "@/components/layouts/PageBackground";
 
 function PrimaryComplete() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    localStorage.setItem(
+      ONBOARDING_STEP_STORAGE_KEY,
+      ROUTES.ONBOARDING_PRIMARY_COMPLETE,
+    );
+  }, []);
 
   const handleAddAccount = () => {
     navigate(ROUTES.ONBOARDING_ADD_MAILBOXES);

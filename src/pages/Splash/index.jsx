@@ -7,6 +7,10 @@ import {
   verifyWaitlistToken,
 } from "@/services/waitlistService";
 import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
+import {
+  ONBOARDING_STEP_STORAGE_KEY,
+  RESUMABLE_ONBOARDING_STEPS,
+} from "@/constants/onboarding";
 import InstallPromptModal, {
   getInstallReminderView,
 } from "@/pages/Onboarding/PreRegister/components/InstallPromptModal";
@@ -95,10 +99,20 @@ function Splash() {
           goTo(ROUTES.ONBOARDING_PROFILE, { gate: true });
           return;
         }
-        // 최초 분석이 끝나기 전까지는 재접속해도 분석 화면부터 재진행한다.
+        // 최초 분석이 끝나기 전까지는 재접속해도 이어서 재진행한다.
         // 분석 완료 시 Analyzing 화면이 onboardingCompleted를 true로 저장한다.
         if (!user.onboardingCompleted) {
-          goTo(ROUTES.ANALYZING, { gate: true });
+          // PrimaryComplete/AddMailboxes/FullComplete는 서버에 흔적을 남기지
+          // 않으므로, 이 구간에서 이탈했다면 로컬에 저장해둔 마지막 화면부터
+          // 재개한다. 저장된 게 없으면(새 기기 등) Analyzing으로 건너뛰지
+          // 말고 이 구간의 시작점(PrimaryComplete)부터 다시 거치게 한다 —
+          // 그래야 메일함 추가 같은 단계를 건너뛴 채 분석이 시작되지 않는다.
+          const savedStep = localStorage.getItem(ONBOARDING_STEP_STORAGE_KEY);
+          if (RESUMABLE_ONBOARDING_STEPS.includes(savedStep)) {
+            goTo(savedStep, { gate: true });
+            return;
+          }
+          goTo(ROUTES.ONBOARDING_PRIMARY_COMPLETE, { gate: true });
           return;
         }
         goTo(ROUTES.HOME, { gate: true });

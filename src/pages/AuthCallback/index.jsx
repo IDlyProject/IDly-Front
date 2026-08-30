@@ -48,13 +48,11 @@ function AuthCallback() {
       }
 
       if (mode === "login") {
-        if (!user.requiredTermsAgreed) {
-          navigate(ROUTES.ONBOARDING_CONSENT, { replace: true });
-        } else if (!user.nickname) {
-          navigate(ROUTES.ONBOARDING_PROFILE, { replace: true });
-        } else {
-          navigate(ROUTES.HOME, { replace: true });
-        }
+        // 어느 온보딩 단계로 보낼지는 Splash 한 곳에서만 판단한다(중복 로직
+        // 방지). Splash는 onboardingCompleted와 로컬에 저장된 마지막 단계까지
+        // 고려하므로, 여기서 requiredTermsAgreed/nickname만 보고 HOME으로
+        // 보내면 분석 전 단계를 건너뛰는 문제가 생긴다.
+        navigate(ROUTES.SPLASH, { replace: true });
         return;
       }
 
