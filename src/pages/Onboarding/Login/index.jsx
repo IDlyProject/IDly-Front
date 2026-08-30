@@ -46,14 +46,14 @@ function Login() {
             <br />
             계정을 지키는 IDly입니다!
           </h1>
-          <p className="mt-4 text-center text-[18px] font-bold text-gray60">
+          <p className="mt-4 text-center text-[16px] font-bold text-gray60">
             계정 등록이 완료되셨나요?
             <br />
             아래 버튼을 눌러
             <br />
             IDly에서 사용할 대표 Gmail부터 연결해주세요!
           </p>
-          <p className="mt-6 text-center text-[18px] font-bold text-gray60">
+          <p className="mt-6 text-center text-[16px] font-bold text-gray60">
             대표 Gmail을 연결한 뒤
             <br />
             다른 Gmail 연동도 가능합니다.

@@ -190,10 +190,10 @@ function PreRegister() {
                 <br />
                 계정을 지키는 IDly입니다!
               </h1>
-              <p className="mt-4 mb-1.5 text-[15px] font-[600]  text-gray60">
+              <p className="mt-4 mb-1.5 text-[13px] font-[600]  text-gray60">
                 내 이메일 속 보안 위험, IDly가 찾아드립니다.
               </p>
-              <p className="text-[15px] font-[600]  text-gray60">
+              <p className="text-[13px] font-[600]  text-gray60">
                 IDly 이용을 위해 먼저 Gmail 계정 등록이 필요해요.
                 <br />
                 <span className="text-[#000000]">전화번호와 이메일</span>을
