@@ -14,6 +14,7 @@ import CallIcon from "@/assets/ic_call.svg";
 import MessageIcon from "@/assets/ic_message_18.svg";
 import MessageColoredIcon from "@/assets/ic_message_colored_18.svg";
 import PlusIcon from "@/assets/ic_plus.svg";
+import MinusIcon from "@/assets/ic_minus.svg";
 import CheckedBoxIcon from "@/assets/ic_checked_box.svg";
 import UncheckedBoxIcon from "@/assets/ic_unchecked_box.svg";
 
@@ -101,6 +102,10 @@ function PreRegister() {
   const handleDraftEmailChange = (value) => {
     setDraftEmail(value);
     if (emailErrorMessage) setEmailErrorMessage("");
+  };
+
+  const removeConfirmedEmail = (idx) => {
+    setConfirmedEmails((prev) => prev.filter((_, i) => i !== idx));
   };
 
   const confirmDraftEmail = async () => {
@@ -266,6 +271,15 @@ function PreRegister() {
                       <span className="flex-1 truncate text-[14px] font-bold text-main100">
                         {email}
                       </span>
+                      <button
+                        type="button"
+                        onClick={() => removeConfirmedEmail(idx)}
+                        aria-label="이메일 삭제"
+                      >
+                        <span className="grid h-7.5 w-7.5 shrink-0 place-items-center rounded-full bg-main100">
+                          <img src={MinusIcon} alt="" className="h-3 w-3" />
+                        </span>
+                      </button>
                     </div>
                   ))}
 
