@@ -226,7 +226,7 @@ function PreRegister() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="이름을 입력해주세요"
-                      className="h-full min-w-0 flex-1 text-r14 text-gray100 outline-none placeholder:text-[#8C8F96]"
+                      className="h-full min-w-0 flex-1 text-r14 text-[11px] text-gray100 outline-none placeholder:text-[#8C8F96]"
                     />
                   </div>
                 </label>
@@ -241,7 +241,7 @@ function PreRegister() {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="010-1234-5678"
-                      className="h-full min-w-0 flex-1 text-r14 text-gray100 outline-none placeholder:text-[#8C8F96]"
+                      className="h-full min-w-0 flex-1 text-r14 text-[11px] text-gray100 outline-none placeholder:text-[#8C8F96]"
                     />
                   </div>
                 </label>
