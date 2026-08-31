@@ -95,7 +95,13 @@ function GuideScreen({ title, note, steps, closing, onBack }) {
  * 다이얼로그를 띄운 뒤(수락/거절과 무관하게) 브라우저 상태에서도 바로
  * 요청 가능한 푸시 권한 동의 모달로 이어진다.
  */
-function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
+function InstallPromptModal({
+  onClose,
+  initialView = VIEW.MAIN,
+  name,
+  phone,
+  onIdentify,
+}) {
   const { isIos, install } = useInstallPromptContext();
   const showToast = useToast();
   // iOS는 Safari와 홈 화면 앱의 저장 공간이 분리돼 있어, 사전등록 때 저장한
@@ -118,11 +124,12 @@ function InstallPromptModal({ onClose, initialView = VIEW.MAIN, name, phone }) {
 
   const confirmIdentify = () => {
     if (!canConfirmIdentify) return;
+    const normalizedPhone = identifyPhone.trim().replace(/-/g, "");
     localStorage.setItem(WAITLIST_STORAGE_KEYS.NAME, identifyName.trim());
-    localStorage.setItem(
-      WAITLIST_STORAGE_KEYS.PHONE,
-      identifyPhone.trim().replace(/-/g, ""),
-    );
+    localStorage.setItem(WAITLIST_STORAGE_KEYS.PHONE, normalizedPhone);
+    // 이 번호가 서버에 어떤 상태로 등록돼 있는지는 부모(Splash)가 판단해서
+    // 모달을 닫을 때의 목적지를 갱신한다. 여기서 결과를 기다릴 필요는 없다.
+    onIdentify?.(normalizedPhone);
     setView(VIEW.NOTIFY_PROMPT);
   };
 

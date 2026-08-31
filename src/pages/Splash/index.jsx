@@ -14,6 +14,7 @@ import {
 import InstallPromptModal, {
   getInstallReminderView,
 } from "@/pages/Onboarding/PreRegister/components/InstallPromptModal";
+import { isStandalone } from "@/hooks/useInstallPrompt";
 import typoLogo from "@/assets/ic_typo_logo_white.svg";
 import PageBackground from "@/components/layouts/PageBackground";
 
@@ -26,6 +27,34 @@ function Splash() {
   const [gateWithReminder, setGateWithReminder] = useState(false);
   const [reminderResolved, setReminderResolved] = useState(false);
   const [searchParams] = useSearchParams();
+
+  // 전화번호 하나로 "이 사람이 어느 화면으로 가야 하는가"를 판단하는 로직.
+  // resolveWaitlistEntry(최초 진입)와 handleIdentify(iOS PWA 재입력 후) 양쪽에서 쓴다.
+  const resolveDestinationForPhone = async (phone) => {
+    try {
+      const { status } = await getWaitlistStatus(phone);
+      if (status === "approved") {
+        localStorage.setItem(WAITLIST_STORAGE_KEYS.APPROVED, "true");
+        return ROUTES.ONBOARDING_LOGIN;
+      }
+      if (status === "not_found") {
+        localStorage.removeItem(WAITLIST_STORAGE_KEYS.PHONE);
+        return ROUTES.ONBOARDING_PRE_REGISTER;
+      }
+      return ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE;
+    } catch {
+      // status API 실패 → 대기 화면 유지 (재시도 안내)
+      return ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE;
+    }
+  };
+
+  // iOS PWA에서 로컬에 전화번호가 없어 InstallPromptModal의 IDENTIFY 화면으로
+  // 재입력받은 경우, 그 번호가 서버에 이미 등록돼 있으면 빈 등록 폼이 아니라
+  // 승인 상태에 맞는 화면으로 보내야 한다. 모달이 닫힐 때 쓸 목적지를 갱신한다.
+  const handleIdentify = async (phone) => {
+    const nextDest = await resolveDestinationForPhone(phone);
+    setDest(nextDest);
+  };
 
   useEffect(() => {
     const startTime = Date.now();
@@ -52,7 +81,7 @@ function Splash() {
         } catch {
           // expired/invalid token → fall through to registration
         }
-        goTo(ROUTES.ONBOARDING_PRE_REGISTER);
+        goTo(ROUTES.ONBOARDING_PRE_REGISTER, { gate: isStandalone() });
         return;
       }
 
@@ -63,25 +92,16 @@ function Splash() {
 
       const phone = localStorage.getItem(WAITLIST_STORAGE_KEYS.PHONE);
       if (phone) {
-        try {
-          const { status } = await getWaitlistStatus(phone);
-          if (status === "approved") {
-            localStorage.setItem(WAITLIST_STORAGE_KEYS.APPROVED, "true");
-            goTo(ROUTES.ONBOARDING_LOGIN, { gate: true });
-          } else if (status === "not_found") {
-            localStorage.removeItem(WAITLIST_STORAGE_KEYS.PHONE);
-            goTo(ROUTES.ONBOARDING_PRE_REGISTER);
-          } else {
-            goTo(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE, { gate: true });
-          }
-        } catch {
-          // status API 실패 → 대기 화면 유지 (재시도 안내)
-          goTo(ROUTES.ONBOARDING_PRE_REGISTER_COMPLETE, { gate: true });
-        }
+        const nextDest = await resolveDestinationForPhone(phone);
+        goTo(nextDest, { gate: nextDest !== ROUTES.ONBOARDING_PRE_REGISTER });
         return;
       }
 
-      goTo(ROUTES.ONBOARDING_PRE_REGISTER);
+      // iOS는 Safari와 PWA(홈 화면 앱)의 localStorage가 분리돼 있어, Safari에서
+      // 등록한 뒤 PWA로 처음 열면 여기로 떨어진다. standalone이면 gate를 걸어
+      // InstallPromptModal(이름/전화번호 재입력 → 알림 동의)을 띄운다. 재입력된
+      // 번호로 어디로 보낼지는 handleIdentify가 dest를 갱신해서 처리한다.
+      goTo(ROUTES.ONBOARDING_PRE_REGISTER, { gate: isStandalone() });
     };
 
     fetchCurrentUser()
@@ -149,6 +169,7 @@ function Splash() {
           initialView={reminderView}
           name={localStorage.getItem(WAITLIST_STORAGE_KEYS.NAME)}
           phone={localStorage.getItem(WAITLIST_STORAGE_KEYS.PHONE)}
+          onIdentify={handleIdentify}
           onClose={() => setReminderResolved(true)}
         />
       )}
