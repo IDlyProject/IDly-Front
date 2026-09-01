@@ -5,6 +5,7 @@ import { fetchCurrentUser } from "@/services/authService";
 import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
 import { setTokens } from "@/lib/api";
 import { trackEvent } from "@/lib/ga";
+import { linkUserPush } from "@/services/pushService";
 
 function AuthCallback() {
   const [searchParams] = useSearchParams();
@@ -41,6 +42,7 @@ function AuthCallback() {
       localStorage.removeItem(WAITLIST_STORAGE_KEYS.PHONE);
       localStorage.removeItem(WAITLIST_STORAGE_KEYS.APPROVED);
       trackEvent("login_succeeded", { mode: mode ?? "unknown" });
+      linkUserPush().catch(() => {});
 
       if (mode === "add") {
         navigate(ROUTES.ONBOARDING_ADD_MAILBOXES, { replace: true });
