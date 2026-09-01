@@ -33,18 +33,26 @@ function Home() {
   const [showActionsSheet, setShowActionsSheet] = useState(false);
   const mailAccountId = selectedEmailId === "all" ? undefined : selectedEmailId;
   const { data: homeData, status: homeStatus, reload } = useHomeData(mailAccountId);
+  // 메일함 목록(EmailSelector, MailboxGrid)은 특정 메일함으로 필터링된 응답이 아니라
+  // 항상 전체 목록 기준으로 구성해야, 특정 메일함 선택 상태에서 다시 열어도
+  // 다른 메일함들이 그대로 보인다.
+  const { data: allMailData, reload: reloadAllMailData } = useHomeData(undefined);
   const { user } = useCurrentUser();
   const displayName = user?.nickname ?? user?.name ?? homeData?.userName;
 
   const emails = useMemo(() => {
-    if (!homeData) return [];
-    const primaryFirst = [...homeData.mailAccounts].sort(
+    if (!allMailData) return [];
+    const primaryFirst = [...allMailData.mailAccounts].sort(
       (a, b) => (b.role === "primary") - (a.role === "primary"),
     );
     return [
-      { id: "all", label: "전체", count: homeData.metrics.totalServiceAccounts },
+      {
+        id: "all",
+        label: "전체",
+        count: allMailData.metrics.totalServiceAccounts,
+      },
       ...primaryFirst.map((account, idx) => {
-        const mailboxServiceAccounts = homeData.serviceAccounts.filter(
+        const mailboxServiceAccounts = allMailData.serviceAccounts.filter(
           (sa) => sa.sourceMailAccountId === account.id,
         );
         const hasRisk = mailboxServiceAccounts.some(
@@ -66,7 +74,7 @@ function Home() {
         };
       }),
     ];
-  }, [homeData]);
+  }, [allMailData]);
 
   const mailboxes = useMemo(
     () => emails.filter((email) => email.id !== "all"),
@@ -94,7 +102,7 @@ function Home() {
     try {
       await setServiceAccountDormant(accountId);
       trackEvent("account_dormant_set", { serviceAccountId: accountId });
-      await reload();
+      await Promise.all([reload(), reloadAllMailData()]);
     } catch (err) {
       showToast(getErrorMessage(err, "휴면 처리에 실패했어요. 다시 시도해주세요."));
     }
@@ -131,8 +139,8 @@ function Home() {
   const hasImmediateActions = immediateActions.length > 0;
 
   return (
-    <PageBackground variant="frost">
-      <div className="min-h-dvh px-4 pb-4 pt-[max(8px,env(safe-area-inset-top))]">
+    <PageBackground variant="frost" fill>
+      <div className="px-4 pb-4 pt-[max(8px,env(safe-area-inset-top))]">
         <HomeHeader />
         <button
           onClick={() =>

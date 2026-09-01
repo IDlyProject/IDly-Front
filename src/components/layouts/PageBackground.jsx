@@ -21,7 +21,7 @@ const BG_CLASSES = {
   detail: "bg-gradient-to-b from-[#D5DEED] to-[#F8FBFE]",
 };
 
-function PageBackground({ variant = "default", children }) {
+function PageBackground({ variant = "default", fill = false, children }) {
   useLayoutEffect(() => {
     const prevBody = document.body.style.background;
     const prevHtml = document.documentElement.style.background;
@@ -46,7 +46,7 @@ function PageBackground({ variant = "default", children }) {
   }, [variant]);
 
   return (
-    <div className="relative min-h-dvh w-full">
+    <div className={`relative w-full ${fill ? "min-h-full" : "min-h-dvh"}`}>
       <div className={`absolute inset-0 -z-10 ${BG_CLASSES[variant]}`} />
       {children}
     </div>

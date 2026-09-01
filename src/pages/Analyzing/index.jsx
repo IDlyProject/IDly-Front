@@ -103,7 +103,7 @@ function Analyzing() {
           style={{ filter: "drop-shadow(0 12px 32px rgba(8,37,126,0.1))" }}
         />
 
-        <h1 className="mt-8 w-full text-left text-b24 text-[22px] text-gray100">
+        <h1 className="mt-8 w-full text-center text-b24 text-[22px] text-gray100">
           {failed ? "분석에 실패했어요" : message}
         </h1>
 
