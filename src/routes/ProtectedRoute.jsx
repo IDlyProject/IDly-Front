@@ -1,26 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
-import { fetchCurrentUser } from "@/services/authService";
+import { useUserStore } from "@/store/userStore";
 
 function ProtectedRoute({ children }) {
   const location = useLocation();
-  const [status, setStatus] = useState("checking");
+  const status = useUserStore((state) => state.status);
+  const user = useUserStore((state) => state.user);
+  const fetchUser = useUserStore((state) => state.fetchUser);
 
   useEffect(() => {
-    let cancelled = false;
+    if (status === "idle") fetchUser();
+  }, [status, fetchUser]);
 
-    fetchCurrentUser().then((user) => {
-      if (!cancelled) setStatus(user ? "authed" : "guest");
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // 인증 확인 중
+  if (status === "idle" || status === "loading") return null;
 
-  if (status === "checking") return null;
-
-  if (status === "guest") {
+  // 미인증
+  if (!user) {
     return (
       <Navigate to={ROUTES.ONBOARDING_LOGIN} state={{ from: location }} replace />
     );
