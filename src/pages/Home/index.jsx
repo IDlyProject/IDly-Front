@@ -140,6 +140,8 @@ function Home() {
   if (homeStatus === "error" && !homeData) {
     return <ErrorScreen text="홈 정보를 불러오지 못했어요." />;
   }
+  // refreshing 상태에서 필터 전환 시 homeData가 잠깐 null이 될 수 있음
+  if (!homeData) return <LoadingScreen />;
 
   const cardNews = homeData.cardNews?.[0];
   const priorityAccountId = homeData.riskSummary.serviceAccountId;

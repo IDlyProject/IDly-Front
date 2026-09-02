@@ -33,7 +33,7 @@ function My() {
   const { user } = useCurrentUser();
   const displayName = user?.nickname ?? user?.name;
   const primaryEmail = getPrimaryGmailAccount(user)?.email;
-  const isSafe = false;
+  const isSafe = true;
   const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
@@ -55,7 +55,8 @@ function My() {
           <h1 className="text-b24 text-[22px] text-gray100">마이</h1>
           <button
             aria-label="설정"
-            className="grid h-9 w-9 place-items-center rounded-full bg-white shadow-[0_1px_3px_rgba(16,24,46,0.03)]"
+            className="grid h-9 w-9 place-items-center rounded-full bg-white shadow-[0_1px_3px_rgba(16,24,46,0.03)] opacity-40 cursor-not-allowed"
+            disabled
           >
             <img src={SettingIcon} alt="" className="h-4.5 w-4.5" />
           </button>
@@ -94,16 +95,7 @@ function My() {
             label="알림 설정"
             onClick={() => navigate(ROUTES.NOTIFICATION_SETTINGS)}
           />
-          <MenuRow
-            icon={<img src={HeadphoneIcon} className="w-4.5 h-4.5" />}
-            label="고객 센터"
-            onClick={() => {}}
-          />
-          <MenuRow
-            icon={<img src={DocumentIcon} className="w-4.5 h-4.5" />}
-            label="이용약관"
-            onClick={() => {}}
-          />
+          {/* 고객 센터 / 이용약관 — 미구현, 준비 후 노출 */}
         </div>
 
         <h3 className="mb-5.25 text-sb16 font-bold text-gray100">기타</h3>
