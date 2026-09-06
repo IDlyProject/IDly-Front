@@ -6,6 +6,7 @@ import { WAITLIST_STORAGE_KEYS } from "@/constants/waitlist";
 import { setTokens } from "@/lib/api";
 import { trackEvent } from "@/lib/ga";
 import { linkUserPush } from "@/services/pushService";
+import axiosInstance from "@/lib/api/axiosInstance";
 
 function AuthCallback() {
   const [searchParams] = useSearchParams();
@@ -21,19 +22,27 @@ function AuthCallback() {
       return;
     }
 
+    // iOS Safari 등 SameSite=None 쿠키가 차단되는 환경을 위한 one-time code 교환.
+    // URL에 실제 토큰 대신 1분 수명의 code를 담아 전달받고, 여기서 교환한다.
+    const code = searchParams.get("code");
+    window.history.replaceState(null, "", window.location.pathname);
 
-    // iOS Safari 등 SameSite=None 쿠키가 차단되는 환경에서는 idly_token/idly_refresh
-    // 쿠키 대신 리다이렉트 URL의 at/rt 파라미터로 인증을 이어간다.
-    const accessToken = searchParams.get("at");
-    const refreshToken = searchParams.get("rt");
-    if (accessToken || refreshToken) {
-      setTokens({ accessToken, refreshToken });
-      window.history.replaceState(null, "", window.location.pathname);
-    }
+    const exchangeAndProceed = async () => {
+      let resolvedMode = searchParams.get("mode");
+      if (code) {
+        try {
+          const { data } = await axiosInstance.post("/auth/exchange", { code });
+          setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
+          resolvedMode = data.mode ?? resolvedMode;
+        } catch {
+          navigate(`${ROUTES.ONBOARDING_LOGIN}?error=exchange_failed`, { replace: true });
+          return;
+        }
+      }
 
-    const mode = searchParams.get("mode");
+      const mode = resolvedMode;
 
-    fetchCurrentUser().then((user) => {
+      const user = await fetchCurrentUser();
       if (!user) {
         navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
         return;
@@ -50,16 +59,14 @@ function AuthCallback() {
       }
 
       if (mode === "login") {
-        // 어느 온보딩 단계로 보낼지는 Splash 한 곳에서만 판단한다(중복 로직
-        // 방지). Splash는 onboardingCompleted와 로컬에 저장된 마지막 단계까지
-        // 고려하므로, 여기서 requiredTermsAgreed/nickname만 보고 HOME으로
-        // 보내면 분석 전 단계를 건너뛰는 문제가 생긴다.
         navigate(ROUTES.SPLASH, { replace: true });
         return;
       }
 
       navigate(ROUTES.ONBOARDING_LOGIN, { replace: true });
-    });
+    };
+
+    exchangeAndProceed();
   }, [searchParams, navigate]);
 
   return (
