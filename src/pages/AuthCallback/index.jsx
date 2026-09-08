@@ -31,7 +31,7 @@ function AuthCallback() {
       let resolvedMode = searchParams.get("mode");
       if (code) {
         try {
-          const { data } = await axiosInstance.post("/auth/exchange", { code });
+          const { data } = await axiosInstance.post("/api/auth/exchange", { code });
           setTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
           resolvedMode = data.mode ?? resolvedMode;
         } catch {
