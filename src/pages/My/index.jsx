@@ -8,6 +8,8 @@ import { useUserStore } from "@/store/userStore";
 import { trackEvent } from "@/lib/ga";
 import SettingIcon from "@/assets/ic_setting.svg";
 import AccountManageIcon from "@/assets/ic_account_manage.svg";
+import HeadphoneIcon from "@/assets/ic_headphone.svg";
+import DocumentIcon from "@/assets/ic_document.svg";
 import BellIcon from "@/assets/ic_bell_18.svg";
 import ArchiveIcon from "@/assets/ic_archive.svg";
 import ChevronRightIcon from "@/assets/ic_chevron_right.svg";
