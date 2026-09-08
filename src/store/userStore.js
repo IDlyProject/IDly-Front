@@ -10,11 +10,16 @@ export const useUserStore = create((set, get) => ({
     const { fetchPromise } = get();
     if (fetchPromise && !force) return fetchPromise;
 
-    set({ status: "loading" });
-    const promise = fetchCurrentUser().then((user) => {
-      set({ user, status: user ? "ready" : "error", fetchPromise: null });
-      return user;
-    });
+    set({ status: "loading", fetchPromise: null });
+    const promise = fetchCurrentUser()
+      .then((user) => {
+        set({ user, status: user ? "ready" : "error", fetchPromise: null });
+        return user;
+      })
+      .catch(() => {
+        set({ user: null, status: "error", fetchPromise: null });
+        return null;
+      });
     set({ fetchPromise: promise });
     return promise;
   },

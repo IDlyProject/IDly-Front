@@ -10,6 +10,7 @@ import {
 export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
+  timeout: 20000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -73,6 +74,10 @@ axiosInstance.interceptors.response.use(
       if (refreshed) {
         return axiosInstance(config);
       }
+      // refresh 실패 — 스토어 초기화 후 로그인으로 강제 이동
+      const { useUserStore } = await import("@/store/userStore");
+      useUserStore.getState().clearUser();
+      window.location.replace("/onboarding/login");
     }
 
     return Promise.reject(error);

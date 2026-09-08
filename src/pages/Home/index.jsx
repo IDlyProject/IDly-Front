@@ -32,11 +32,19 @@ function Home() {
   const [emailSelectorOpen, setEmailSelectorOpen] = useState(false);
   const [showActionsSheet, setShowActionsSheet] = useState(false);
   const mailAccountId = selectedEmailId === "all" ? undefined : selectedEmailId;
-  const { data: homeData, status: homeStatus, reload } = useHomeData(mailAccountId);
+  const hasFilter = !!mailAccountId;
+
   // 메일함 목록(EmailSelector, MailboxGrid)은 특정 메일함으로 필터링된 응답이 아니라
   // 항상 전체 목록 기준으로 구성해야, 특정 메일함 선택 상태에서 다시 열어도
   // 다른 메일함들이 그대로 보인다.
-  const { data: allMailData, reload: reloadAllMailData } = useHomeData(undefined);
+  const { data: allMailData, status: allMailStatus, reload: reloadAll } = useHomeData(undefined);
+  // 특정 메일함 필터 없을 때는 allMailData를 재사용 — GET /api/home 중복 호출 방지
+  const { data: filteredData, status: filteredStatus, reload: reloadFiltered } = useHomeData(mailAccountId, !hasFilter);
+
+  const homeData = hasFilter ? filteredData : allMailData;
+  const homeStatus = hasFilter ? filteredStatus : allMailStatus;
+  const reload = hasFilter ? reloadFiltered : reloadAll;
+  const reloadAllMailData = reloadAll;
   const { user } = useCurrentUser();
   const displayName = user?.nickname ?? user?.name ?? homeData?.userName;
 
@@ -132,6 +140,8 @@ function Home() {
   if (homeStatus === "error" && !homeData) {
     return <ErrorScreen text="홈 정보를 불러오지 못했어요." />;
   }
+  // refreshing 상태에서 필터 전환 시 homeData가 잠깐 null이 될 수 있음
+  if (!homeData) return <LoadingScreen />;
 
   const cardNews = homeData.cardNews?.[0];
   const priorityAccountId = homeData.riskSummary.serviceAccountId;
